@@ -1174,6 +1174,13 @@ class Horde_Form_Type_image extends Horde_Form_Type {
 
         /* Get image params stored in the hidden field. */
         $value = $var->getValue($vars);
+
+        /* Check if we have image data */
+        if (!isset($this->_img) || !isset($this->_img['img'])) {
+            $info = '';
+            return;
+        }
+        
         $info = $this->_img['img'];
         if (empty($info['file'])) {
             unset($info['file']);
