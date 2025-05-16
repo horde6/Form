@@ -108,7 +108,7 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## License
 
-This library is licensed under the Apache License 2.0. See the LICENSE file for details.
+See the LICENSE file for details.
 
 ## Support
 
