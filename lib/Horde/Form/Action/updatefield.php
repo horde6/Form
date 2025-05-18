@@ -31,7 +31,7 @@ class Horde_Form_Action_updatefield extends Horde_Form_Action {
         return 'updateField' . $this->id() . '();';
     }
 
-    function setValues(&$vars, $sourceVal, $index = null, $arrayVal = false)
+    function setValues($vars, $sourceVal, $index = null, $arrayVal = false)
     {
     }
 

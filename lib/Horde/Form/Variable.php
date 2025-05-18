@@ -163,7 +163,7 @@ class Horde_Form_Variable {
      *
      * @param Horde_Form $form  The form instance to assign this variable to.
      */
-    function setFormOb(&$form)
+    function setFormOb($form)
     {
         $this->form = &$form;
     }
@@ -427,7 +427,7 @@ class Horde_Form_Variable {
      *
      * @return mixed  Depending on the variable type.
      */
-    function getInfo(&$vars, &$info)
+    function getInfo($vars, $info)
     {
         return $this->type->getInfo($vars, $this, $info);
     }
@@ -443,7 +443,7 @@ class Horde_Form_Variable {
      *                  option set or the form wasn't submitted yet. A boolean
      *                  indicating whether the variable was changed otherwise.
      */
-    function wasChanged(&$vars)
+    function wasChanged($vars)
     {
         if (!$this->getOption('trackchange')) {
             return null;
@@ -466,7 +466,7 @@ class Horde_Form_Variable {
      *
      * @return boolean  True if the variable validated.
      */
-    function validate(&$vars, &$message)
+    function validate($vars, $message)
     {
         if ($this->_arrayVal) {
             $vals = $this->getValue($vars);
@@ -508,7 +508,7 @@ class Horde_Form_Variable {
      *
      * @return mixed  The variable or element value.
      */
-    function getValue(&$vars, $index = null)
+    function getValue($vars, $index = null)
     {
         if ($this->_arrayVal) {
             $name = str_replace('[]', '', $this->varName);

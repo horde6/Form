@@ -137,7 +137,7 @@ class Horde_Form_Renderer {
         $this->_renderBeginInactive($name, $extra);
     }
 
-    function _renderSectionTabs(&$form)
+    function _renderSectionTabs($form)
     {
         /* If javascript is not available, do not render tabs. */
         if (!$GLOBALS['browser']->hasFeature('javascript')) {
@@ -169,7 +169,7 @@ class Horde_Form_Renderer {
         echo "</ul></div><br class=\"clear\" />\n";
     }
 
-    function _renderSectionBegin(&$form, $section)
+    function _renderSectionBegin($form, $section)
     {
         // Stripe alternate rows if that option is turned on.
         if ($this->_stripedRows && class_exists('Horde')) {
@@ -247,7 +247,7 @@ class Horde_Form_Renderer {
         return $vars;
     }
 
-    function listFormVars(&$form)
+    function listFormVars($form)
     {
         echo '<input type="hidden" name="_formvars" value="' . htmlspecialchars(json_encode($this->getFormVars($form))) . '" />';
     }
@@ -261,17 +261,17 @@ class Horde_Form_Renderer {
         echo '<input type="hidden" name="_formvars" value="' . htmlspecialchars(json_encode($vars)) . '" />';
     }
 
-    function renderFormActive(&$form, &$vars)
+    function renderFormActive($form, $vars)
     {
         $this->_renderForm($form, $vars, true);
     }
 
-    function renderFormInactive(&$form, &$vars)
+    function renderFormInactive($form, $vars)
     {
         $this->_renderForm($form, $vars, false);
     }
 
-    function _renderForm(&$form, &$vars, $active)
+    function _renderForm($form, $vars, $active)
     {
         $this->_forms[] = $form;
 
@@ -420,7 +420,7 @@ class Horde_Form_Renderer {
 
     function _renderSubmit($submit, $reset)
     {
-        $buildAttribute = function(&$value, $attribute)
+        $buildAttribute = function($value, $attribute)
         {
             $value = sprintf('%s="%s"', $attribute, $value);
         };
@@ -461,7 +461,7 @@ class Horde_Form_Renderer {
     }
 
     // Implementation specifics -- input variables.
-    function _renderVarInputBegin(&$form, &$var, &$vars)
+    function _renderVarInputBegin($form, $var, $vars)
     {
         $message = $form->getError($var);
         $isvalid = empty($message);
@@ -477,7 +477,7 @@ class Horde_Form_Renderer {
                ($var->isDisabled() ? ' class="horde-form-disabled"' : ''));
     }
 
-    function _renderVarInputEnd(&$form, &$var, &$vars)
+    function _renderVarInputEnd($form, $var, $vars)
     {
         /* Display any description for the field. */
         if ($var->hasDescription()) {
@@ -499,7 +499,7 @@ class Horde_Form_Renderer {
     }
 
     // Implementation specifics -- display variables.
-    function _renderVarDisplayBegin(&$form, &$var, &$vars)
+    function _renderVarDisplayBegin($form, $var, $vars)
     {
         $message = $form->getError($var);
         $isvalid = empty($message);
@@ -512,7 +512,7 @@ class Horde_Form_Renderer {
         echo '  <td>';
     }
 
-    function _renderVarDisplayEnd(&$form, &$var, &$vars)
+    function _renderVarDisplayEnd($form, $var, $vars)
     {
         if ($var->hasHelp()) {
             echo '</td><td>&nbsp;';

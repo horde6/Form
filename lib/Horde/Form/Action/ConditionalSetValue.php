@@ -36,7 +36,7 @@ class Horde_Form_Action_ConditionalSetValue extends Horde_Form_Action {
         return 'map(\'' . $renderer->_genID($varname, false) . "', '" . $renderer->_genID($this->getTarget(), false) . '\');';
     }
 
-    function setValues(&$vars, $sourceVal, $arrayVal = false)
+    function setValues($vars, $sourceVal, $arrayVal = false)
     {
         $map = $this->_params['map'];
         $target = $this->getTarget();

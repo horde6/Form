@@ -63,7 +63,7 @@ class Horde_Form_Action {
         return isset($this->_params['target']) ? $this->_params['target'] : null;
     }
 
-    function setValues(&$vars, $sourceVal, $index = null, $arrayVal = false)
+    function setValues($vars, $sourceVal, $index = null, $arrayVal = false)
     {
     }
 

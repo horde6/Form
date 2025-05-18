@@ -34,7 +34,7 @@ class Horde_Form_Type_tableset extends Horde_Form_Type {
         $this->_header = $params[1];
     }
 
-    function isValid(&$var, &$vars, $value, &$message)
+    function isValid($var, $vars, $value, $message)
     {
         if (count($this->_values) == 0 || count($value) == 0) {
             return true;

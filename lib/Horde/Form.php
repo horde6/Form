@@ -60,7 +60,7 @@ class Horde_Form {
     /**
      * @deprecated
      */
-    function singleton($form, &$vars, $title = '', $name = null)
+    function singleton($form, $vars, $title = '', $name = null)
     {
         static $instances = array();
 
@@ -76,7 +76,7 @@ class Horde_Form {
         return $instances[$signature];
     }
 
-    function setVars(&$vars)
+    function setVars($vars)
     {
         $this->_vars = &$vars;
     }
@@ -299,7 +299,7 @@ class Horde_Form {
      *
      * @return boolean  True if the variable was found (and deleted).
      */
-    function removeVariable(&$var)
+    function removeVariable($var)
     {
         foreach (array_keys($this->_variables) as $section) {
             foreach (array_keys($this->_variables[$section]) as $i) {
@@ -383,7 +383,7 @@ class Horde_Form {
         $this->_submit = array_merge($this->_submit, $submit);
     }
 
-    function preserveVarByPost(&$vars, $varname, $alt_varname = '')
+    function preserveVarByPost($vars, $varname, $alt_varname = '')
     {
         $value = $vars->getExists($varname, $wasset);
 
@@ -415,7 +415,7 @@ class Horde_Form {
         }
     }
 
-    function open(&$renderer, &$vars, $action, $method = 'get', $enctype = null)
+    function open($renderer, $vars, $action, $method = 'get', $enctype = null)
     {
         if (is_null($enctype) && !is_null($this->_enctype)) {
             $enctype = $this->_enctype;
@@ -580,7 +580,7 @@ class Horde_Form {
         }
     }
 
-    function unsetVars(&$vars)
+    function unsetVars($vars)
     {
         foreach ($this->getVariables() as $var) {
             $vars->remove($var->getVarName());
@@ -715,7 +715,7 @@ class Horde_Form {
      * @param array $info      Array to be filled with the submitted field
      *                         values.
      */
-    function getInfo($vars, &$info)
+    function getInfo($vars, $info)
     {
         if (is_null($vars)) {
             $vars = $this->_vars;
@@ -735,7 +735,7 @@ class Horde_Form {
      * @param array  $info       The array to be filled with the submitted
      *                           field values.
      */
-    function _getInfoFromVariables($variables, &$vars, &$info)
+    function _getInfoFromVariables($variables, $vars, $info)
     {
         foreach ($variables as $var) {
             if ($var->isDisabled()) {
@@ -756,13 +756,13 @@ class Horde_Form {
                     if (!isset($info[$base])) {
                         $info[$base] = array();
                     }
-                    $pointer = &$info[$base];
+                    $pointer = $info[$base];
                     while (count($keys)) {
                         $key = array_shift($keys);
                         if (!isset($pointer[$key])) {
                             $pointer[$key] = array();
                         }
-                        $pointer = &$pointer[$key];
+                        $pointer = $pointer[$key];
                     }
                     $var->getInfo($vars, $pointer);
                 } else {
@@ -808,7 +808,7 @@ class Horde_Form {
      *
      * @param Horde_Variables $vars
      */
-    function onSubmit(&$vars)
+    function onSubmit($vars)
     {
         /* Loop through all vars and check if there's anything to do on
          * submit. */
