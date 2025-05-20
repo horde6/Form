@@ -420,7 +420,7 @@ class Horde_Form_Renderer {
 
     function _renderSubmit($submit, $reset)
     {
-        $buildAttribute = function($value, $attribute)
+        $buildAttribute = function(&$value, $attribute)
         {
             $value = sprintf('%s="%s"', $attribute, $value);
         };
