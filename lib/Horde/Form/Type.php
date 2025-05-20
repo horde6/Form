@@ -265,7 +265,7 @@ class Horde_Form_Type_int extends Horde_Form_Type {
 
 class Horde_Form_Type_octal extends Horde_Form_Type {
 
-    function isValid(&$var, &$vars, $value, &$message)
+    function isValid($var, $vars, $value, $message)
     {
         if ($var->isRequired() && empty($value) && ((string)(int)$value !== $value)) {
             $message = Horde_Form_Translation::t("This field is required.");
@@ -292,7 +292,7 @@ class Horde_Form_Type_octal extends Horde_Form_Type {
 
 class Horde_Form_Type_intlist extends Horde_Form_Type {
 
-    function isValid(&$var, &$vars, $value, &$message)
+    function isValid($var, $vars, $value, $message)
     {
         if (empty($value) && $var->isRequired()) {
             $message = Horde_Form_Translation::t("This field is required.");
@@ -354,7 +354,7 @@ class Horde_Form_Type_text extends Horde_Form_Type {
         $this->_maxlength = $params[2] ?? null;
     }
 
-    function isValid(&$var, &$vars, $value, &$message)
+    function isValid($var, $vars, $value, $message)
     {
         $valid = true;
 
@@ -429,7 +429,7 @@ class Horde_Form_Type_stringlist extends Horde_Form_Type_text {
 
 class Horde_Form_Type_stringarray extends Horde_Form_Type_stringlist {
 
-    function getInfo(&$vars, &$var, &$info)
+    function getInfo($vars, $var, $info)
     {
         $info = array_map('trim', explode(',', $vars->get($var->getVarName())));
     }
@@ -470,7 +470,7 @@ class Horde_Form_Type_phone extends Horde_Form_Type {
         $this->_size = $params[0] ?? 15;
     }
 
-    function isValid(&$var, &$vars, $value, &$message)
+    function isValid($var, $vars, $value, $message)
     {
         if (!strlen(trim($value))) {
             if ($var->isRequired()) {
@@ -520,7 +520,7 @@ class Horde_Form_Type_cellphone extends Horde_Form_Type_phone {
 
 class Horde_Form_Type_ipaddress extends Horde_Form_Type_text {
 
-    function isValid(&$var, &$vars, $value, &$message)
+    function isValid($var, $vars, $value, $message)
     {
         $valid = true;
 
@@ -561,7 +561,7 @@ class Horde_Form_Type_ipaddress extends Horde_Form_Type_text {
 
 class Horde_Form_Type_ip6address extends Horde_Form_Type_text {
 
-    function isValid(&$var, &$vars, $value, &$message)
+    function isValid($var, $vars, $value, $message)
     {
         $valid = true;
 
@@ -678,7 +678,7 @@ class Horde_Form_Type_countedtext extends Horde_Form_Type_longtext {
         $this->_chars = $chars;
     }
 
-    function isValid(&$var, &$vars, $value, &$message)
+    function isValid($var, $vars, $value, $message)
     {
         $valid = true;
 
@@ -830,7 +830,7 @@ class Horde_Form_Type_address extends Horde_Form_Type_longtext {
 
 class Horde_Form_Type_addresslink extends Horde_Form_Type_address {
 
-    function isValid(&$var, &$vars, $value, &$message)
+    function isValid($var, $vars, $value, $message)
     {
         return true;
     }
@@ -990,7 +990,7 @@ class Horde_Form_Type_country extends Horde_Form_Type_enum {
 
 class Horde_Form_Type_file extends Horde_Form_Type {
 
-    function isValid(&$var, &$vars, $value, &$message)
+    function isValid($var, $vars, $value, $message)
     {
         if ($var->isRequired()) {
             try {
@@ -1004,7 +1004,7 @@ class Horde_Form_Type_file extends Horde_Form_Type {
         return true;
     }
 
-    function getInfo(&$vars, &$var, &$info)
+    function getInfo($vars, $var, $info)
     {
         $name = $var->getVarName();
         try {
@@ -1085,7 +1085,7 @@ class Horde_Form_Type_image extends Horde_Form_Type {
     }
 
     /**
-     *     function onSubmit(&$var, &$vars)
+     *     function onSubmit($var, $vars)
      */
     public function onSubmit(...$params)
     {
@@ -1120,7 +1120,7 @@ class Horde_Form_Type_image extends Horde_Form_Type {
      * @param something  $message       Not clear what this field does
      */
 
-    function isValid(&$var, &$vars, $value, &$message)
+    function isValid($var, $vars, $value, $message)
     {
         if ($vars->get('remove_' . $var->getVarName())) {
             return true;
@@ -1167,7 +1167,7 @@ class Horde_Form_Type_image extends Horde_Form_Type {
         return true;
     }
 
-    function getInfo(&$vars, &$var, &$info)
+    function getInfo($vars, $var, $info)
     {
         /* Get the upload. */
         $this->getImage($vars, $var);
@@ -1224,7 +1224,7 @@ class Horde_Form_Type_image extends Horde_Form_Type {
      * @param Horde_Form_Variable $var  The Form field object to check
      *
      */
-    function _getUpload(&$vars, &$var)
+    function _getUpload($vars, $var)
     {
         global $session;
 
@@ -1380,7 +1380,7 @@ class Horde_Form_Type_image extends Horde_Form_Type {
      *
      * @param array $image  The image array.
      */
-    function loadImageData(&$image)
+    function loadImageData($image)
     {
         /* No existing image data to load. */
         if (!isset($image['load'])) {
@@ -1426,12 +1426,12 @@ class Horde_Form_Type_image extends Horde_Form_Type {
 
 class Horde_Form_Type_boolean extends Horde_Form_Type {
 
-    function isValid(&$var, &$vars, $value, &$message)
+    function isValid($var, $vars, $value, $message)
     {
         return true;
     }
 
-    function getInfo(&$vars, &$var, &$info)
+    function getInfo($vars, $var, $info)
     {
         $info = Horde_String::lower($vars->get($var->getVarName())) == 'on';
     }
@@ -1466,7 +1466,7 @@ class Horde_Form_Type_link extends Horde_Form_Type {
         $this->values = $params[0] ?? null;
     }
 
-    function isValid(&$var, &$vars, $value, &$message)
+    function isValid($var, $vars, $value, $message)
     {
         return true;
     }
@@ -1585,7 +1585,7 @@ class Horde_Form_Type_email extends Horde_Form_Type {
 
     /**
      */
-    function isValid(&$var, &$vars, $value, &$message)
+    function isValid($var, $vars, $value, $message)
     {
         // Split into individual addresses.
         $emails = $this->splitEmailAddresses($value);
@@ -2205,7 +2205,7 @@ class Horde_Form_Type_matrix extends Horde_Form_Type {
         $this->_new_input  = $params[3] ?? false;
     }
 
-    function isValid(&$var, &$vars, $value, &$message)
+    function isValid($var, $vars, $value, $message)
     {
         return true;
     }
@@ -2215,7 +2215,7 @@ class Horde_Form_Type_matrix extends Horde_Form_Type {
     function getMatrix()   { return $this->_matrix; }
     function getNewInput() { return $this->_new_input; }
 
-    function getInfo(&$vars, &$var, &$info)
+    function getInfo($vars, $var, $info)
     {
         $values = $vars->get($var->getVarName());
         if (!empty($values['n']['r']) && isset($values['n']['v'])) {
@@ -2240,7 +2240,7 @@ class Horde_Form_Type_matrix extends Horde_Form_Type {
 
 class Horde_Form_Type_emailConfirm extends Horde_Form_Type {
 
-    function isValid(&$var, &$vars, $value, &$message)
+    function isValid($var, $vars, $value, $message)
     {
         if ($var->isRequired() && empty($value['original'])) {
             $message = Horde_Form_Translation::t("This field is required.");
@@ -2280,7 +2280,7 @@ class Horde_Form_Type_emailConfirm extends Horde_Form_Type {
 
 class Horde_Form_Type_password extends Horde_Form_Type {
 
-    function isValid(&$var, &$vars, $value, &$message)
+    function isValid($var, $vars, $value, $message)
     {
         $valid = true;
 
@@ -2307,7 +2307,7 @@ class Horde_Form_Type_password extends Horde_Form_Type {
 
 class Horde_Form_Type_passwordconfirm extends Horde_Form_Type {
 
-    function isValid(&$var, &$vars, $value, &$message)
+    function isValid($var, $vars, $value, $message)
     {
         if ($var->isRequired() && empty($value['original'])) {
             $message = Horde_Form_Translation::t("This field is required.");
@@ -2322,7 +2322,7 @@ class Horde_Form_Type_passwordconfirm extends Horde_Form_Type {
         return true;
     }
 
-    function getInfo(&$vars, &$var, &$info)
+    function getInfo($vars, $var, $info)
     {
         $value = $vars->get($var->getVarName());
         $info = $value['original'];
@@ -2365,7 +2365,7 @@ class Horde_Form_Type_enum extends Horde_Form_Type {
         }
     }
 
-    function isValid(&$var, &$vars, $value, &$message)
+    function isValid($var, $vars, $value, $message)
     {
         if ($var->isRequired() && $value == '' && !isset($this->_values[$value])) {
             $message = Horde_Form_Translation::t("This field is required.");
@@ -2420,7 +2420,7 @@ class Horde_Form_Type_mlenum extends Horde_Form_Type {
     /**
      * Initialize an mlenum field
      * 
-     * function init(&$values, $prompts = null)
+     * function init($values, $prompts = null)
      */
     function init(...$params)
     {
@@ -2437,7 +2437,7 @@ class Horde_Form_Type_mlenum extends Horde_Form_Type {
     }
 
     /**
-     *     function onSubmit(&$var, &$vars)
+     *     function onSubmit($var, $vars)
      */
     public function onSubmit(...$params)
     {
@@ -2452,7 +2452,7 @@ class Horde_Form_Type_mlenum extends Horde_Form_Type {
         }
     }
 
-    function isValid(&$var, &$vars, $value, &$message)
+    function isValid($var, $vars, $value, $message)
     {
         if ($var->isRequired() && (empty($value['1']) || empty($value['2']))) {
             $message = Horde_Form_Translation::t("This field is required.");
@@ -2478,7 +2478,7 @@ class Horde_Form_Type_mlenum extends Horde_Form_Type {
         return $this->_prompts;
     }
 
-    function getInfo(&$vars, &$var, &$info)
+    function getInfo($vars, $var, $info)
     {
         $info = $vars->get($var->getVarName());
         return $info['2'];
@@ -2529,7 +2529,7 @@ class Horde_Form_Type_multienum extends Horde_Form_Type_enum {
         parent::init($values);
     }
 
-    function isValid(&$var, &$vars, $value, &$message)
+    function isValid($var, $vars, $value, $message)
     {
         if (is_array($value)) {
             foreach ($value as $val) {
@@ -2576,7 +2576,7 @@ class Horde_Form_Type_multienum extends Horde_Form_Type_enum {
 
 class Horde_Form_Type_keyval_multienum extends Horde_Form_Type_multienum {
 
-    function getInfo(&$vars, &$var, &$info)
+    function getInfo($vars, $var, $info)
     {
         $value = $vars->get($var->getVarName());
         $info = array();
@@ -2631,7 +2631,7 @@ class Horde_Form_Type_set extends Horde_Form_Type {
         $this->_checkAll = $params[1] ?? false;
     }
 
-    function isValid(&$var, &$vars, $value, &$message)
+    function isValid($var, $vars, $value, $message)
     {
         if (count($this->_values) == 0 || count($value) == 0) {
             return true;
@@ -2683,7 +2683,7 @@ class Horde_Form_Type_date extends Horde_Form_Type {
         $this->_format = $params[0] ?? '%a %d %B';
     }
 
-    function isValid(&$var, &$vars, $value, &$message)
+    function isValid($var, $vars, $value, $message)
     {
         $valid = true;
 
@@ -2758,7 +2758,7 @@ class Horde_Form_Type_date extends Horde_Form_Type {
 
 class Horde_Form_Type_time extends Horde_Form_Type {
 
-    function isValid(&$var, &$vars, $value, &$message)
+    function isValid($var, $vars, $value, $message)
     {
         if ($var->isRequired() && empty($value) && ((string)(double)$value !== $value)) {
             $message = Horde_Form_Translation::t("This field is required.");
@@ -2797,7 +2797,7 @@ class Horde_Form_Type_hourminutesecond extends Horde_Form_Type {
         $this->_show_seconds = $params[0] ?? false;
     }
 
-    function isValid(&$var, &$vars, $value, &$message)
+    function isValid($var, $vars, $value, $message)
     {
         $time = $vars->get($var->getVarName());
         if (!$this->_show_seconds && count($time) && !isset($time['second'])) {
@@ -2925,7 +2925,7 @@ class Horde_Form_Type_monthyear extends Horde_Form_Type {
         $this->_end_year = $end_year;
     }
 
-    function isValid(&$var, &$vars, $value, &$message)
+    function isValid($var, $vars, $value, $message)
     {
         if (!$var->isRequired()) {
             return true;
@@ -3010,7 +3010,7 @@ class Horde_Form_Type_monthdayyear extends Horde_Form_Type {
         $this->_format_out = $format_out;
     }
 
-    function isValid(&$var, &$vars, $value, &$message)
+    function isValid($var, $vars, $value, $message)
     {
         $date = $vars->get($var->getVarName());
         $empty = $this->emptyDateArray($date);
@@ -3147,7 +3147,7 @@ class Horde_Form_Type_monthdayyear extends Horde_Form_Type {
      * specified by the $format_in parameter when setting up monthdayyear
      * field.
      */
-    function getInfo(&$vars, &$var, &$info)
+    function getInfo($vars, $var, $info)
     {
         $info = $this->_validateAndFormat($var->getValue($vars), $var);
     }
@@ -3155,7 +3155,7 @@ class Horde_Form_Type_monthdayyear extends Horde_Form_Type {
     /**
      * Validate/format a date submission.
      */
-    function _validateAndFormat($value, &$var)
+    function _validateAndFormat($value, $var)
     {
         /* If any component is empty consider it a bad date and return the
          * default. */
@@ -3237,7 +3237,7 @@ class Horde_Form_Type_datetime extends Horde_Form_Type {
         $this->_show_seconds = $show_seconds;
     }
 
-    function isValid(&$var, &$vars, $value, &$message)
+    function isValid($var, $vars, $value, $message)
     {
         $date = $vars->get($var->getVarName());
         if (!$this->_show_seconds && !isset($date['second'])) {
@@ -3268,7 +3268,7 @@ class Horde_Form_Type_datetime extends Horde_Form_Type {
         return $valid;
     }
 
-    function getInfo(&$vars, &$var, &$info)
+    function getInfo($vars, $var, $info)
     {
         /* If any component is empty consider it a bad date and return the
          * default. */
@@ -3281,7 +3281,7 @@ class Horde_Form_Type_datetime extends Horde_Form_Type {
         $this->_getInfo($value, $info);
     }
 
-    function _getInfo($value, &$info)
+    function _getInfo($value, $info)
     {
         // If any component is empty consider it a bad date and return null 
         if ($this->emptyDateArray($value) != 0 || $this->emptyTimeArray($value)) {
@@ -3385,7 +3385,7 @@ class Horde_Form_Type_datetime extends Horde_Form_Type {
 
 class Horde_Form_Type_colorpicker extends Horde_Form_Type {
 
-    function isValid(&$var, &$vars, $value, &$message)
+    function isValid($var, $vars, $value, $message)
     {
         if ($var->isRequired() && empty($value)) {
             $message = Horde_Form_Translation::t("This field is required.");
@@ -3424,7 +3424,7 @@ class Horde_Form_Type_sound extends Horde_Form_Type {
         return $this->_sounds;
     }
 
-    function isValid(&$var, &$vars, $value, &$message)
+    function isValid($var, $vars, $value, $message)
     {
         if ($var->isRequired() && empty($value)) {
             $message = Horde_Form_Translation::t("This field is required.");
@@ -3476,7 +3476,7 @@ class Horde_Form_Type_sorter extends Horde_Form_Type {
         $this->_header = $header;
     }
 
-    function isValid(&$var, &$vars, $value, &$message)
+    function isValid($var, $vars, $value, $message)
     {
         return true;
     }
@@ -3518,7 +3518,7 @@ class Horde_Form_Type_sorter extends Horde_Form_Type {
         return $html;
     }
 
-    function getInfo(&$vars, &$var, &$info)
+    function getInfo($vars, $var, $info)
     {
         $value = $vars->get($var->getVarName());
         $info = explode("\t", $value['array']);
@@ -3593,12 +3593,12 @@ class Horde_Form_Type_selectfiles extends Horde_Form_Type {
         $this->_icon = $icon;
     }
 
-    function isValid(&$var, &$vars, $value, &$message)
+    function isValid($var, $vars, $value, $message)
     {
         return true;
     }
 
-    function getInfo(&$var, &$vars, &$info)
+    function getInfo($var, $vars, $info)
     {
         $value = $vars->getValue($var);
         $info = $GLOBALS['registry']->call('files/selectlistResults', array($value));
@@ -3646,7 +3646,7 @@ class Horde_Form_Type_assign extends Horde_Form_Type {
         $this->_width = $params[5] ?? '200px';
     }
 
-    function isValid(&$var, &$vars, $value, &$message)
+    function isValid($var, $vars, $value, $message)
     {
         return true;
     }
@@ -3714,7 +3714,7 @@ class Horde_Form_Type_assign extends Horde_Form_Type {
         return $html;
     }
 
-    function getInfo(&$vars, &$var, &$info)
+    function getInfo($vars, $var, $info)
     {
         $value = $vars->get($var->getVarName() . '__values');
         if (strpos($value, "\t\t") === false) {
@@ -3761,7 +3761,7 @@ class Horde_Form_Type_assign extends Horde_Form_Type {
 
 class Horde_Form_Type_creditcard extends Horde_Form_Type {
 
-    function isValid(&$var, &$vars, $value, &$message)
+    function isValid($var, $vars, $value, $message)
     {
         if (empty($value) && $var->isRequired()) {
             $message = Horde_Form_Translation::t("This field is required.");
@@ -3863,7 +3863,7 @@ class Horde_Form_Type_creditcard extends Horde_Form_Type {
 
 class Horde_Form_Type_obrowser extends Horde_Form_Type {
 
-    function isValid(&$var, &$vars, $value, &$message)
+    function isValid($var, $vars, $value, $message)
     {
         return true;
     }
@@ -3939,7 +3939,7 @@ class Horde_Form_Type_figlet extends Horde_Form_Type {
         $this->_font = $params[1];
     }
 
-    function isValid(&$var, &$vars, $value, &$message)
+    function isValid($var, $vars, $value, $message)
     {
         if (empty($value) && $var->isRequired()) {
             $message = Horde_Form_Translation::t("This field is required.");
@@ -4002,7 +4002,7 @@ class Horde_Form_Type_captcha extends Horde_Form_Type_figlet {
 
 class Horde_Form_Type_category extends Horde_Form_Type {
 
-    function getInfo(&$vars, &$var, &$info)
+    function getInfo($vars, $var, $info)
     {
         $info = $var->getValue($vars);
         if ($info == '*new*') {
@@ -4022,7 +4022,7 @@ class Horde_Form_Type_category extends Horde_Form_Type {
         return array('name' => Horde_Form_Translation::t("Category"));
     }
 
-    function isValid(&$var, &$vars, $value, &$message)
+    function isValid($var, $vars, $value, $message)
     {
         if (empty($value) && $var->isRequired()) {
             $message = Horde_Form_Translation::t("This field is required.");
@@ -4048,7 +4048,7 @@ class Horde_Form_Type_invalid extends Horde_Form_Type {
         $this->message = $params[0] ?? '';
     }
 
-    function isValid(&$var, &$vars, $value, &$message)
+    function isValid($var, $vars, $value, $message)
     {
         return false;
     }
