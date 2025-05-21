@@ -97,4 +97,15 @@ class BasicFormTest extends TestCase
         $this->assertEquals('value1', $result['testField1']);
         $this->assertEquals('value2', $result['testField2']);   
     }
+
+    public function testGetInfoWithMultiEnum()
+    {
+        $vars = new Horde_Variables(['multienum1' => ['optiona', 'optionb']]);
+        $params = ['optiona' => 'Option A', 'optionb' => 'Option B', 'optionc' => 'Option C', 'optiond' => 'Option D'];
+        $info = [];
+        $form = new Horde_Form($vars, name: 'testFormWithMultiEnum');
+        $form->addVariable(humanName: 'SelectBoxMultiEnum', varName: 'multienum1', type: 'multienum', required: false, readonly: false, description: 'testMultiEnum1', params: $params);
+        $result = $form->getInfo(null, $info);
+        $this->assertIsArray($result);
+    }
 }
