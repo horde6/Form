@@ -28,7 +28,7 @@
         "horde/nls": "^3 || dev-FRAMEWORK_6_0",
         "horde/token": "^3 || dev-FRAMEWORK_6_0",
         "horde/translation": "^3 || dev-FRAMEWORK_6_0",
-        "horde/util": "^3 || dev-FRAMEWORK_6_0",
+        "horde/util": "^3.0.0alpha8 || dev-FRAMEWORK_6_0",
         "ext-json": "*"
     },
     "require-dev": {

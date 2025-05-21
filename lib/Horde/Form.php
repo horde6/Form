@@ -792,6 +792,7 @@ class Horde_Form
                 // pretend they were.
                 continue;
             }
+            // An ArrayVal is a value with a varName ending with []
             if ($var->isArrayVal()) {
                 $var->getInfo($vars, $values);
                 if (is_array($values)) {
@@ -801,19 +802,11 @@ class Horde_Form
                     }
                 }
             } else {
+                // A field name like example[key1][key2][key3]
                 if (Horde_Array::getArrayParts($var->getVarName(), $base, $keys)) {
-                    if (!isset($info[$base])) {
-                        $info[$base] = [];
-                    }
-                    $pointer = $info[$base];
-                    while (count($keys)) {
-                        $key = array_shift($keys);
-                        if (!isset($pointer[$key])) {
-                            $pointer[$key] = [];
-                        }
-                        $pointer = $pointer[$key];
-                    }
-                    $var->getInfo($vars, $pointer);
+                    $res = $var->getInfo($vars, $var->getVarName());
+                    $path = array_merge([$base], $keys);
+                    Horde_Array::setElement($info, $path, $res);
                 } else {
                     $info[$var->getVarName()] = $var->getInfo($vars, $info[$var->getVarName()]);
                 }
