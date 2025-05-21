@@ -219,6 +219,7 @@ class Horde_Form_Type_number extends Horde_Form_Type
         $linfo = Horde_Nls::getLocaleInfo();
         $value = str_replace($linfo['mon_thousands_sep'], '', $value);
         $info = str_replace($linfo['mon_decimal_point'], '.', $value);
+        return $info;
     }
 
     /**
@@ -430,6 +431,7 @@ class Horde_Form_Type_stringarray extends Horde_Form_Type_stringlist
     public function getInfo($vars, $var, $info)
     {
         $info = array_map('trim', explode(',', $vars->get($var->getVarName())));
+        return $info;
     }
 
     /**
@@ -1015,6 +1017,7 @@ class Horde_Form_Type_file extends Horde_Form_Type
             $info['size'] = $_FILES[$name]['size'];
         } catch (Horde_Browser_Exception $e) {
         }
+        return $info;
     }
 
     /**
@@ -1213,6 +1216,7 @@ class Horde_Form_Type_image extends Horde_Form_Type
                 rename($mod_file, $info['file']);
             }
         }
+        return $info;
     }
 
     /**
@@ -1433,6 +1437,7 @@ class Horde_Form_Type_boolean extends Horde_Form_Type
     public function getInfo($vars, $var, $info)
     {
         $info = Horde_String::lower($vars->get($var->getVarName())) == 'on';
+        return $info;
     }
 
     /**
@@ -2272,6 +2277,7 @@ class Horde_Form_Type_matrix extends Horde_Form_Type
         }
 
         $info = ($values['r'] ?? []);
+        return $info;
     }
 
     public function about()
@@ -2373,6 +2379,7 @@ class Horde_Form_Type_passwordconfirm extends Horde_Form_Type
     {
         $value = $vars->get($var->getVarName());
         $info = $value['original'];
+        return $info;
     }
 
     /**
@@ -2630,6 +2637,7 @@ class Horde_Form_Type_keyval_multienum extends Horde_Form_Type_multienum
         foreach ($value as $key) {
             $info[$key] = $this->_values[$key];
         }
+        return $info;
     }
 
     /**
@@ -3201,6 +3209,7 @@ class Horde_Form_Type_monthdayyear extends Horde_Form_Type
     public function getInfo($vars, $var, $info)
     {
         $info = $this->_validateAndFormat($var->getValue($vars), $var);
+        return $info;
     }
 
     /**
@@ -3329,7 +3338,7 @@ class Horde_Form_Type_datetime extends Horde_Form_Type
             return;
         }
 
-        $this->_getInfo($value, $info);
+        return $this->_getInfo($value, $info);
     }
 
     public function _getInfo($value, $info)
@@ -3350,6 +3359,7 @@ class Horde_Form_Type_datetime extends Horde_Form_Type
         } else {
             $info = $date->strftime($this->getProperty('format_in'));
         }
+        return $info;
     }
 
     public function getProperty($property)
@@ -3573,6 +3583,7 @@ class Horde_Form_Type_sorter extends Horde_Form_Type
     {
         $value = $vars->get($var->getVarName());
         $info = explode("\t", $value['array']);
+        return $info;
     }
 
     /**
@@ -3653,6 +3664,7 @@ class Horde_Form_Type_selectfiles extends Horde_Form_Type
     {
         $value = $vars->getValue($var);
         $info = $GLOBALS['registry']->call('files/selectlistResults', [$value]);
+        return $info;
     }
 
     public function about()
@@ -3784,6 +3796,7 @@ class Horde_Form_Type_assign extends Horde_Form_Type
         } else {
             $info['right'] = explode("\t", $right);
         }
+        return $info;
     }
 
     /**
@@ -4063,6 +4076,7 @@ class Horde_Form_Type_category extends Horde_Form_Type
             $info = ['new' => false,
                 'value' => $info];
         }
+        return $info;
     }
 
     /**
