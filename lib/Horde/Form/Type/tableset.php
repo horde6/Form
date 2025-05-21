@@ -1,40 +1,41 @@
 <?php
+
 /**
  * Copyright 2001-2017 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
  *
- * @author   
+ * @author
  * @category Horde
  * @license  http://www.horde.org/licenses/lgpl21 LGPL
  * @package  Form
  */
 
 /**
- * 
  *
- * @author    
+ *
+ * @author
  * @category  Horde
  * @copyright 2001-2017 Horde LLC
  * @license   http://www.horde.org/licenses/lgpl21 LGPL
  * @package   Form
  */
-class Horde_Form_Type_tableset extends Horde_Form_Type {
-
-    var $_values;
-    var $_header;
+class Horde_Form_Type_tableset extends Horde_Form_Type
+{
+    public $_values;
+    public $_header;
 
     /**
      *     function init($values, $header)
      */
-    function init(...$params)
+    public function init(...$params)
     {
         $this->_values = $params[0];
         $this->_header = $params[1];
     }
 
-    function isValid($var, $vars, $value, $message)
+    public function isValid($var, $vars, $value, $message)
     {
         if (count($this->_values) == 0 || count($value) == 0) {
             return true;
@@ -53,12 +54,12 @@ class Horde_Form_Type_tableset extends Horde_Form_Type {
         return false;
     }
 
-    function getHeader()
+    public function getHeader()
     {
         return $this->_header;
     }
 
-    function getValues()
+    public function getValues()
     {
         return $this->_values;
     }
@@ -66,16 +67,16 @@ class Horde_Form_Type_tableset extends Horde_Form_Type {
     /**
      * Return info about field type.
      */
-    function about()
+    public function about()
     {
-        return array(
+        return [
             'name' => Horde_Form_Translation::t("Table Set"),
-            'params' => array(
-                'values' => array('label' => Horde_Form_Translation::t("Values"),
-                                  'type'  => 'stringlist'),
-                'header' => array('label' => Horde_Form_Translation::t("Headers"),
-                                  'type'  => 'stringlist')),
-            );
+            'params' => [
+                'values' => ['label' => Horde_Form_Translation::t("Values"),
+                    'type'  => 'stringlist'],
+                'header' => ['label' => Horde_Form_Translation::t("Headers"),
+                    'type'  => 'stringlist']],
+        ];
     }
 
 }

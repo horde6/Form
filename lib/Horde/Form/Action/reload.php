@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright 2003-2017 Horde LLC (http://www.horde.org/)
  *
@@ -22,11 +23,11 @@
  * @license   http://www.horde.org/licenses/lgpl21 LGPL
  * @package   Form
  */
-class Horde_Form_Action_reload extends Horde_Form_Action {
+class Horde_Form_Action_reload extends Horde_Form_Action
+{
+    public $_trigger = ['onchange'];
 
-    var $_trigger = array('onchange');
-
-    function getActionScript($form, $renderer, $varname)
+    public function getActionScript($form, $renderer, $varname)
     {
         $page_output = $GLOBALS['injector']->getInstance('Horde_PageOutput');
         $page_output->addScriptFile('scriptaculous/effects.js', 'horde');

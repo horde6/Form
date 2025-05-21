@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright 2001-2007 Robert E. Coyle <robertecoyle@hotmail.com>
  * Copyright 2001-2017 Horde LLC (http://www.horde.org/)
@@ -12,8 +13,11 @@
  * @license  http://www.horde.org/licenses/lgpl21 LGPL
  * @package  Form
  */
-
-require_once 'Horde/Form/Type.php';
+// Restrict legacy loader
+if (!class_exists('Horde_Form_Type'))
+{
+    require_once 'Horde/Form/Type.php';
+}
 
 /**
  * Horde_Form Master Class.
@@ -26,27 +30,27 @@ require_once 'Horde/Form/Type.php';
  * @license   http://www.horde.org/licenses/lgpl21 LGPL
  * @package   Form
  */
-class Horde_Form {
-
+class Horde_Form
+{
     protected $_name = '';
     protected $_title = '';
     protected $_extra = '';
     protected $_vars;
-    protected $_submit = array();
+    protected $_submit = [];
     protected $_reset = false;
-    protected $_errors = array();
+    protected $_errors = [];
     protected $_submitted = null;
-    public $_sections = array();
+    public $_sections = [];
     protected $_open_section = null;
-    protected $_currentSection = array();
-    protected $_variables = array();
-    protected $_hiddenVariables = array();
+    protected $_currentSection = [];
+    protected $_variables = [];
+    protected $_hiddenVariables = [];
     protected $_useFormToken = true;
     protected $_autofilled = false;
     protected $_enctype = null;
     public $_help = false;
 
-    function __construct($vars, $title = '', $name = null)
+    public function __construct($vars, $title = '', $name = null)
     {
         if (empty($name)) {
             $name = Horde_String::lower(get_class($this));
@@ -58,13 +62,13 @@ class Horde_Form {
     }
 
     /**
-     * @deprecated
+     * @deprecated Due for removal in 3.0.0 final release.
      */
-    function singleton($form, $vars, $title = '', $name = null)
+    public function singleton($form, $vars, $title = '', $name = null)
     {
-        static $instances = array();
+        static $instances = [];
 
-        $signature = serialize(array($form, $vars, $title, $name));
+        $signature = serialize([$form, $vars, $title, $name]);
         if (!isset($instances[$signature])) {
             if (class_exists($form)) {
                 $instances[$signature] = new $form($vars, $title, $name);
@@ -76,37 +80,37 @@ class Horde_Form {
         return $instances[$signature];
     }
 
-    function setVars($vars)
+    public function setVars($vars)
     {
         $this->_vars = &$vars;
     }
 
-    function getVars()
+    public function getVars()
     {
         return $this->_vars;
     }
 
-    function getTitle()
+    public function getTitle()
     {
         return $this->_title;
     }
 
-    function setTitle($title)
+    public function setTitle($title)
     {
         $this->_title = $title;
     }
 
-    function getExtra()
+    public function getExtra()
     {
         return $this->_extra;
     }
 
-    function setExtra($extra)
+    public function setExtra($extra)
     {
         $this->_extra = $extra;
     }
 
-    function getName()
+    public function getName()
     {
         return $this->_name;
     }
@@ -119,7 +123,7 @@ class Horde_Form {
      *
      * @return boolean  Whether form tokens are being used.
      */
-    function useToken($token = null)
+    public function useToken($token = null)
     {
         if (!is_null($token)) {
             $this->_useFormToken = $token;
@@ -147,7 +151,7 @@ class Horde_Form {
      *
      * @return object Horde_Form_Renderer  The form renderer.
      */
-    function getRenderer($params = array())
+    public function getRenderer($params = [])
     {
         $renderer = new Horde_Form_Renderer($params);
         return $renderer;
@@ -155,13 +159,13 @@ class Horde_Form {
 
     /**
      * Initialize a Horde_Form_Type object from a type id
-     * 
+     *
      * @throws Horde_Exception
      */
-    function getType($type, $params = array())
+    public function getType($type, $params = [])
     {
         if (strpos($type, ':') !== false) {
-            list($app, $type) = explode(':', $type);
+            [$app, $type] = explode(':', $type);
             $type_class = $app . '_Form_Type_' . $type;
         } else {
             $type_class = 'Horde_Form_Type_' . $type;
@@ -173,11 +177,11 @@ class Horde_Form {
         if (!$params) {
             $params = [];
         }
-        call_user_func_array(array($type_ob, 'init'), $params);
+        call_user_func_array([$type_ob, 'init'], $params);
         return $type_ob;
     }
 
-    function setSection($section = '', $desc = '', $image = '', $expanded = true)
+    public function setSection($section = '', $desc = '', $image = '', $expanded = true)
     {
         $this->_currentSection = $section;
         if (!count($this->_sections) && !$this->getOpenSection()) {
@@ -188,27 +192,27 @@ class Horde_Form {
         $this->_sections[$section]['image'] = $image;
     }
 
-    function getSectionDesc($section)
+    public function getSectionDesc($section)
     {
         return $this->_sections[$section]['desc'];
     }
 
-    function getSectionImage($section)
+    public function getSectionImage($section)
     {
         return $this->_sections[$section]['image'];
     }
 
-    function setOpenSection($section)
+    public function setOpenSection($section)
     {
         $this->_vars->set('__formOpenSection', $section);
     }
 
-    function getOpenSection()
+    public function getOpenSection()
     {
         return $this->_vars->get('__formOpenSection');
     }
 
-    function getSectionExpandedState($section, $boolean = false)
+    public function getSectionExpandedState($section, $boolean = false)
     {
         if ($boolean) {
             /* Only the boolean value is required. */
@@ -224,27 +228,51 @@ class Horde_Form {
     }
 
     /**
-     * TODO
+     * Add a new form field variable to the form.
      */
-    function addVariable($humanName, $varName, $type, $required,
-                         $readonly = false, $description = null,
-                         $params = array())
-    {
-        return $this->insertVariableBefore(null, $humanName, $varName, $type,
-                                           $required, $readonly, $description,
-                                           $params);
+    public function addVariable(
+        $humanName,
+        $varName,
+        $type,
+        $required,
+        $readonly = false,
+        $description = null,
+        $params = []
+    ) {
+        return $this->insertVariableBefore(
+            null,
+            $humanName,
+            $varName,
+            $type,
+            $required,
+            $readonly,
+            $description,
+            $params
+        );
     }
 
     /**
      * TODO
      */
-    function insertVariableBefore($before, $humanName, $varName, $type,
-                                  $required, $readonly = false,
-                                  $description = null, $params = array())
-    {
+    public function insertVariableBefore(
+        $before,
+        $humanName,
+        $varName,
+        $type,
+        $required,
+        $readonly = false,
+        $description = null,
+        $params = []
+    ) {
         $type = $this->getType($type, $params);
-        $var = new Horde_Form_Variable($humanName, $varName, $type,
-                                       $required, $readonly, $description);
+        $var = new Horde_Form_Variable(
+            $humanName,
+            $varName,
+            $type,
+            $required,
+            $readonly,
+            $description
+        );
 
         /* Set the form object reference in the var. */
         $var->setFormOb($this);
@@ -276,8 +304,9 @@ class Horde_Form {
             } else {
                 $this->_variables[$this->_currentSection] = array_merge(
                     array_slice($this->_variables[$this->_currentSection], 0, $num),
-                    array(&$var),
-                    array_slice($this->_variables[$this->_currentSection], $num));
+                    [&$var],
+                    array_slice($this->_variables[$this->_currentSection], $num)
+                );
             }
         }
 
@@ -299,7 +328,7 @@ class Horde_Form {
      *
      * @return boolean  True if the variable was found (and deleted).
      */
-    function removeVariable($var)
+    public function removeVariable($var)
     {
         foreach (array_keys($this->_variables) as $section) {
             foreach (array_keys($this->_variables[$section]) as $i) {
@@ -308,7 +337,8 @@ class Horde_Form {
                     // Slice out the variable to be removed.
                     $this->_variables[$section] = array_merge(
                         array_slice($this->_variables[$section], 0, $i),
-                        array_slice($this->_variables[$section], $i + 1));
+                        array_slice($this->_variables[$section], $i + 1)
+                    );
 
                     return true;
                 }
@@ -324,22 +354,33 @@ class Horde_Form {
      * @todo Remove $readonly parameter. Hidden fields are read-only by
      *       definition.
      */
-    function addHidden($humanName, $varName, $type, $required,
-                       $readonly = false, $description = null,
-                       $params = array())
-    {
+    public function addHidden(
+        $humanName,
+        $varName,
+        $type,
+        $required,
+        $readonly = false,
+        $description = null,
+        $params = []
+    ) {
         $type = $this->getType($type, $params);
-        $var = new Horde_Form_Variable($humanName, $varName, $type,
-                                       $required, $readonly, $description);
+        $var = new Horde_Form_Variable(
+            $humanName,
+            $varName,
+            $type,
+            $required,
+            $readonly,
+            $description
+        );
         $var->hide();
         $this->_hiddenVariables[] = &$var;
         return $var;
     }
 
-    function getVariables($flat = true, $withHidden = false)
+    public function getVariables($flat = true, $withHidden = false)
     {
         if ($flat) {
-            $vars = array();
+            $vars = [];
             foreach ($this->_variables as $section) {
                 foreach ($section as $var) {
                     $vars[] = $var;
@@ -356,14 +397,14 @@ class Horde_Form {
         }
     }
 
-    function setButtons($submit, $reset = false)
+    public function setButtons($submit, $reset = false)
     {
         if ($submit === true || is_null($submit) || empty($submit)) {
             /* Default to 'Submit'. */
-            $submit = array(Horde_Form_Translation::t("Submit"));
+            $submit = [Horde_Form_Translation::t("Submit")];
         } elseif (!is_array($submit)) {
             /* Default to array if not passed. */
-            $submit = array($submit);
+            $submit = [$submit];
         }
         /* Only if $reset is strictly true insert default 'Reset'. */
         if ($reset === true) {
@@ -374,16 +415,16 @@ class Horde_Form {
         $this->_reset = $reset;
     }
 
-    function appendButtons($submit)
+    public function appendButtons($submit)
     {
         if (!is_array($submit)) {
-            $submit = array($submit);
+            $submit = [$submit];
         }
 
         $this->_submit = array_merge($this->_submit, $submit);
     }
 
-    function preserveVarByPost($vars, $varname, $alt_varname = '')
+    public function preserveVarByPost($vars, $varname, $alt_varname = '')
     {
         $value = $vars->getExists($varname, $wasset);
 
@@ -400,7 +441,7 @@ class Horde_Form {
     /**
      * @access private
      */
-    function _preserveVarByPost($varname, $value)
+    public function _preserveVarByPost($varname, $value)
     {
         if (is_array($value)) {
             foreach ($value as $id => $val) {
@@ -409,13 +450,15 @@ class Horde_Form {
         } else {
             $varname = htmlspecialchars($varname);
             $value = htmlspecialchars($value);
-            printf('<input type="hidden" name="%s" value="%s" />' . "\n",
-                   $varname,
-                   $value);
+            printf(
+                '<input type="hidden" name="%s" value="%s" />' . "\n",
+                $varname,
+                $value
+            );
         }
     }
 
-    function open($renderer, $vars, $action, $method = 'get', $enctype = null)
+    public function open($renderer, $vars, $action, $method = 'get', $enctype = null)
     {
         if (is_null($enctype) && !is_null($this->_enctype)) {
             $enctype = $this->_enctype;
@@ -447,7 +490,7 @@ class Horde_Form {
         }
     }
 
-    function close($renderer)
+    public function close($renderer)
     {
         $renderer->close();
     }
@@ -466,9 +509,14 @@ class Horde_Form {
      *                                       automatically if null.
      * @param boolean $focus                 Focus the first form field?
      */
-    function renderActive($renderer = null, $vars = null, $action = '',
-                          $method = 'get', $enctype = null, $focus = true)
-    {
+    public function renderActive(
+        $renderer = null,
+        $vars = null,
+        $action = '',
+        $method = 'get',
+        $enctype = null,
+        $focus = true
+    ) {
         if (is_null($renderer)) {
             $renderer = $this->getRenderer();
         }
@@ -526,7 +574,7 @@ class Horde_Form {
      * @param Variables $vars                A Variables instance, optional
      *                                       since Horde 3.2.
      */
-    function renderInactive($renderer = null, $vars = null)
+    public function renderInactive($renderer = null, $vars = null)
     {
         if (is_null($renderer)) {
             $renderer = $this->getRenderer();
@@ -541,7 +589,7 @@ class Horde_Form {
         $renderer->end();
     }
 
-    function preserve($vars)
+    public function preserve($vars)
     {
         if ($this->_useFormToken) {
             $token = Horde_Token::generateId($this->_name);
@@ -555,22 +603,22 @@ class Horde_Form {
 
             /* Save value of individual components. */
             switch ($var->getTypeName()) {
-            case 'passwordconfirm':
-            case 'emailconfirm':
-                $this->preserveVarByPost($vars, $varname . '[original]');
-                $this->preserveVarByPost($vars, $varname . '[confirm]');
-                break;
+                case 'passwordconfirm':
+                case 'emailconfirm':
+                    $this->preserveVarByPost($vars, $varname . '[original]');
+                    $this->preserveVarByPost($vars, $varname . '[confirm]');
+                    break;
 
-            case 'monthyear':
-                $this->preserveVarByPost($vars, $varname . '[month]');
-                $this->preserveVarByPost($vars, $varname . '[year]');
-                break;
+                case 'monthyear':
+                    $this->preserveVarByPost($vars, $varname . '[month]');
+                    $this->preserveVarByPost($vars, $varname . '[year]');
+                    break;
 
-            case 'monthdayyear':
-                $this->preserveVarByPost($vars, $varname . '[month]');
-                $this->preserveVarByPost($vars, $varname . '[day]');
-                $this->preserveVarByPost($vars, $varname . '[year]');
-                break;
+                case 'monthdayyear':
+                    $this->preserveVarByPost($vars, $varname . '[month]');
+                    $this->preserveVarByPost($vars, $varname . '[day]');
+                    $this->preserveVarByPost($vars, $varname . '[year]');
+                    break;
             }
 
             $this->preserveVarByPost($vars, $varname);
@@ -580,7 +628,7 @@ class Horde_Form {
         }
     }
 
-    function unsetVars($vars)
+    public function unsetVars($vars)
     {
         foreach ($this->getVariables() as $var) {
             $vars->remove($var->getVarName());
@@ -599,7 +647,7 @@ class Horde_Form {
      *
      * @return boolean  True if the form is valid.
      */
-    function validate($vars = null, $canAutoFill = false)
+    public function validate($vars = null, $canAutoFill = false)
     {
         if (is_null($vars)) {
             $vars = $this->_vars;
@@ -658,27 +706,27 @@ class Horde_Form {
         return $this->isValid();
     }
 
-    function clearValidation()
+    public function clearValidation()
     {
-        $this->_errors = array();
+        $this->_errors = [];
     }
 
-    function getErrors()
+    public function getErrors()
     {
         return $this->_errors;
     }
 
-    function getError($var)
+    public function getError($var)
     {
         if (is_a($var, 'Horde_Form_Variable')) {
             $name = $var->getVarName();
         } else {
             $name = $var;
         }
-        return isset($this->_errors[$name]) ? $this->_errors[$name] : null;
+        return $this->_errors[$name] ?? null;
     }
 
-    function setError($var, $message)
+    public function setError($var, $message)
     {
         if (is_a($var, 'Horde_Form_Variable')) {
             $name = $var->getVarName();
@@ -688,7 +736,7 @@ class Horde_Form {
         $this->_errors[$name] = $message;
     }
 
-    function clearError($var)
+    public function clearError($var)
     {
         if (is_a($var, 'Horde_Form_Variable')) {
             $name = $var->getVarName();
@@ -698,12 +746,12 @@ class Horde_Form {
         unset($this->_errors[$name]);
     }
 
-    function isValid()
+    public function isValid()
     {
         return ($this->_autofilled || count($this->_errors) == 0);
     }
 
-    function execute()
+    public function execute()
     {
         Horde::log('Warning: Horde_Form::execute() called, should be overridden', 'DEBUG');
     }
@@ -711,17 +759,18 @@ class Horde_Form {
     /**
      * Fetch the field values of the submitted form.
      *
-     * @param Variables $vars  A Variables instance, optional since Horde 3.2.
+     * @param ?Variables $vars  A Variables instance, optional since Horde 3.2.
      * @param array $info      Array to be filled with the submitted field
      *                         values.
      */
-    function getInfo($vars, $info)
+    public function getInfo($vars = null, $info = [])
     {
         if (is_null($vars)) {
             $vars = $this->_vars;
         }
-        $this->_getInfoFromVariables($this->getVariables(), $vars, $info);
-        $this->_getInfoFromVariables($this->_hiddenVariables, $vars, $info);
+        $info = $this->_getInfoFromVariables($this->getVariables(), $vars, $info);
+        $info = $this->_getInfoFromVariables($this->_hiddenVariables, $vars, $info);
+        return $info;
     }
 
     /**
@@ -729,13 +778,13 @@ class Horde_Form {
      *
      * @access private
      *
-     * @param array  $variables  An array of Horde_Form_Variable objects to
+     * @param array  $variables  An array of Horde_Form_Variable (Fields) objects to
      *                           fetch from.
-     * @param object $vars       The Variables object.
+     * @param object $vars       The Variables object that holds the values.
      * @param array  $info       The array to be filled with the submitted
      *                           field values.
      */
-    function _getInfoFromVariables($variables, $vars, $info)
+    public function _getInfoFromVariables($variables, $vars, $info)
     {
         foreach ($variables as $var) {
             if ($var->isDisabled()) {
@@ -754,25 +803,26 @@ class Horde_Form {
             } else {
                 if (Horde_Array::getArrayParts($var->getVarName(), $base, $keys)) {
                     if (!isset($info[$base])) {
-                        $info[$base] = array();
+                        $info[$base] = [];
                     }
                     $pointer = $info[$base];
                     while (count($keys)) {
                         $key = array_shift($keys);
                         if (!isset($pointer[$key])) {
-                            $pointer[$key] = array();
+                            $pointer[$key] = [];
                         }
                         $pointer = $pointer[$key];
                     }
                     $var->getInfo($vars, $pointer);
                 } else {
-                    $var->getInfo($vars, $info[$var->getVarName()]);
+                    $info[$var->getVarName()] = $var->getInfo($vars, $info[$var->getVarName()]);
                 }
             }
         }
+        return $info;
     }
 
-    function hasHelp()
+    public function hasHelp()
     {
         return $this->_help;
     }
@@ -789,7 +839,7 @@ class Horde_Form {
      * @return boolean  True or false indicating if the form has been
      *                  submitted.
      */
-    function isSubmitted()
+    public function isSubmitted()
     {
         if (is_null($this->_submitted)) {
             if ($this->_vars->get('formname') == $this->getName()) {
@@ -808,7 +858,7 @@ class Horde_Form {
      *
      * @param Horde_Variables $vars
      */
-    function onSubmit($vars)
+    public function onSubmit($vars)
     {
         /* Loop through all vars and check if there's anything to do on
          * submit. */
@@ -836,7 +886,7 @@ class Horde_Form {
      * @param boolean $state  Whether to set the state of the form as being
      *                        submitted.
      */
-    function setSubmitted($state = true)
+    public function setSubmitted($state = true)
     {
         $this->_submitted = $state;
     }

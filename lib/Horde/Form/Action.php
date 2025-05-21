@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright 2002-2017 Horde LLC (http://www.horde.org/)
  *
@@ -21,51 +22,47 @@
  * @license   http://www.horde.org/licenses/lgpl21 LGPL
  * @package   Form
  */
-class Horde_Form_Action {
+class Horde_Form_Action
+{
+    public $_id;
+    public $_params;
+    public $_trigger = null;
 
-    var $_id;
-    var $_params;
-    var $_trigger = null;
-
-    public function __construct($params = null) 
+    public function __construct($params = null)
     {
         $this->_params = $params;
         $this->_id = md5(mt_rand());
 
     }
-    function Horde_Form_Action($params = null)
+    public function Horde_Form_Action($params = null)
     {
         $this->_params = $params;
         $this->_id = md5(mt_rand());
     }
 
-    function getTrigger()
+    public function getTrigger()
     {
         return $this->_trigger;
     }
 
-    function id()
+    public function id()
     {
         return $this->_id;
     }
 
-    function getActionScript($form, $renderer, $varname)
+    public function getActionScript($form, $renderer, $varname)
     {
         return '';
     }
 
-    function printJavaScript()
+    public function printJavaScript() {}
+
+    public function getTarget()
     {
+        return $this->_params['target'] ?? null;
     }
 
-    function getTarget()
-    {
-        return isset($this->_params['target']) ? $this->_params['target'] : null;
-    }
-
-    function setValues($vars, $sourceVal, $index = null, $arrayVal = false)
-    {
-    }
+    public function setValues($vars, $sourceVal, $index = null, $arrayVal = false) {}
 
     /**
      * Attempts to return a concrete Horde_Form_Action instance
@@ -81,7 +78,7 @@ class Horde_Form_Action {
      * @return Horde_Form_Action  The concrete Horde_Form_Action reference, or
      *                            false on an error.
      */
-    static function &factory($action, $params = null)
+    public static function &factory($action, $params = null)
     {
         if (is_array($action)) {
             $app = $action[0];
@@ -127,11 +124,11 @@ class Horde_Form_Action {
      * @return Horde_Form_Action  The concrete Horde_Form_Action reference, or
      *                            false on an error.
      */
-    function &singleton($action, $params = null)
+    public function &singleton($action, $params = null)
     {
-        static $instances = array();
+        static $instances = [];
 
-        $signature = serialize(array($action, $params));
+        $signature = serialize([$action, $params]);
         if (!isset($instances[$signature])) {
             $instances[$signature] = &Horde_Form_Action::factory($action, $params);
         }

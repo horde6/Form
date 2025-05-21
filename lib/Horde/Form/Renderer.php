@@ -21,18 +21,18 @@
  * @license   http://www.horde.org/licenses/lgpl21 LGPL
  * @package   Form
  */
-class Horde_Form_Renderer {
-
-    var $_name;
-    var $_requiredLegend = false;
-    var $_requiredMarker = '*';
-    var $_helpMarker = '?';
-    var $_showHeader = true;
-    var $_cols = 2;
-    var $_varRenderer = null;
-    var $_firstField = null;
-    var $_stripedRows = false;
-    var $_forms = array();
+class Horde_Form_Renderer
+{
+    public $_name;
+    public $_requiredLegend = false;
+    public $_requiredMarker = '*';
+    public $_helpMarker = '?';
+    public $_showHeader = true;
+    public $_cols = 2;
+    public $_varRenderer = null;
+    public $_firstField = null;
+    public $_stripedRows = false;
+    public $_forms = [];
 
     /**
      * Does the title of the form contain HTML? If so, you are responsible for
@@ -41,7 +41,7 @@ class Horde_Form_Renderer {
      *
      * @var boolean
      */
-    var $_encodeTitle = true;
+    public $_encodeTitle = true;
 
     /**
      * Width of the attributes column.
@@ -49,7 +49,7 @@ class Horde_Form_Renderer {
      * @access private
      * @var string
      */
-    var $_attrColumnWidth = '15%';
+    public $_attrColumnWidth = '15%';
 
     /**
      * Construct a new Horde_Form_Renderer::.
@@ -60,12 +60,12 @@ class Horde_Form_Renderer {
      *                         parameter to Horde_Core_Ui_VarRenderer::factory().
      *                       - 'encode_title': @see $_encodeTitle
      */
-    static function Horde_Form_Renderer($params = array())
+    public static function Horde_Form_Renderer($params = [])
     {
         return new Horde_Form_Renderer($params);
     }
 
-    function __construct($params = array())
+    public function __construct($params = [])
     {
         global $registry;
         if (isset($registry) && is_a($registry, 'Registry')) {
@@ -87,7 +87,7 @@ class Horde_Form_Renderer {
         $this->_varRenderer = Horde_Core_Ui_VarRenderer::factory($driver, $params);
     }
 
-    function showHeader($bool)
+    public function showHeader($bool)
     {
         $this->_showHeader = $bool;
     }
@@ -102,7 +102,7 @@ class Horde_Form_Renderer {
      *
      * @return boolean  Whether the form title should be encoded.
      */
-    function encodeTitle($encode = null)
+    public function encodeTitle($encode = null)
     {
         if (!is_null($encode)) {
             $this->_encodeTitle = $encode;
@@ -113,11 +113,9 @@ class Horde_Form_Renderer {
     /**
      * @deprecated
      */
-    function setAttrColumnWidth($width)
-    {
-    }
+    public function setAttrColumnWidth($width) {}
 
-    function open($action, $method, $name, $enctype = null)
+    public function open($action, $method, $name, $enctype = null)
     {
         $this->_name = $name;
         $name = htmlspecialchars($name);
@@ -127,17 +125,17 @@ class Horde_Form_Renderer {
         Horde_Util::pformInput();
     }
 
-    function beginActive($name, $extra = null)
+    public function beginActive($name, $extra = null)
     {
         $this->_renderBeginActive($name, $extra);
     }
 
-    function beginInactive($name, $extra = null)
+    public function beginInactive($name, $extra = null)
     {
         $this->_renderBeginInactive($name, $extra);
     }
 
-    function _renderSectionTabs($form)
+    public function _renderSectionTabs($form)
     {
         /* If javascript is not available, do not render tabs. */
         if (!$GLOBALS['browser']->hasFeature('javascript')) {
@@ -150,26 +148,35 @@ class Horde_Form_Renderer {
         $page = $GLOBALS['injector']->getInstance('Horde_PageOutput');
         $page->addScriptFile('form_sections.js', 'horde');
         $page->addInlineScript(
-            sprintf('var sections_%1$s = new Horde_Form_Sections(\'%1$s\', \'%2$s\');',
-                    $form->getName(),
-                    rawurlencode($open_section)));
+            sprintf(
+                'var sections_%1$s = new Horde_Form_Sections(\'%1$s\', \'%2$s\');',
+                $form->getName(),
+                rawurlencode($open_section)
+            )
+        );
 
         /* Loop through the sections and print out a tab for each. */
         echo "<div class=\"tabset\"><ul>\n";
         foreach ($form->_sections as $section => $val) {
             $class = ($section == $open_section) ? ' class="horde-active"' : '';
-            $js = sprintf('onclick="sections_%s.toggle(\'%s\'); return false;"',
-                          $form->getName(),
-                          $section);
-            printf('<li%s id="%s"><a href="#" %s>%s%s</a> </li>' . "\n",
-                   $class, htmlspecialchars($form->getName() . '_tab_' . $section), $js,
-                   $form->getSectionImage($section),
-                   $form->getSectionDesc($section));
+            $js = sprintf(
+                'onclick="sections_%s.toggle(\'%s\'); return false;"',
+                $form->getName(),
+                $section
+            );
+            printf(
+                '<li%s id="%s"><a href="#" %s>%s%s</a> </li>' . "\n",
+                $class,
+                htmlspecialchars($form->getName() . '_tab_' . $section),
+                $js,
+                $form->getSectionImage($section),
+                $form->getSectionDesc($section)
+            );
         }
         echo "</ul></div><br class=\"clear\" />\n";
     }
 
-    function _renderSectionBegin($form, $section)
+    public function _renderSectionBegin($form, $section)
     {
         // Stripe alternate rows if that option is turned on.
         if ($this->_stripedRows && class_exists('Horde')) {
@@ -183,23 +190,25 @@ class Horde_Form_Renderer {
         if (is_null($open_section)) {
             $open_section = '__base';
         }
-        printf('<div id="%s" style="display:%s;"><table%s>',
-               htmlspecialchars($form->getName() . '_section_' . $section),
-               ($open_section == $section ? 'block' : 'none'),
-               $class);
+        printf(
+            '<div id="%s" style="display:%s;"><table%s>',
+            htmlspecialchars($form->getName() . '_section_' . $section),
+            ($open_section == $section ? 'block' : 'none'),
+            $class
+        );
     }
 
-    function _renderSectionEnd()
+    public function _renderSectionEnd()
     {
         echo '</table></div>';
     }
 
-    function end()
+    public function end()
     {
         $this->_renderEnd();
     }
 
-    function close($focus = true)
+    public function close($focus = true)
     {
         $this->_listAllFormVars();
         echo "</form>\n";
@@ -209,14 +218,15 @@ class Horde_Form_Renderer {
                 ->addInlineScript(
                     '$("' . htmlspecialchars($this->_name)
                     . '").focusFirstElement()',
-                    true);
+                    true
+                );
         }
     }
 
-    function getFormVars($form)
+    public function getFormVars($form)
     {
         $variables = $form->getVariables(true, true);
-        $vars = array();
+        $vars = [];
         if ($variables) {
             foreach ($variables as $var) {
                 if (is_object($var)) {
@@ -230,7 +240,7 @@ class Horde_Form_Renderer {
                             $place = &$vars;
                             while ($key = array_shift($keys)) {
                                 if (!isset($place[$key])) {
-                                    $place[$key] = array();
+                                    $place[$key] = [];
                                 }
                                 $place = &$place[$key];
                             }
@@ -247,31 +257,31 @@ class Horde_Form_Renderer {
         return $vars;
     }
 
-    function listFormVars($form)
+    public function listFormVars($form)
     {
         echo '<input type="hidden" name="_formvars" value="' . htmlspecialchars(json_encode($this->getFormVars($form))) . '" />';
     }
 
-    function _listAllFormVars()
+    public function _listAllFormVars()
     {
-        $vars = array();
+        $vars = [];
         foreach ($this->_forms as $form) {
             $vars = array_merge($vars, $this->getFormVars($form));
         }
         echo '<input type="hidden" name="_formvars" value="' . htmlspecialchars(json_encode($vars)) . '" />';
     }
 
-    function renderFormActive($form, $vars)
+    public function renderFormActive($form, $vars)
     {
         $this->_renderForm($form, $vars, true);
     }
 
-    function renderFormInactive($form, $vars)
+    public function renderFormInactive($form, $vars)
     {
         $this->_renderForm($form, $vars, false);
     }
 
-    function _renderForm($form, $vars, $active)
+    public function _renderForm($form, $vars, $active)
     {
         $this->_forms[] = $form;
 
@@ -301,43 +311,43 @@ class Horde_Form_Renderer {
                 $type = $var->getTypeName();
 
                 switch ($type) {
-                case 'header':
-                    $this->_renderHeader($var->getHumanName(), $form->getError($var->getVarName()));
-                    break;
+                    case 'header':
+                        $this->_renderHeader($var->getHumanName(), $form->getError($var->getVarName()));
+                        break;
 
-                case 'description':
-                    $this->_renderDescription($var->getHumanName());
-                    break;
+                    case 'description':
+                        $this->_renderDescription($var->getHumanName());
+                        break;
 
-                case 'spacer':
-                    $this->_renderSpacer();
-                    break;
+                    case 'spacer':
+                        $this->_renderSpacer();
+                        break;
 
-                default:
-                    $isInput = ($active && !$var->isReadonly());
-                    $format = $isInput ? 'Input' : 'Display';
-                    $begin = "_renderVar{$format}Begin";
-                    $end = "_renderVar{$format}End";
+                    default:
+                        $isInput = ($active && !$var->isReadonly());
+                        $format = $isInput ? 'Input' : 'Display';
+                        $begin = "_renderVar{$format}Begin";
+                        $end = "_renderVar{$format}End";
 
-                    $this->$begin($form, $var, $vars);
-                    echo $this->_varRenderer->render($form, $var, $vars, $isInput);
+                        $this->$begin($form, $var, $vars);
+                        echo $this->_varRenderer->render($form, $var, $vars, $isInput);
 
-                    /* Print any javascript if actions present. */
-                    if ($var->hasAction()) {
-                        $var->_action->printJavaScript();
-                    }
+                        /* Print any javascript if actions present. */
+                        if ($var->hasAction()) {
+                            $var->_action->printJavaScript();
+                        }
 
-                    $this->$end($form, $var, $vars);
+                        $this->$end($form, $var, $vars);
 
-                    /* Keep first field. */
-                    if ($active && empty($this->_firstField) && !$var->isReadonly() && !$var->isHidden()) {
-                        $this->_firstField = $var->getVarName();
-                    }
+                        /* Keep first field. */
+                        if ($active && empty($this->_firstField) && !$var->isReadonly() && !$var->isHidden()) {
+                            $this->_firstField = $var->getVarName();
+                        }
 
-                    /* Keep section with first error. */
-                    if (is_null($error_section) && $form->getError($var)) {
-                        $error_section = $section_id;
-                    }
+                        /* Keep section with first error. */
+                        if (is_null($error_section) && $form->getError($var)) {
+                            $error_section = $section_id;
+                        }
                 }
             }
 
@@ -346,13 +356,15 @@ class Horde_Form_Renderer {
 
         $page = $GLOBALS['injector']->getInstance('Horde_PageOutput');
         if (!is_null($error_section) && $form->_sections) {
-            $page->addInlineScript(sprintf('sections_%s.toggle(\'%s\');',
-                                           $form->getName(),
-                                           $error_section));
+            $page->addInlineScript(sprintf(
+                'sections_%s.toggle(\'%s\');',
+                $form->getName(),
+                $error_section
+            ));
         }
     }
 
-    function submit($submit = null, $reset = false)
+    public function submit($submit = null, $reset = false)
     {
         if (is_null($submit) || empty($submit)) {
             $submit = Horde_Form_Translation::t("Submit");
@@ -366,7 +378,7 @@ class Horde_Form_Renderer {
     /**
      * Implementation specific begin function.
      */
-    function _renderBeginActive($name, $extra)
+    public function _renderBeginActive($name, $extra)
     {
         echo '<div class="horde-form" id="' . htmlspecialchars($this->_name) . '_active">';
         if ($this->_showHeader) {
@@ -380,7 +392,7 @@ class Horde_Form_Renderer {
     /**
      * Implementation specific begin function.
      */
-    function _renderBeginInactive($name, $extra)
+    public function _renderBeginInactive($name, $extra)
     {
         echo '<div class="horde-form" id="' . htmlspecialchars($this->_name) . '_inactive">';
         if ($this->_showHeader) {
@@ -391,64 +403,67 @@ class Horde_Form_Renderer {
     /**
      * Implementation specific end function.
      */
-    function _renderEnd()
+    public function _renderEnd()
     {
         echo '</div>' . $this->_varRenderer->renderEnd();
     }
 
-    function _renderHeader($header, $error = '')
+    public function _renderHeader($header, $error = '')
     {
-?><tr><td class="control" width="100%" colspan="<?php echo $this->_cols ?>" valign="bottom"><strong><?php echo $header ?></strong><?php
-        if (!empty($error)) {
-?><br /><span class="horde-form-error"><?php echo $error ?></span><?php
-        }
-?></td></tr>
+        ?><tr><td class="control" width="100%" colspan="<?php echo $this->_cols ?>" valign="bottom"><strong><?php echo $header ?></strong><?php
+                if (!empty($error)) {
+                    ?><br /><span class="horde-form-error"><?php echo $error ?></span><?php
+                }
+        ?></td></tr>
 <?php
     }
 
-    function _renderDescription($text)
+    public function _renderDescription($text)
     {
-?><tr><td width="100%" colspan="<?php echo $this->_cols ?>"><p style="padding:8px"><?php echo $text ?></p></td></tr>
+        ?><tr><td width="100%" colspan="<?php echo $this->_cols ?>"><p style="padding:8px"><?php echo $text ?></p></td></tr>
 <?php
     }
 
-    function _renderSpacer()
+    public function _renderSpacer()
     {
-?><tr><td colspan="<?php echo $this->_cols ?>">&nbsp;</td></tr>
+        ?><tr><td colspan="<?php echo $this->_cols ?>">&nbsp;</td></tr>
 <?php
     }
 
-    function _renderSubmit($submit, $reset)
+    public function _renderSubmit($submit, $reset)
     {
-        $buildAttribute = function(&$value, $attribute)
-        {
+        $buildAttribute = function (&$value, $attribute) {
             $value = sprintf('%s="%s"', $attribute, $value);
         };
 
         if (!is_array($submit)) {
-            $submit = array($submit);
+            $submit = [$submit];
         }
 
         $first = true;
         foreach ($submit as &$submitbutton) {
-            $default = array(
+            $default = [
                 'class' => $first ? 'horde-default' : 'horde-button',
                 'name' => 'submitbutton',
                 'type' => 'submit',
-            );
+            ];
             if (is_array($submitbutton)) {
-                $submitbutton = array_merge($default,
-                                            $submitbutton);
+                $submitbutton = array_merge(
+                    $default,
+                    $submitbutton
+                );
             } else {
-                $submitbutton = array_merge($default,
-                                            array('value' => $submitbutton));
+                $submitbutton = array_merge(
+                    $default,
+                    ['value' => $submitbutton]
+                );
             }
             array_walk($submitbutton, $buildAttribute);
             $submitbutton = implode(' ', $submitbutton);
             $first = false;
         }
 
-?><div class="horde-form-buttons">
+        ?><div class="horde-form-buttons">
 <?php foreach ($submit as $button): ?>
     <input <?php echo $button ?> />
 <?php endforeach ?>
@@ -461,23 +476,27 @@ class Horde_Form_Renderer {
     }
 
     // Implementation specifics -- input variables.
-    function _renderVarInputBegin($form, $var, $vars)
+    public function _renderVarInputBegin($form, $var, $vars)
     {
         $message = $form->getError($var);
         $isvalid = empty($message);
         echo "<tr valign=\"top\">\n";
-        printf('  <td class="horde-form-label"%s>%s%s%s%s</td>' . "\n",
-               empty($this->_attrColumnWidth) ? '' : ' width="' . $this->_attrColumnWidth . '"',
-               $isvalid ? '' : '<span class="horde-form-error">',
-               $var->isRequired() ? '<span class="horde-form-error">' . $this->_requiredMarker . '</span>&nbsp;' : '',
-               $var->getHumanName(),
-               $isvalid ? '' : '<br />' . $message . '</span>');
-        printf('  <td%s%s>',
-               ((!$var->hasHelp() && $form->hasHelp()) ? ' colspan="2"' : ''),
-               ($var->isDisabled() ? ' class="horde-form-disabled"' : ''));
+        printf(
+            '  <td class="horde-form-label"%s>%s%s%s%s</td>' . "\n",
+            empty($this->_attrColumnWidth) ? '' : ' width="' . $this->_attrColumnWidth . '"',
+            $isvalid ? '' : '<span class="horde-form-error">',
+            $var->isRequired() ? '<span class="horde-form-error">' . $this->_requiredMarker . '</span>&nbsp;' : '',
+            $var->getHumanName(),
+            $isvalid ? '' : '<br />' . $message . '</span>'
+        );
+        printf(
+            '  <td%s%s>',
+            ((!$var->hasHelp() && $form->hasHelp()) ? ' colspan="2"' : ''),
+            ($var->isDisabled() ? ' class="horde-form-disabled"' : '')
+        );
     }
 
-    function _renderVarInputEnd($form, $var, $vars)
+    public function _renderVarInputEnd($form, $var, $vars)
     {
         /* Display any description for the field. */
         if ($var->hasDescription()) {
@@ -499,20 +518,22 @@ class Horde_Form_Renderer {
     }
 
     // Implementation specifics -- display variables.
-    function _renderVarDisplayBegin($form, $var, $vars)
+    public function _renderVarDisplayBegin($form, $var, $vars)
     {
         $message = $form->getError($var);
         $isvalid = empty($message);
         echo "<tr valign=\"top\">\n";
-        printf('  <td%s align="right">%s<strong>%s</strong>%s</td>' . "\n",
-               empty($this->_attrColumnWidth) ? '' : ' width="' . $this->_attrColumnWidth . '"',
-               $isvalid ? '' : '<span class="horde-form-error">',
-               $var->getHumanName(),
-               $isvalid ? '' : '<br />' . $message . '</span>');
+        printf(
+            '  <td%s align="right">%s<strong>%s</strong>%s</td>' . "\n",
+            empty($this->_attrColumnWidth) ? '' : ' width="' . $this->_attrColumnWidth . '"',
+            $isvalid ? '' : '<span class="horde-form-error">',
+            $var->getHumanName(),
+            $isvalid ? '' : '<br />' . $message . '</span>'
+        );
         echo '  <td>';
     }
 
-    function _renderVarDisplayEnd($form, $var, $vars)
+    public function _renderVarDisplayEnd($form, $var, $vars)
     {
         if ($var->hasHelp()) {
             echo '</td><td>&nbsp;';
@@ -520,7 +541,7 @@ class Horde_Form_Renderer {
         echo "</td>\n</tr>\n";
     }
 
-    function _sectionHeader($title, $extra = '')
+    public function _sectionHeader($title, $extra = '')
     {
         if (strlen($title)) {
             echo '<div class="header">';
@@ -547,7 +568,7 @@ class Horde_Form_Renderer {
      * @return Horde_Form_Renderer  The concrete Horde_Form_Renderer reference,
      *                              or false on an error.
      */
-    function factory($renderer = '', $params = null)
+    public function factory($renderer = '', $params = null)
     {
         if (is_array($renderer)) {
             $app = $renderer[0];
@@ -599,11 +620,11 @@ class Horde_Form_Renderer {
      * @return Horde_Form_Renderer  The concrete Horde_Form_Renderer reference,
      *                              or false on an error.
      */
-    function &singleton($renderer, $params = null)
+    public function &singleton($renderer, $params = null)
     {
-        static $instances = array();
+        static $instances = [];
 
-        $signature = serialize(array($renderer, $params));
+        $signature = serialize([$renderer, $params]);
         if (!isset($instances[$signature])) {
             $instances[$signature] = Horde_Form_Renderer::factory($renderer, $params);
         }

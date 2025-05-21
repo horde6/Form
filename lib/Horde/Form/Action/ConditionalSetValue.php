@@ -22,21 +22,21 @@
  * @license   http://www.horde.org/licenses/lgpl21 LGPL
  * @package   Form
  */
-class Horde_Form_Action_ConditionalSetValue extends Horde_Form_Action {
-
+class Horde_Form_Action_ConditionalSetValue extends Horde_Form_Action
+{
     /**
      * Which JS events should trigger this action?
      *
      * @var array
      */
-    var $_trigger = array('onchange', 'onload');
+    public $_trigger = ['onchange', 'onload'];
 
-    function getActionScript($form, $renderer, $varname)
+    public function getActionScript($form, $renderer, $varname)
     {
         return 'map(\'' . $renderer->_genID($varname, false) . "', '" . $renderer->_genID($this->getTarget(), false) . '\');';
     }
 
-    function setValues($vars, $sourceVal, $arrayVal = false)
+    public function setValues($vars, $sourceVal, $arrayVal = false)
     {
         $map = $this->_params['map'];
         $target = $this->getTarget();
@@ -58,21 +58,21 @@ class Horde_Form_Action_ConditionalSetValue extends Horde_Form_Action {
         }
     }
 
-    function printJavaScript()
+    public function printJavaScript()
     {
         $this->_printJavaScriptStart();
         $map = $this->_params['map'];
-?>
+        ?>
 
 var _map = [<?php
-$i = 0;
-foreach ($map as $val) {
-    if ($i > 0) {
-        echo ', ';
-    }
-    echo '"' . $val . '"';
-    $i++;
-}?>];
+        $i = 0;
+        foreach ($map as $val) {
+            if ($i > 0) {
+                echo ', ';
+            }
+            echo '"' . $val . '"';
+            $i++;
+        }?>];
 
 function map(sourceId, targetId)
 {
@@ -99,7 +99,7 @@ function map(sourceId, targetId)
         }
     }
 }<?php
-        $this->_printJavaScriptEnd();
+                $this->_printJavaScriptEnd();
     }
 
 }

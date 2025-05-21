@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright 2002-2017 Horde LLC (http://www.horde.org/)
  *
@@ -34,11 +35,11 @@
  * @license   http://www.horde.org/licenses/lgpl21 LGPL
  * @package   Form
  */
-class Horde_Form_Action_ConditionalEnable extends Horde_Form_Action {
+class Horde_Form_Action_ConditionalEnable extends Horde_Form_Action
+{
+    public $_trigger = ['onload'];
 
-    var $_trigger = array('onload');
-
-    function getActionScript($form, $renderer, $varname)
+    public function getActionScript($form, $renderer, $varname)
     {
         $GLOBALS['injector']->getInstance('Horde_PageOutput')->addScriptFile('form_helpers.js', 'horde');
 
@@ -49,7 +50,7 @@ class Horde_Form_Action_ConditionalEnable extends Horde_Form_Action {
             $enabled = ($enabled) ? 'true' : 'false';
         }
         $vals = $this->_params['values'];
-        $vals = (is_array($vals)) ? $vals : array($vals);
+        $vals = (is_array($vals)) ? $vals : [$vals];
         $args = "'$varname', $enabled, '" . implode("','", $vals) . "'";
 
         return "if (addEvent(document.getElementById('$form_name').$target, 'onchange', \"checkEnabled(this, $args);\")) { "

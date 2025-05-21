@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright 2006-2017 Horde LLC (http://www.horde.org/)
  *
@@ -23,11 +24,11 @@
  * @license   http://www.horde.org/licenses/lgpl21 LGPL
  * @package   Form
  */
-class Horde_Form_Action_setcursorpos extends Horde_Form_Action {
+class Horde_Form_Action_setcursorpos extends Horde_Form_Action
+{
+    public $_trigger = ['onload'];
 
-    var $_trigger = array('onload');
-
-    function getActionScript($form, $renderer, $varname)
+    public function getActionScript($form, $renderer, $varname)
     {
         $injector->getInstance('Horde_PageOutput')->addScriptFile('form_helpers.js', 'horde');
 

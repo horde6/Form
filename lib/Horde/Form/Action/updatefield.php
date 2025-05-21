@@ -22,20 +22,18 @@
  * @license   http://www.horde.org/licenses/lgpl21 LGPL
  * @package   Form
  */
-class Horde_Form_Action_updatefield extends Horde_Form_Action {
+class Horde_Form_Action_updatefield extends Horde_Form_Action
+{
+    public $_trigger = ['onchange', 'onload', 'onkeyup'];
 
-    var $_trigger = array('onchange', 'onload', 'onkeyup');
-
-    function getActionScript($form, $renderer, $varname)
+    public function getActionScript($form, $renderer, $varname)
     {
         return 'updateField' . $this->id() . '();';
     }
 
-    function setValues($vars, $sourceVal, $index = null, $arrayVal = false)
-    {
-    }
+    public function setValues($vars, $sourceVal, $index = null, $arrayVal = false) {}
 
-    function printJavaScript()
+    public function printJavaScript()
     {
         $pieces = explode('%s', $this->_params['format']);
         $fields = $this->_params['fields'] ?? [];
@@ -47,7 +45,7 @@ class Horde_Form_Action_updatefield extends Horde_Form_Action {
             array_pop($pieces);
         }
 
-        $args = array();
+        $args = [];
         if ($val_first) {
             $args[] = "document.getElementById('" . array_shift($fields) . "').value";
         }
@@ -56,7 +54,7 @@ class Horde_Form_Action_updatefield extends Horde_Form_Action {
             $args[] = "document.getElementById('" . array_shift($fields) . "').value";
         }
         Horde::startBuffer();
-?>
+        ?>
 // Updater for <?php echo $this->getTarget() ?>.
 function updateField<?php echo $this->id() ?>()
 {
@@ -65,8 +63,8 @@ function updateField<?php echo $this->id() ?>()
         target.value = (<?php echo implode(' + ', str_replace("\n", "\\n", $args)) ?>).replace(/(^ +| +$)/, '').replace(/ +/g, ' ');
     }
 }<?php
-        $GLOBALS['injector']->getInstance('Horde_PageOutput')
-            ->addInlineScript(Horde::endBuffer());
+                $GLOBALS['injector']->getInstance('Horde_PageOutput')
+                    ->addInlineScript(Horde::endBuffer());
     }
 
 }
