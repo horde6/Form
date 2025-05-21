@@ -2688,7 +2688,8 @@ class Horde_Form_Type_set extends Horde_Form_Type
 
     public function isValid($var, $vars, $value, $message)
     {
-        if (count($this->_values) == 0 || count($value) == 0) {
+	
+        if ((!is_null($this->_values) && count($this->_values) == 0) || is_null($value) || count($value) == 0) {
             return true;
         }
         foreach ($value as $item) {
