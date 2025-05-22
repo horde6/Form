@@ -803,12 +803,16 @@ class Horde_Form
                 }
             } else {
                 // A field name like example[key1][key2][key3]
-                if (Horde_Array::getArrayParts($var->getVarName(), $base, $keys)) {
-                    $res = $var->getInfo($vars, $var->getVarName());
+                $varName = $var->getVarName();
+                if (Horde_Array::getArrayParts($varName, $base, $keys)) {
+                    $res = $var->getInfo($vars, $varName);
                     $path = array_merge([$base], $keys);
                     Horde_Array::setElement($info, $path, $res);
                 } else {
-                    $info[$var->getVarName()] = $var->getInfo($vars, $info[$var->getVarName()]);
+                    if (!isset($info[$varName])) {
+                        $info[$varName] = null;
+                    }
+                    $info[$varName] = $var->getInfo($vars, $info[$varName]);
                 }
             }
         }
