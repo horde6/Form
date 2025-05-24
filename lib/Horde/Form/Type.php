@@ -2682,13 +2682,21 @@ class Horde_Form_Type_set extends Horde_Form_Type
      */
     public function init(...$params)
     {
-        $this->_values = $params[0];
-        $this->_checkAll = $params[1] ?? false;
+        if (is_array($params) && array_key_exists('values', $params)) {
+            $this->_values = $params['values'];
+        } else {
+            $this->_values = $params[0];
+        }
+        if (is_array($params) && array_key_exists('checkAll', $params)) {
+            $this->_checkAll = (bool) $params['checkAll'];
+        } else {
+            $this->_checkAll = $params[1] ?? false;
+        }
     }
 
     public function isValid($var, $vars, $value, $message)
     {
-	
+
         if ((!is_null($this->_values) && count($this->_values) == 0) || is_null($value) || count($value) == 0) {
             return true;
         }
