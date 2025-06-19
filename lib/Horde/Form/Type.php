@@ -23,6 +23,16 @@
  */
 class Horde_Form_Type
 {
+    /**
+     * Messages from isValid() method.
+     */
+    protected string $message = '';
+
+    public function getMessage()
+    {
+        return $this->message;
+    }
+
     public function getProperty($property)
     {
         $prop = '_' . $property;
@@ -55,6 +65,7 @@ class Horde_Form_Type
     public function isValid($var, $vars, $value, $message)
     {
         $message = '<strong>Error:</strong> Horde_Form_Type::isValid() called - should be overridden<br />';
+        $this->message = $message;
         return false;
     }
 
@@ -160,6 +171,7 @@ class Horde_Form_Type_number extends Horde_Form_Type
     {
         if ($var->isRequired() && empty($value) && ((string) (float) $value !== $value)) {
             $message = Horde_Form_Translation::t("This field is required.");
+            $this->message = $message;
             return false;
         } elseif (empty($value)) {
             return true;
@@ -241,6 +253,7 @@ class Horde_Form_Type_int extends Horde_Form_Type
     {
         if ($var->isRequired() && empty($value) && ((string) (int) $value !== $value)) {
             $message = Horde_Form_Translation::t("This field is required.");
+            $this->message = $message;
             return false;
         }
 
@@ -249,6 +262,7 @@ class Horde_Form_Type_int extends Horde_Form_Type
         }
 
         $message = Horde_Form_Translation::t("This field may only contain integers.");
+        $this->message = $message;
         return false;
     }
 
@@ -268,6 +282,7 @@ class Horde_Form_Type_octal extends Horde_Form_Type
     {
         if ($var->isRequired() && empty($value) && ((string) (int) $value !== $value)) {
             $message = Horde_Form_Translation::t("This field is required.");
+            $this->message = $message;
             return false;
         }
 
@@ -276,6 +291,7 @@ class Horde_Form_Type_octal extends Horde_Form_Type
         }
 
         $message = Horde_Form_Translation::t("This field may only contain octal values.");
+        $this->message = $message;
         return false;
     }
 
@@ -295,6 +311,7 @@ class Horde_Form_Type_intlist extends Horde_Form_Type
     {
         if (empty($value) && $var->isRequired()) {
             $message = Horde_Form_Translation::t("This field is required.");
+            $this->message = $message;
             return false;
         }
 
@@ -303,6 +320,7 @@ class Horde_Form_Type_intlist extends Horde_Form_Type
         }
 
         $message = Horde_Form_Translation::t("This field must be a comma or space separated list of integers");
+        $this->message = $message;
         return false;
     }
 
@@ -360,17 +378,20 @@ class Horde_Form_Type_text extends Horde_Form_Type
         if (!empty($this->_maxlength) && Horde_String::length($value) > $this->_maxlength) {
             $valid = false;
             $message = sprintf(Horde_Form_Translation::t("Value is over the maximum length of %d."), $this->_maxlength);
+            $this->message = $message;
         } elseif ($var->isRequired() && empty($this->_regex)) {
             $valid = strlen(trim($value)) > 0;
 
             if (!$valid) {
                 $message = Horde_Form_Translation::t("This field is required.");
+                $this->message = $message;
             }
         } elseif (!empty($this->_regex)) {
             $valid = preg_match($this->_regex, $value);
 
             if (!$valid) {
                 $message = Horde_Form_Translation::t("You must enter a valid value.");
+                $this->message = $message;
             }
         }
 
@@ -475,10 +496,12 @@ class Horde_Form_Type_phone extends Horde_Form_Type
         if (!strlen(trim($value))) {
             if ($var->isRequired()) {
                 $message = Horde_Form_Translation::t("This field is required.");
+                $this->message = $message;
                 return false;
             }
         } elseif (!preg_match('/^\+?[\d()\-\/.\s]*$/u', $value)) {
             $message = Horde_Form_Translation::t("You must enter a valid phone number, digits only with an optional '+' for the international dialing prefix.");
+            $this->message = $message;
             return false;
         }
 
@@ -544,6 +567,7 @@ class Horde_Form_Type_ipaddress extends Horde_Form_Type_text
         } elseif ($var->isRequired()) {
             $valid = false;
             $message = Horde_Form_Translation::t("This field is required.");
+            $this->message = $message;
         }
 
         return $valid;
@@ -570,12 +594,15 @@ class Horde_Form_Type_ip6address extends Horde_Form_Type_text
 
             if ($valid === false) {
                 $message = Horde_Form_Translation::t("Please enter a valid IP address.");
+                $this->message = $message;
+
             }
         } elseif ($var->isRequired()) {
             $valid = false;
             $message = Horde_Form_Translation::t("This field is required.");
+            $this->message = $message;
         }
-
+        // Looks like a bug. Shouldn't we return $valid here?
         return true;
     }
 
@@ -687,12 +714,14 @@ class Horde_Form_Type_countedtext extends Horde_Form_Type_longtext
         if ($var->isRequired() && $length <= 0) {
             $valid = false;
             $message = Horde_Form_Translation::t("This field is required.");
+
         } elseif ($length > $this->_chars) {
             $valid = false;
             $message = sprintf(Horde_Form_Translation::ngettext("There are too many characters in this field. You have entered %d character; ", "There are too many characters in this field. You have entered %d characters; ", $length), $length)
                 . sprintf(Horde_Form_Translation::t("you must enter less than %d."), $this->_chars);
         }
 
+        $this->message = (string)$message;
         return $valid;
     }
 
@@ -997,6 +1026,7 @@ class Horde_Form_Type_file extends Horde_Form_Type
                 $GLOBALS['browser']->wasFileUploaded($var->getVarName());
             } catch (Horde_Browser_Exception $e) {
                 $message = $e->getMessage();
+                $this->message = $message;
                 return false;
             }
         }
@@ -1144,10 +1174,12 @@ class Horde_Form_Type_image extends Horde_Form_Type
                 empty($field['hash'])) {
                 /* Nothing uploaded and no older upload. */
                 $message = Horde_Form_Translation::t("This field is required.");
+                $this->message = $message;
                 return false;
             } elseif (!empty($field['hash'])) {
                 if ($this->_img && isset($this->_img['error'])) {
                     $message = $this->_img['error'];
+            $this->message = $message;
                     return false;
                 }
                 /* Nothing uploaded but older upload present. */
@@ -1159,10 +1191,12 @@ class Horde_Form_Type_image extends Horde_Form_Type
             }
         } elseif (empty($this->_img['img']['size'])) {
             $message = Horde_Form_Translation::t("The image file size could not be determined or it was 0 bytes. The upload may have been interrupted.");
+            $this->message = $message;
             return false;
         } elseif ($this->_max_filesize &&
                   $this->_img['img']['size'] > $this->_max_filesize) {
             $message = sprintf(Horde_Form_Translation::t("The image file was larger than the maximum allowed size (%d bytes)."), $this->_max_filesize);
+            $this->message = $message;
             return false;
         }
 
@@ -1597,6 +1631,7 @@ class Horde_Form_Type_email extends Horde_Form_Type
         // Check for too many.
         if (!$this->_allow_multi && count($emails) > 1) {
             $message = Horde_Form_Translation::t("Only one email address is allowed.");
+            $this->message = $message;
             return false;
         }
 
@@ -1608,6 +1643,7 @@ class Horde_Form_Type_email extends Horde_Form_Type
             }
             if (!$this->validateEmailAddress($email)) {
                 $message = sprintf(Horde_Form_Translation::t("\"%s\" is not a valid email address."), htmlspecialchars($email));
+                $this->message = $message;
                 return false;
             }
             ++$nonEmpty;
@@ -1619,6 +1655,7 @@ class Horde_Form_Type_email extends Horde_Form_Type
             } else {
                 $message = Horde_Form_Translation::t("You must enter an email address.");
             }
+            $this->message = (string)$message;
             return false;
         }
 
@@ -2297,11 +2334,13 @@ class Horde_Form_Type_emailConfirm extends Horde_Form_Type
     {
         if ($var->isRequired() && empty($value['original'])) {
             $message = Horde_Form_Translation::t("This field is required.");
+            $this->message = $message;
             return false;
         }
 
         if ($value['original'] != $value['confirm']) {
             $message = Horde_Form_Translation::t("Email addresses must match.");
+            $this->message = $message;
             return false;
         }
 
@@ -2310,6 +2349,7 @@ class Horde_Form_Type_emailConfirm extends Horde_Form_Type
         switch (count($addr_ob)) {
             case 0:
                 $message = Horde_Form_Translation::t("You did not enter a valid email address.");
+                $this->message = $message;
                 return false;
 
             case 1:
@@ -2317,6 +2357,7 @@ class Horde_Form_Type_emailConfirm extends Horde_Form_Type
 
             default:
                 $message = Horde_Form_Translation::t("Only one email address allowed.");
+                $this->message = $message;
                 return false;
         }
     }
@@ -2342,6 +2383,7 @@ class Horde_Form_Type_password extends Horde_Form_Type
 
             if (!$valid) {
                 $message = Horde_Form_Translation::t("This field is required.");
+                $this->message = $message;
             }
         }
 
@@ -2364,11 +2406,13 @@ class Horde_Form_Type_passwordconfirm extends Horde_Form_Type
     {
         if ($var->isRequired() && empty($value['original'])) {
             $message = Horde_Form_Translation::t("This field is required.");
+            $this->message = $message;
             return false;
         }
 
         if ($value['original'] != $value['confirm']) {
             $message = Horde_Form_Translation::t("Passwords must match.");
+            $this->message = $message;
             return false;
         }
 
@@ -2423,6 +2467,7 @@ class Horde_Form_Type_enum extends Horde_Form_Type
     {
         if ($var->isRequired() && $value == '' && !isset($this->_values[$value])) {
             $message = Horde_Form_Translation::t("This field is required.");
+            $this->message = $message;
             return false;
         }
 
@@ -2432,6 +2477,7 @@ class Horde_Form_Type_enum extends Horde_Form_Type
         }
 
         $message = Horde_Form_Translation::t("Invalid data submitted.");
+        $this->message = $message;
         return false;
     }
 
@@ -2510,6 +2556,7 @@ class Horde_Form_Type_mlenum extends Horde_Form_Type
     {
         if ($var->isRequired() && (empty($value['1']) || empty($value['2']))) {
             $message = Horde_Form_Translation::t("This field is required.");
+            $this->message = $message;
             return false;
         }
 
@@ -2519,6 +2566,7 @@ class Horde_Form_Type_mlenum extends Horde_Form_Type
         }
 
         $message = Horde_Form_Translation::t("Invalid data submitted.");
+        $this->message = $message;
         return false;
     }
 
@@ -2597,6 +2645,7 @@ class Horde_Form_Type_multienum extends Horde_Form_Type_enum
         if (empty($value) && ((string) (int) $value !== $value)) {
             if ($var->isRequired()) {
                 $message = Horde_Form_Translation::t("This field is required.");
+                $this->message = $message;
                 return false;
             } else {
                 return true;
@@ -2608,6 +2657,7 @@ class Horde_Form_Type_multienum extends Horde_Form_Type_enum
         }
 
         $message = Horde_Form_Translation::t("Invalid data submitted.");
+        $this->message = $message;
         return false;
     }
 
@@ -2711,6 +2761,7 @@ class Horde_Form_Type_set extends Horde_Form_Type
         }
 
         $message = Horde_Form_Translation::t("Invalid data submitted.");
+        $this->message = $message;
         return false;
     }
 
@@ -2756,6 +2807,7 @@ class Horde_Form_Type_date extends Horde_Form_Type
 
             if (!$valid) {
                 $message = sprintf(Horde_Form_Translation::t("%s is required"), $var->getHumanName());
+                $this->message = $message;
             }
         }
 
@@ -2826,6 +2878,7 @@ class Horde_Form_Type_time extends Horde_Form_Type
     {
         if ($var->isRequired() && empty($value) && ((string) (float) $value !== $value)) {
             $message = Horde_Form_Translation::t("This field is required.");
+            $this->message = $message;
             return false;
         }
 
@@ -2834,6 +2887,7 @@ class Horde_Form_Type_time extends Horde_Form_Type
         }
 
         $message = Horde_Form_Translation::t("This field may only contain numbers and the colon.");
+        $this->message = $message;
         return false;
     }
 
@@ -2870,9 +2924,11 @@ class Horde_Form_Type_hourminutesecond extends Horde_Form_Type
 
         if (!$this->emptyTimeArray($time) && !$this->checktime($time['hour'], $time['minute'], $time['second'])) {
             $message = Horde_Form_Translation::t("Please enter a valid time.");
+            $this->message = $message;
             return false;
         } elseif ($this->emptyTimeArray($time) && $var->isRequired()) {
             $message = Horde_Form_Translation::t("This field is required.");
+            $this->message = $message;
             return false;
         }
 
@@ -2998,6 +3054,7 @@ class Horde_Form_Type_monthyear extends Horde_Form_Type
         if (!$vars->get($this->getMonthVar($var)) ||
             !$vars->get($this->getYearVar($var))) {
             $message = Horde_Form_Translation::t("Please enter a month and a year.");
+            $this->message = $message;
             return false;
         }
 
@@ -3081,6 +3138,7 @@ class Horde_Form_Type_monthdayyear extends Horde_Form_Type
 
         if ($empty == 1 && $var->isRequired()) {
             $message = Horde_Form_Translation::t("This field is required.");
+            $this->message = $message;
             return false;
         } elseif ($empty == 0 && !checkdate(
             $date['month'],
@@ -3088,9 +3146,11 @@ class Horde_Form_Type_monthdayyear extends Horde_Form_Type
             $date['year']
         )) {
             $message = Horde_Form_Translation::t("Please enter a valid date, check the number of days in the month.");
+            $this->message = $message;
             return false;
         } elseif ($empty == -1) {
             $message = Horde_Form_Translation::t("Select all date components.");
+            $this->message = $message;
             return false;
         }
 
@@ -3332,6 +3392,7 @@ class Horde_Form_Type_datetime extends Horde_Form_Type
             } elseif ($hms_valid && !$mdy_valid) {
                 $message = Horde_Form_Translation::t("You must choose a date.");
             }
+            $this->message = (string)$message;
         }
 
         return $valid;
@@ -3459,6 +3520,7 @@ class Horde_Form_Type_colorpicker extends Horde_Form_Type
     {
         if ($var->isRequired() && empty($value)) {
             $message = Horde_Form_Translation::t("This field is required.");
+            $this->message = $message;
             return false;
         }
 
@@ -3467,6 +3529,7 @@ class Horde_Form_Type_colorpicker extends Horde_Form_Type
         }
 
         $message = Horde_Form_Translation::t("This field must contain a color code in the RGB Hex format, for example '#1234af'.");
+        $this->message = $message;
         return false;
     }
 
@@ -3498,6 +3561,7 @@ class Horde_Form_Type_sound extends Horde_Form_Type
     {
         if ($var->isRequired() && empty($value)) {
             $message = Horde_Form_Translation::t("This field is required.");
+            $this->message = $message;
             return false;
         }
 
@@ -3506,6 +3570,7 @@ class Horde_Form_Type_sound extends Horde_Form_Type
         }
 
         $message = Horde_Form_Translation::t("Please choose a sound.");
+        $this->message = $message;
         return false;
     }
 
@@ -3838,6 +3903,7 @@ class Horde_Form_Type_creditcard extends Horde_Form_Type
     {
         if (empty($value) && $var->isRequired()) {
             $message = Horde_Form_Translation::t("This field is required.");
+            $this->message = $message;
             return false;
         }
 
@@ -3846,6 +3912,7 @@ class Horde_Form_Type_creditcard extends Horde_Form_Type
             $type = $this->getCardType($value);
             if ($type === false || $type == 'unknown') {
                 $message = Horde_Form_Translation::t("This does not seem to be a valid card number.");
+                $this->message = $message;
                 return false;
             }
         }
@@ -4016,11 +4083,13 @@ class Horde_Form_Type_figlet extends Horde_Form_Type
     {
         if (empty($value) && $var->isRequired()) {
             $message = Horde_Form_Translation::t("This field is required.");
+            $this->message = $message;
             return false;
         }
 
         if (Horde_String::lower($value) != Horde_String::lower($this->_text)) {
             $message = Horde_Form_Translation::t("The text you entered did not match the text on the screen.");
+            $this->message = $message;
             return false;
         }
 
@@ -4100,6 +4169,7 @@ class Horde_Form_Type_category extends Horde_Form_Type
     {
         if (empty($value) && $var->isRequired()) {
             $message = Horde_Form_Translation::t("This field is required.");
+            $this->message = $message;
             return false;
         }
 
@@ -4110,7 +4180,7 @@ class Horde_Form_Type_category extends Horde_Form_Type
 
 class Horde_Form_Type_invalid extends Horde_Form_Type
 {
-    public $message;
+    public string $message;
 
     /**
      * Initialize an Invalid Message form type
