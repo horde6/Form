@@ -51,6 +51,7 @@ class Horde_Form_Type_tableset extends Horde_Form_Type
         }
 
         $message = Horde_Form_Translation::t("Invalid data submitted.");
+        $this->message = $message;
         return false;
     }
 
