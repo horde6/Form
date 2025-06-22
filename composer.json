@@ -16,7 +16,7 @@
             "role": "lead"
         }
     ],
-    "time": "2025-05-29",
+    "time": "2025-06-22",
     "repositories": [],
     "require": {
         "php": "^7.4 || ^8",

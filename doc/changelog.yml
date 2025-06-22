@@ -1,4 +1,19 @@
 ---
+3.0.0-alpha8:
+  api: 3.0.0-alpha1
+  state:
+    release: alpha
+    api: alpha
+  date: 2025-06-22
+  license:
+    identifier: LGPL-2.1-only
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    fix: Add missing message assignment
+    chore: Add more V3 types
+    chore: Draft V3 design
+    docs(README): Add upgrading instructions
+    fix: Discussion from #5 - use a getter and property instead of a return parameter
 3.0.0-alpha7:
   api: 3.0.0-alpha1
   state:
