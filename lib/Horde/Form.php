@@ -794,7 +794,7 @@ class Horde_Form
             }
             // An ArrayVal is a value with a varName ending with []
             if ($var->isArrayVal()) {
-                $var->getInfo($vars, $values);
+                $values = $var->getInfo($vars, $values);
                 if (is_array($values)) {
                     $varName = str_replace('[]', '', $var->getVarName());
                     foreach ($values as $i => $val) {
