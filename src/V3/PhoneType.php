@@ -1,6 +1,7 @@
 <?php
 namespace Horde\Form\V3;
 use Horde_Form_Translation;
+
 class PhoneType extends BaseType
 {
     /**
@@ -18,7 +19,7 @@ class PhoneType extends BaseType
         $this->_size = $params[0] ?? 15;
     }
 
-    public function isValid($var, Horde_Variables|array $vars, $value)
+    public function isValid($var, Horde_Variables|array $vars, $value): bool
     {
         if (!strlen(trim($value))) {
             if ($var->isRequired()) {
@@ -53,8 +54,10 @@ class PhoneType extends BaseType
         return [
             'name' => Horde_Form_Translation::t("Phone number"),
             'params' => [
-                'size'      => ['label' => Horde_Form_Translation::t("Size"),
-                    'type'  => 'int'],
+                'size' => [
+                    'label' => Horde_Form_Translation::t("Size"),
+                    'type'  => 'int'
+                ],
             ],
         ];
     }

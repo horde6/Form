@@ -1,6 +1,7 @@
 <?php
 namespace Horde\Form\V3;
 use Horde_Form_Translation;
+
 class HeaderType extends BaseType
 {
     public function isValid($var, Horde_Variables|array $vars, $value): bool

@@ -1,7 +1,8 @@
 <?php
 namespace Horde\Form\V3;
 use Horde_Form_Translation;
-class HtmlType extends BaseType
+
+class TablesetType extends BaseType
 {
     public $_values;
     public $_header;
@@ -53,10 +54,15 @@ class HtmlType extends BaseType
         return [
             'name' => Horde_Form_Translation::t("Table Set"),
             'params' => [
-                'values' => ['label' => Horde_Form_Translation::t("Values"),
-                    'type'  => 'stringlist'],
-                'header' => ['label' => Horde_Form_Translation::t("Headers"),
-                    'type'  => 'stringlist']],
+                'values' => [
+                    'label' => Horde_Form_Translation::t("Values"),
+                    'type'  => 'stringlist'
+                ],
+                'header' => [
+                    'label' => Horde_Form_Translation::t("Headers"),
+                    'type'  => 'stringlist'
+                ]
+            ],
         ];
     }
 }

@@ -1,6 +1,7 @@
 <?php
 namespace Horde\Form\V3;
 use Horde_Form_Translation;
+
 class CountedtextType extends LongtextType
 {
     public $_chars;
@@ -19,7 +20,7 @@ class CountedtextType extends LongtextType
         $this->_chars = $chars;
     }
 
-    public function isValid($var, Horde_Variables|array $vars, $value)
+    public function isValid($var, Horde_Variables|array $vars, $value): bool
     {
         $valid = true;
 
@@ -28,14 +29,14 @@ class CountedtextType extends LongtextType
         if ($var->isRequired() && $length <= 0) {
             $valid = false;
             $message = Horde_Form_Translation::t("This field is required.");
-
+            $this->message = $message;
         } elseif ($length > $this->_chars) {
             $valid = false;
             $message = sprintf(Horde_Form_Translation::ngettext("There are too many characters in this field. You have entered %d character; ", "There are too many characters in this field. You have entered %d characters; ", $length), $length)
                 . sprintf(Horde_Form_Translation::t("you must enter less than %d."), $this->_chars);
+            $this->message = $message;
         }
 
-        $this->message = (string)$message;
         return $valid;
     }
 
@@ -47,12 +48,20 @@ class CountedtextType extends LongtextType
         return [
             'name' => Horde_Form_Translation::t("Counted text"),
             'params' => [
-                'rows'  => ['label' => Horde_Form_Translation::t("Number of rows"),
-                    'type'  => 'int'],
-                'cols'  => ['label' => Horde_Form_Translation::t("Number of columns"),
-                    'type'  => 'int'],
-                'chars' => ['label' => Horde_Form_Translation::t("Number of characters"),
-                    'type'  => 'int']]];
+                'rows'  => [
+                    'label' => Horde_Form_Translation::t("Number of rows"),
+                    'type'  => 'int'
+                ],
+                'cols'  => [
+                    'label' => Horde_Form_Translation::t("Number of columns"),
+                    'type'  => 'int'
+                ],
+                'chars' => [
+                    'label' => Horde_Form_Translation::t("Number of characters"),
+                    'type'  => 'int'
+                ]
+            ]
+        ];
     }
 
 }

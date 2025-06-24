@@ -1,6 +1,7 @@
 <?php
 namespace Horde\Form\V3;
 use Horde_Form_Translation;
+
 class AddressType extends LongtextType
 {
     public function parse($address)
@@ -102,9 +103,15 @@ class AddressType extends LongtextType
         return [
             'name' => Horde_Form_Translation::t("Address"),
             'params' => [
-                'rows' => ['label' => Horde_Form_Translation::t("Number of rows"),
-                    'type'  => 'int'],
-                'cols' => ['label' => Horde_Form_Translation::t("Number of columns"),
-                    'type'  => 'int']]];
+                'rows' => [
+                    'label' => Horde_Form_Translation::t("Number of rows"),
+                    'type'  => 'int'
+                ],
+                'cols' => [
+                    'label' => Horde_Form_Translation::t("Number of columns"),
+                    'type'  => 'int'
+                ]
+            ]
+        ];
     }
 }

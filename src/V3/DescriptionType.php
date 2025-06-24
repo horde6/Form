@@ -1,6 +1,7 @@
 <?php
 namespace Horde\Form\V3;
 use Horde_Form_Translation;
+
 class DescriptionType extends BaseType
 {
     public function isValid($var, Horde_Variables|array $vars, $value): bool
@@ -12,4 +13,3 @@ class DescriptionType extends BaseType
         return ['name' => Horde_Form_Translation::t("Description")];
     }
 }
-

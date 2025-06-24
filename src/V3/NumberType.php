@@ -1,6 +1,7 @@
 <?php
 namespace Horde\Form\V3;
 use Horde_Form_Translation;
+
 class NumberType extends BaseType
 {
     public $_fraction;
@@ -72,8 +73,7 @@ class NumberType extends BaseType
         $value = $vars->get($var->getVarName());
         $linfo = Horde_Nls::getLocaleInfo();
         $value = str_replace($linfo['mon_thousands_sep'], '', $value);
-        $info = str_replace($linfo['mon_decimal_point'], '.', $value);
-        return $info;
+        return str_replace($linfo['mon_decimal_point'], '.', $value);
     }
 
     /**
@@ -81,7 +81,6 @@ class NumberType extends BaseType
      */
     public function about(): array
     {
-        return ['name' => Horde_Form_Translation::t("Number")];
+        return [ 'name' => Horde_Form_Translation::t("Number") ];
     }
 }
-

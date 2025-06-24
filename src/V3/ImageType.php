@@ -1,0 +1,418 @@
+<?php
+namespace Horde\Form\V3;
+use Horde_Form_Translation;
+
+class ImageType extends BaseType
+{
+    /**
+     * Has a file been uploaded on this form submit?
+     *
+     * @var boolean
+     */
+    public $_uploaded = null;
+
+    /**
+     * Show the upload button?
+     *
+     * @var boolean
+     */
+    public $_show_upload = true;
+
+    /**
+     * Show the option to upload also original non-modified image?
+     *
+     * @var boolean
+     */
+    public $_show_keeporig = false;
+
+    /**
+     * Limit the file size?
+     *
+     * @var integer
+     */
+    public $_max_filesize = null;
+
+    /**
+     * Hash containing the previously uploaded image info.
+     *
+     * @var array
+     */
+    public $_img;
+
+    /**
+     * A random id that identifies the image information in the session data.
+     *
+     * @var string
+     */
+    public $_random;
+
+    /**
+     * Init a Country field
+     *
+     *     function init($show_upload = true, $show_keeporig = false, $max_filesize = null)
+     */
+    public function init(...$params)
+    {
+        $this->_show_upload   = $params[0] ?? true;
+        $this->_show_keeporig = $params[1] ?? false;
+        $this->_max_filesize  = $params[2] ?? null;
+    }
+
+    /**
+     *     function onSubmit($var, $vars)
+     */
+    public function onSubmit(...$params)
+    {
+        $var = $params[0];
+        $vars = $params[1];
+
+        /* Are we removing an image? */
+        if ($vars->get('remove_' . $var->getVarName())) {
+            $GLOBALS['session']->remove('horde', 'form/' . $this->getRandomId());
+            $this->_img = null;
+            return;
+        }
+
+        /* Get the upload. */
+        $this->getImage($vars, $var);
+
+        /* If this was done through the upload button override the submitted
+         * value of the form. */
+        if ($vars->get('do_' . $var->getVarName())) {
+            $var->form->setSubmitted(false);
+            if ($this->_uploaded instanceof Horde_Browser_Exception) {
+                $this->_img = ['hash' => $this->getRandomId(),
+                    'error' => $this->_uploaded->getMessage()];
+            }
+        }
+    }
+
+    /**
+     * @param Horde_Form_Variable $var  The Form field object to check
+     * @param Horde_Variables $vars     The form state to check this field for
+     * @param array $value              The field value array - should contain a key ['hash'] which holds the key for the image on temp storage
+     * @param something  $message       Not clear what this field does
+     */
+
+    public function isValid($var, Horde_Variables|array $vars, $value): bool
+    {
+        if ($vars->get('remove_' . $var->getVarName())) {
+            return true;
+        }
+
+        /* Get the upload. */
+        $this->getImage($vars, $var);
+        $field = $vars->get($var->getVarName());
+
+        /* The upload generated a PEAR Error. */
+        if ($this->_uploaded instanceof Horde_Browser_Exception) {
+            /* Not required and no image upload attempted. */
+            if (!$var->isRequired() && empty($field['hash']) &&
+                $this->_uploaded->getCode() == UPLOAD_ERR_NO_FILE) {
+                return true;
+            }
+
+            if (($this->_uploaded->getCode() == UPLOAD_ERR_NO_FILE) &&
+                empty($field['hash'])) {
+                /* Nothing uploaded and no older upload. */
+                $message = Horde_Form_Translation::t("This field is required.");
+                $this->message = $message;
+                return false;
+            }
+
+            if (!empty($field['hash'])) {
+                if ($this->_img && isset($this->_img['error'])) {
+                    $message = $this->_img['error'];
+                    $this->message = $message;
+                    return false;
+                }
+                /* Nothing uploaded but older upload present. */
+                return true;
+            }
+
+            /* Some other error message. */
+            $message = $this->_uploaded->getMessage();
+            $this->message = $message;
+            return false;
+        }
+
+        if (empty($this->_img['img']['size'])) {
+            $message = Horde_Form_Translation::t("The image file size could not be determined or it was 0 bytes. The upload may have been interrupted.");
+            $this->message = $message;
+            return false;
+        }
+
+        if ($this->_max_filesize && $this->_img['img']['size'] > $this->_max_filesize) {
+            $message = sprintf(Horde_Form_Translation::t("The image file was larger than the maximum allowed size (%d bytes)."), $this->_max_filesize);
+            $this->message = $message;
+            return false;
+        }
+
+        return true;
+    }
+
+    public function getInfo($vars, $var)
+    {
+        /* Get the upload. */
+        $this->getImage($vars, $var);
+
+        /* Get image params stored in the hidden field. */
+        $value = $var->getValue($vars);
+
+        /* Check if we have image data */
+        if (!isset($this->_img) || !isset($this->_img['img'])) {
+            return '';
+        }
+
+        $info = $this->_img['img'];
+        if (empty($info['file'])) {
+            unset($info['file']);
+            return $info;
+        }
+
+        if ($this->_show_keeporig) {
+            $info['keep_orig'] = !empty($value['keep_orig']);
+        }
+
+        /* Set the uploaded value (either true or Horde_Browser_Exception). */
+        $info['uploaded'] = &$this->_uploaded;
+
+        /* If a modified file exists move it over the original. */
+        if ($this->_show_keeporig && $info['keep_orig']) {
+            /* Requested the saving of original file also. */
+            $info['orig_file'] = Horde::getTempDir() . '/' . $info['file'];
+            $info['file'] = Horde::getTempDir() . '/mod_' . $info['file'];
+            /* Check if a modified file actually exists. */
+            if (!file_exists($info['file'])) {
+                $info['file'] = $info['orig_file'];
+                unset($info['orig_file']);
+            }
+        } else {
+            /* Saving of original not required. */
+            $mod_file = Horde::getTempDir() . '/mod_' . $info['file'];
+            $info['file'] = Horde::getTempDir() . '/' . $info['file'];
+
+            if (file_exists($mod_file)) {
+                /* Unlink first (has to be done on Windows machines?) */
+                unlink($info['file']);
+                rename($mod_file, $info['file']);
+            }
+        }
+        return $info;
+    }
+
+    /**
+     * Gets the upload and sets up the upload data array. Either
+     * fetches an upload done with this submit or retrieves stored
+     * upload info.
+     * @param Horde_Variables $vars     The form state to check this field for
+     * @param Horde_Form_Variable $var  The Form field object to check
+     *
+     */
+    public function _getUpload($vars, $var)
+    {
+        global $session;
+
+        /* Don't bother with this function if already called and set
+         * up vars. */
+        if (!empty($this->_img)) {
+            return true;
+        }
+
+        /* Check if file has been uploaded. */
+        $varname = $var->getVarName();
+
+        try {
+            $GLOBALS['browser']->wasFileUploaded($varname . '[new]');
+            $this->_uploaded = true;
+
+            /* A file has been uploaded on this submit. Save to temp dir for
+             * preview work. */
+            $this->_img['img']['type'] = $this->getUploadedFileType($varname . '[new]');
+
+            /* Get the other parts of the upload. */
+            Horde_Array::getArrayParts($varname . '[new]', $base, $keys);
+
+            /* Get the temporary file name. */
+            $keys_path = array_merge([$base, 'tmp_name'], $keys);
+            $this->_img['img']['file'] = Horde_Array::getElement($_FILES, $keys_path);
+
+            /* Get the actual file name. */
+            $keys_path = array_merge([$base, 'name'], $keys);
+            $this->_img['img']['name'] = Horde_Array::getElement($_FILES, $keys_path);
+
+            /* Get the file size. */
+            $keys_path = array_merge([$base, 'size'], $keys);
+            $this->_img['img']['size'] = Horde_Array::getElement($_FILES, $keys_path);
+
+            /* Get any existing values for the image upload field. */
+            $upload = $vars->get($var->getVarName());
+            if (!empty($upload['hash'])) {
+                $upload['img'] = $session->get('horde', 'form/' . $upload['hash']);
+                $session->remove('horde', 'form/' . $upload['hash']);
+                if (!empty($upload['img']['file'])) {
+                    $tmp_file = Horde::getTempDir() . '/' . basename($upload['img']['file']);
+                } else {
+                    $tmp_file = Horde::getTempFile('Horde', false);
+                }
+            } else {
+                $tmp_file = Horde::getTempFile('Horde', false);
+            }
+
+            /* Move the browser created temp file to the new temp file. */
+            move_uploaded_file($this->_img['img']['file'], $tmp_file);
+            $this->_img['img']['file'] = basename($tmp_file);
+        } catch (Horde_Browser_Exception $e) {
+            $this->_uploaded = $e;
+
+            /* File has not been uploaded. */
+            $upload = $vars->get($var->getVarName());
+
+            /* File is explicitly removed */
+            if ($vars->get('remove_' . $var->getVarName())) {
+                $this->_img = null;
+                $session->remove('horde', 'form/' . $upload['hash']);
+                return;
+            }
+
+            if ($this->_uploaded->getCode() == 4 &&
+                !empty($upload['hash']) &&
+                $session->exists('horde', 'form/' . $upload['hash'])) {
+                $this->_img['img'] = $session->get('horde', 'form/' . $upload['hash']);
+                $session->remove('horde', 'form/' . $upload['hash']);
+                if (isset($this->_img['error'])) {
+                    $this->_uploaded = PEAR::raiseError($this->_img['error']);
+                }
+            }
+        }
+        if (isset($this->_img['img'])) {
+            $session->set('horde', 'form/' . $this->getRandomId(), $this->_img['img']);
+        }
+    }
+
+    public function getUploadedFileType($field)
+    {
+        /* Get any index on the field name. */
+        $index = Horde_Array::getArrayParts($field, $base, $keys);
+
+        if ($index) {
+            /* Index present, fetch the mime type var to check. */
+            $keys_path = array_merge([$base, 'type'], $keys);
+            $type = Horde_Array::getElement($_FILES, $keys_path);
+            $keys_path = array_merge([$base, 'tmp_name'], $keys);
+            $tmp_name = Horde_Array::getElement($_FILES, $keys_path);
+        } else {
+            /* No index, simple set up of vars to check. */
+            $type = $_FILES[$field]['type'];
+            $tmp_name = $_FILES[$field]['tmp_name'];
+        }
+
+        if (empty($type) || ($type == 'application/octet-stream')) {
+            /* Type wasn't set on upload, try analising the upload. */
+            if (!($type = Horde_Mime_Magic::analyzeFile($tmp_name, $GLOBALS['conf']['mime']['magic_db'] ?? null))) {
+                if ($index) {
+                    /* Get the name value. */
+                    $keys_path = array_merge([$base, 'name'], $keys);
+                    $name = Horde_Array::getElement($_FILES, $keys_path);
+
+                    /* Work out the type from the file name. */
+                    $type = Horde_Mime_Magic::filenameToMime($name);
+
+                    /* Set the type. */
+                    $keys_path = array_merge([$base, 'type'], $keys);
+                    Horde_Array::getElement($_FILES, $keys_path, $type);
+                } else {
+                    /* Work out the type from the file name. */
+                    $type = Horde_Mime_Magic::filenameToMime($_FILES[$field]['name']);
+
+                    /* Set the type. */
+                    $_FILES[$field]['type'] = Horde_Mime_Magic::filenameToMime($_FILES[$field]['name']);
+                }
+            }
+        }
+
+        return $type;
+    }
+
+    /**
+     * Returns the current image information.
+     *
+     * @param Horde_Variables $vars     The form state to check this field for
+     * @param Horde_Form_Variable $var  The Form field object to check
+     * @return array  The current image hash.
+     */
+    public function getImage($vars, $var)
+    {
+        $this->_getUpload($vars, $var);
+        if (!isset($this->_img)) {
+            $image = $vars->get($var->getVarName());
+            if ($image) {
+                $this->loadImageData($image);
+                if (isset($image['img'])) {
+                    $this->_img = $image;
+                    $GLOBALS['session']->set('horde', 'form/' . $this->getRandomId(), $this->_img['img']);
+                }
+            }
+        }
+        return $this->_img;
+    }
+
+    /**
+     * Loads any existing image data into the image field. Requires that the
+     * array $image passed to it contains the structure:
+     *   $image['load']['file'] - the filename of the image;
+     *   $image['load']['data'] - the raw image data.
+     *
+     * @param array $image  The image array.
+     */
+    public function loadImageData($image)
+    {
+        /* No existing image data to load. */
+        if (!isset($image['load'])) {
+            return;
+        }
+
+        /* Save the data to the temp dir. */
+        $tmp_file = Horde::getTempDir() . '/' . $image['load']['file'];
+        if ($fd = fopen($tmp_file, 'w')) {
+            fwrite($fd, $image['load']['data']);
+            fclose($fd);
+        }
+
+        $image['img'] = ['file' => $image['load']['file']];
+        unset($image['load']);
+    }
+
+    public function getRandomId()
+    {
+        if (!isset($this->_random)) {
+            $this->_random = uniqid(mt_rand());
+        }
+        return $this->_random;
+    }
+
+    /**
+     * Return info about field type.
+     */
+    public function about()
+    {
+        return [
+            'name' => Horde_Form_Translation::t("Image upload"),
+            'params' => [
+                'show_upload'   => [
+                    'label' => Horde_Form_Translation::t("Show upload?"),
+                    'type'  => 'boolean'
+                ],
+                'show_keeporig' => [
+                    'label' => Horde_Form_Translation::t("Show option to keep original?"),
+                    'type'  => 'boolean'
+                ],
+                'max_filesize'  => [
+                    'label' => Horde_Form_Translation::t("Maximum file size in bytes"),
+                    'type'  => 'int'
+                ]
+            ]
+        ];
+    }
+
+}

@@ -1,9 +1,10 @@
 <?php
 namespace Horde\Form\V3;
 use Horde_Form_Translation;
+
 class IpadressType extends TextType
 {
-    public function isValid($var, Horde_Variables|array $vars, $value)
+    public function isValid($var, Horde_Variables|array $vars, $value): bool
     {
         $valid = true;
 
@@ -23,6 +24,7 @@ class IpadressType extends TextType
 
             if (!$valid) {
                 $message = Horde_Form_Translation::t("Please enter a valid IP address.");
+                $this->message = $message;
             }
         } elseif ($var->isRequired()) {
             $valid = false;
@@ -38,7 +40,7 @@ class IpadressType extends TextType
      */
     public function about():array
     {
-        return ['name' => Horde_Form_Translation::t("IP address")];
+        return [ 'name' => Horde_Form_Translation::t("IP address") ];
     }
 
 }

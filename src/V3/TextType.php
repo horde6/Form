@@ -1,6 +1,7 @@
 <?php
 namespace Horde\Form\V3;
 use Horde_Form_Translation;
+
 class TextType extends BaseType
 {
     public $_regex;
@@ -35,7 +36,7 @@ class TextType extends BaseType
         $this->_maxlength = $params[2] ?? null;
     }
 
-    public function isValid($var, Horde_Variables|array $vars, $value)
+    public function isValid($var, Horde_Variables|array $vars, $value): bool
     {
         $valid = true;
 
@@ -60,8 +61,8 @@ class TextType extends BaseType
         }
 
         return $valid;
-
     }
+
     public function getSize()
     {
         return $this->_size;
@@ -80,12 +81,20 @@ class TextType extends BaseType
          return [
             'name' => Horde_Form_Translation::t("Text"),
             'params' => [
-                'regex'     => ['label' => Horde_Form_Translation::t("Regex"),
-                    'type'  => 'text'],
-                'size'      => ['label' => Horde_Form_Translation::t("Size"),
-                    'type'  => 'int'],
-                'maxlength' => ['label' => Horde_Form_Translation::t("Maximum length"),
-                    'type'  => 'int']]];
+                'regex'     => [
+                    'label' => Horde_Form_Translation::t("Regex"),
+                    'type'  => 'text'
+                ],
+                'size'      => [
+                    'label' => Horde_Form_Translation::t("Size"),
+                    'type'  => 'int'
+                ],
+                'maxlength' => [
+                    'label' => Horde_Form_Translation::t("Maximum length"),
+                    'type'  => 'int'
+                ]
+            ]
+        ];
    }
 
 }

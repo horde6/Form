@@ -1,9 +1,10 @@
 <?php
 namespace Horde\Form\V3;
 use Horde_Form_Translation;
+
 class Ip6adressType extends TextType
 {
-    public function isValid($var, Horde_Variables|array $vars, $value)
+    public function isValid($var, Horde_Variables|array $vars, $value): bool
     {
         $valid = true;
 
@@ -29,7 +30,7 @@ class Ip6adressType extends TextType
      */
     public function about():array
     {
-        return ['name' => Horde_Form_Translation::t("IPv6 address")];
+        return [ 'name' => Horde_Form_Translation::t("IPv6 address") ];
     }
 
 }

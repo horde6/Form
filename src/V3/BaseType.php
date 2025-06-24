@@ -10,6 +10,7 @@
 
 namespace Horde\Form\V3;
 use Horde_Variables;
+
 class BaseType implements Type
 {
     /**

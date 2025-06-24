@@ -1,12 +1,14 @@
 <?php
 namespace Horde\Form\V3;
 use Horde_Form_Translation;
+
 class LongtextType extends TextType
 {
     public $_rows;
     public $_cols;
     public $_helper = [];
-    public function isValid($var, Horde_Variables|array $vars, $value)
+
+    public function isValid($var, Horde_Variables|array $vars, $value): bool
     {
         if ($var->isRequired() && empty($value) && ((string) (int) $value !== $value)) {
             $this->message = Horde_Form_Translation::t("This field is required.");
@@ -59,15 +61,15 @@ class LongtextType extends TextType
             /* No option specified, check if any helpers have been
              * activated. */
             return !empty($this->_helper);
-        } elseif (empty($this->_helper)) {
+        }
+        if (empty($this->_helper)) {
             /* No helpers activated at all, return false. */
             return false;
-        } else {
-            /* Check if given helper has been activated. */
-            return in_array($option, $this->_helper);
         }
-    }
 
+        /* Check if given helper has been activated. */
+        return in_array($option, $this->_helper);
+    }
 
     /**
      * Return info about field type.
@@ -77,12 +79,20 @@ class LongtextType extends TextType
         return [
             'name' => Horde_Form_Translation::t("Long text"),
             'params' => [
-                'rows'   => ['label' => Horde_Form_Translation::t("Number of rows"),
-                    'type'  => 'int'],
-                'cols'   => ['label' => Horde_Form_Translation::t("Number of columns"),
-                    'type'  => 'int'],
-                'helper' => ['label' => Horde_Form_Translation::t("Helpers"),
-                    'type'  => 'stringarray']]];
+                'rows'   => [
+                    'label' => Horde_Form_Translation::t("Number of rows"),
+                    'type'  => 'int'
+                ],
+                'cols'   => [
+                    'label' => Horde_Form_Translation::t("Number of columns"),
+                    'type'  => 'int'
+                ],
+                'helper' => [
+                    'label' => Horde_Form_Translation::t("Helpers"),
+                    'type'  => 'stringarray'
+                ]
+            ]
+        ];
     }
 
 }

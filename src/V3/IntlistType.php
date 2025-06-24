@@ -1,9 +1,10 @@
 <?php
 namespace Horde\Form\V3;
 use Horde_Form_Translation;
+
 class IntlistType extends BaseType
 {
-    public function isValid($var, Horde_Variables|array $vars, $value)
+    public function isValid($var, Horde_Variables|array $vars, $value): bool
     {
         if (empty($value) && $var->isRequired()) {
             $message = Horde_Form_Translation::t("This field is required.");
@@ -18,7 +19,6 @@ class IntlistType extends BaseType
         $message = Horde_Form_Translation::t("This field must be a comma or space separated list of integers");
         $this->message = $message;
         return false;
-
     }
 
     /**
@@ -26,7 +26,7 @@ class IntlistType extends BaseType
      */
     public function about():array
     {
-        return ['name' => Horde_Form_Translation::t("Integer list")];
+        return [ 'name' => Horde_Form_Translation::t("Integer list") ];
     }
 
 }
