@@ -10,6 +10,6 @@ class HeaderType extends BaseType
     }
     public function about(): array
     {
-        return ['name' => Horde_Form_Translation::t("Header")];
+        return [ 'name' => Horde_Form_Translation::t("Header") ];
     }
 }

@@ -81,8 +81,10 @@ class ImageType extends BaseType
         if ($vars->get('do_' . $var->getVarName())) {
             $var->form->setSubmitted(false);
             if ($this->_uploaded instanceof Horde_Browser_Exception) {
-                $this->_img = ['hash' => $this->getRandomId(),
-                    'error' => $this->_uploaded->getMessage()];
+                $this->_img = [
+                    'hash' => $this->getRandomId(),
+                    'error' => $this->_uploaded->getMessage()
+                ];
             }
         }
     }
@@ -379,7 +381,7 @@ class ImageType extends BaseType
             fclose($fd);
         }
 
-        $image['img'] = ['file' => $image['load']['file']];
+        $image['img'] = [ 'file' => $image['load']['file'] ];
         unset($image['load']);
     }
 

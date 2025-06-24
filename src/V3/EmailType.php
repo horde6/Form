@@ -134,7 +134,7 @@ class EmailType extends BaseType
         // Trim off any trailing delimiters
         $string = trim($string, $this->_delimiters . ' ');
 
-        $quotes = ['"', "'"];
+        $quotes = [ '"', "'" ];
         $emails = [];
         $pos = 0;
         $in_quote = null;

@@ -10,6 +10,6 @@ class DescriptionType extends BaseType
     }
     public function about(): array
     {
-        return ['name' => Horde_Form_Translation::t("Description")];
+        return [ 'name' => Horde_Form_Translation::t("Description") ];
     }
 }

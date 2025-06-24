@@ -42,7 +42,7 @@ class PgpType extends LongtextType
      */
     public function getPGPParams()
     {
-        return ['program' => $this->_gpg, 'temp' => $this->_temp];
+        return [ 'program' => $this->_gpg, 'temp' => $this->_temp ];
     }
 
     /**
@@ -53,14 +53,24 @@ class PgpType extends LongtextType
         return [
             'name' => Horde_Form_Translation::t("PGP Key"),
             'params' => [
-                'gpg'      => ['label' => Horde_Form_Translation::t("Path to the GnuPG binary"),
-                    'type'  => 'string'],
-                'temp_dir' => ['label' => Horde_Form_Translation::t("A temporary directory"),
-                    'type'  => 'string'],
-                'rows'     => ['label' => Horde_Form_Translation::t("Number of rows"),
-                    'type'  => 'int'],
-                'cols'     => ['label' => Horde_Form_Translation::t("Number of columns"),
-                    'type'  => 'int']]];
+                'gpg'      => [
+                    'label' => Horde_Form_Translation::t("Path to the GnuPG binary"),
+                    'type'  => 'string'
+                ],
+                'temp_dir' => [
+                    'label' => Horde_Form_Translation::t("A temporary directory"),
+                    'type'  => 'string'
+                ],
+                'rows'     => [
+                    'label' => Horde_Form_Translation::t("Number of rows"),
+                    'type'  => 'int'
+                ],
+                'cols'     => [
+                    'label' => Horde_Form_Translation::t("Number of columns"),
+                    'type'  => 'int'
+                ]
+            ]
+        ];
     }
 
 }

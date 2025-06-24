@@ -11,6 +11,6 @@ class HtmlType extends BaseType
 
     public function about(): array
     {
-        return ['name' => Horde_Form_Translation::t("HTML")];
+        return [ 'name' => Horde_Form_Translation::t("HTML") ];
     }
 }

@@ -11,7 +11,7 @@ class AddressType extends LongtextType
 
         if (preg_match('/(?s)(.*?)(?-s)\r?\n(?:(.*?)\s+)?((?:A[BL]|B[ABDHLNRST]?|C[ABFHMORTVW]|D[ADEGHLNTY]|E[CHNX]?|F[KY]|G[LUY]?|H[ADGPRSUX]|I[GMPV]|JE|K[ATWY]|L[ADELNSU]?|M[EKL]?|N[EGNPRW]?|O[LX]|P[AEHLOR]|R[GHM]|S[AEGKLMNOPRSTWY]?|T[ADFNQRSW]|UB|W[ACDFNRSV]?|YO|ZE)\d(?:\d|[A-Z])? \d[A-Z]{2})/', $address, $addressParts)) {
             /* UK postcode detected. */
-            $info = ['country' => 'uk', 'zip' => $addressParts[3]];
+            $info = [ 'country' => 'uk', 'zip' => $addressParts[3] ];
             if (!empty($addressParts[1])) {
                 $info['street'] = $addressParts[1];
             }
@@ -22,7 +22,7 @@ class AddressType extends LongtextType
             /* Australian state detected. */
             /* Split out the address, line-by-line. */
             $addressLines = preg_split('/\r?\n/', $address);
-            $info = ['country' => 'au'];
+            $info = [ 'country' => 'au' ];
             for ($i = 0; $i < count($addressLines); $i++) {
                 /* See if it's the street number & name. */
                 if (preg_match('/(\d+\s*\/\s*)?(\d+|\d+[a-zA-Z])\s+([a-zA-Z ]*)/', $addressLines[$i], $lineParts)) {
@@ -43,7 +43,7 @@ class AddressType extends LongtextType
             }
         } elseif (preg_match('/(?s)(.*?)(?-s)\r?\n(.*)\s*,\s*(\w+)\.?\s+(\d+|[a-zA-Z]\d[a-zA-Z]\s?\d[a-zA-Z]\d)/', $address, $addressParts)) {
             /* American/Canadian address style. */
-            $info = ['country' => 'us'];
+            $info = [ 'country' => 'us' ];
             if (!empty($addressParts[4]) &&
                 preg_match('|[a-zA-Z]\d[a-zA-Z]\s?\d[a-zA-Z]\d|', $addressParts[4])) {
                 $info['country'] = 'ca';

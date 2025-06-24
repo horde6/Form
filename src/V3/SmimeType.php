@@ -33,7 +33,7 @@ class SmimeType extends LongtextType
      */
     public function getSMIMEParams()
     {
-        return ['temp' => $this->_temp];
+        return [ 'temp' => $this->_temp ];
     }
 
     /**
