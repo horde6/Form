@@ -689,7 +689,7 @@ class Horde_Form
         foreach ($this->getVariables() as $var) {
             $this->_autofilled = $var->_autofilled && $this->_autofilled;
             if (!$var->validate($vars, $message)) {
-                $this->_errors[$var->getVarName()] = $message;
+                $this->_errors[$var->getVarName()] = $var->getMessage();
             }
         }
 
@@ -699,7 +699,7 @@ class Horde_Form
 
         foreach ($this->_hiddenVariables as $var) {
             if (!$var->validate($vars, $message)) {
-                $this->_errors[$var->getVarName()] = $message;
+                $this->_errors[$var->getVarName()] = $var->getMessage();
             }
         }
 
