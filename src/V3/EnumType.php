@@ -33,9 +33,7 @@ class EnumType extends BaseType
      public function isValid($var, Horde_Variables|array $vars, $value): bool
     {
         if ($var->isRequired() && $value == '' && !isset($this->_values[$value])) {
-            $message = Horde_Form_Translation::t("This field is required.");
-            $this->message = $message;
-            return false;
+            return $this->invalid('This field is required.');
         }
 
         if (count($this->_values) == 0 || isset($this->_values[$value]) ||
@@ -43,9 +41,7 @@ class EnumType extends BaseType
             return true;
         }
 
-        $message = Horde_Form_Translation::t("Invalid data submitted.");
-        $this->message = $message;
-        return false;
+        return $this->invalid('Invalid data submitted.');
     }
 
     public function getValues(...$params)

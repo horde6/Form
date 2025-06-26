@@ -53,9 +53,7 @@ class MonthdayyearType extends BaseType
         $empty = $this->emptyDateArray($date);
 
         if ($empty == 1 && $var->isRequired()) {
-            $message = Horde_Form_Translation::t("This field is required.");
-            $this->message = $message;
-            return false;
+            return $this->invalid('This field is required.');
         }
 
         if ($empty == 0 && !checkdate(
@@ -63,15 +61,11 @@ class MonthdayyearType extends BaseType
             $date['day'],
             $date['year']
         )) {
-            $message = Horde_Form_Translation::t("Please enter a valid date, check the number of days in the month.");
-            $this->message = $message;
-            return false;
+            return $this->invalid('Please enter a valid date, check the number of days in the month.');
         }
 
         if ($empty == -1) {
-            $message = Horde_Form_Translation::t("Select all date components.");
-            $this->message = $message;
-            return false;
+            return $this->invalid('Select all date components.');
         }
 
         return true;

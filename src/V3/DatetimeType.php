@@ -50,30 +50,25 @@ class DatetimeType extends BaseType
         $mdy_empty = $this->emptyDateArray($date);
         $hms_empty = $this->emptyTimeArray($date);
 
-        $valid = true;
-
         /* Require all fields if one field is not empty */
         if ($var->isRequired() || $mdy_empty != 1 || !$hms_empty) {
             $old_required = $var->required;
             $var->required = true;
 
-            $mdy_valid = $this->_mdy->isValid($var, $vars, $value, $message);
-            $hms_valid = $this->_hms->isValid($var, $vars, $value, $message);
+            $mdy_valid = $this->_mdy->isValid($var, $vars, $value);
+            $hms_valid = $this->_hms->isValid($var, $vars, $value);
             $var->required = $old_required;
 
-            $valid = $mdy_valid && $hms_valid;
-            if ($mdy_valid && !$hms_valid) {
-                $message = Horde_Form_Translation::t("You must choose a time.");
-            } elseif ($hms_valid && !$mdy_valid) {
-                $message = Horde_Form_Translation::t("You must choose a date.");
+            if (!$mdy_valid) {
+                return $this->invalid('You must choose a date.');
             }
 
-            // FIXME: $message is not set if both are invalid
-
-            $this->message = (string)$message;
+            if (!$hms_valid) {
+                return $this->invalid('You must choose a time.');
+            }
         }
 
-        return $valid;
+        return true;
     }
 
     public function getInfo($vars, $var)

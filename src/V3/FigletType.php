@@ -21,15 +21,11 @@ class FigletType extends BaseType
     public function isValid($var, Horde_Variables|array $vars, $value): bool
     {
         if (empty($value) && $var->isRequired()) {
-            $message = Horde_Form_Translation::t("This field is required.");
-            $this->message = $message;
-            return false;
+            return $this->invalid('This field is required.');
         }
 
         if (Horde_String::lower($value) != Horde_String::lower($this->_text)) {
-            $message = Horde_Form_Translation::t("The text you entered did not match the text on the screen.");
-            $this->message = $message;
-            return false;
+            return $this->invalid('The text you entered did not match the text on the screen.');
         }
 
         return true;

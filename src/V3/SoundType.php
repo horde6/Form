@@ -19,18 +19,14 @@ class SoundType extends BaseType
     public function isValid($var, Horde_Variables|array $vars, $value): bool
     {
         if ($var->isRequired() && empty($value)) {
-            $message = Horde_Form_Translation::t("This field is required.");
-            $this->message = $message;
-            return false;
+            return $this->invalid('This field is required.');
         }
 
         if (empty($value) || in_array($value, $this->_sounds)) {
             return true;
         }
 
-        $message = Horde_Form_Translation::t("Please choose a sound.");
-        $this->message = $message;
-        return false;
+        return $this->invalid('Please choose a sound.');
     }
 
     /**

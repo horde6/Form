@@ -10,8 +10,7 @@ class CountryType extends BaseType
             try {
                 $GLOBALS['browser']->wasFileUploaded($var->getVarName());
             } catch (Horde_Browser_Exception $e) {
-                $message = $e->getMessage();
-                $this->message = $message;
+                $this->message = $e->getMessage();
                 return false;
             }
         }

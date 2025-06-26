@@ -34,9 +34,7 @@ class SetType extends BaseType
 
         foreach ($value as $item) {
             if (!isset($this->_values[$item])) {
-                $message = Horde_Form_Translation::t("Invalid data submitted.");
-                $this->message = $message;
-                return false;
+                return $this->invalid('Invalid data submitted.');
             }
         }
 

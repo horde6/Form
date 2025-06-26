@@ -7,18 +7,14 @@ class BooleanType extends BaseType
     public function isValid($var, Horde_Variables|array $vars, $value): bool
     {
         if ($var->isRequired() && empty($value)) {
-            $message = Horde_Form_Translation::t("This field is required.");
-            $this->message = $message;
-            return false;
+            return $this->invalid('This field is required.');
         }
 
         if (empty($value) || preg_match('/^#([0-9a-z]){6}$/i', $value)) {
             return true;
         }
 
-        $message = Horde_Form_Translation::t("This field must contain a color code in the RGB Hex format, for example '#1234af'.");
-        $this->message = $message;
-        return false;
+        return $this->invalid("This field must contain a color code in the RGB Hex format, for example '#1234af'.");
     }
 
     /**

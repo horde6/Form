@@ -85,4 +85,10 @@ class BaseType implements Type
         return $var->getValue($vars);
     }
 
+    public function invalid(string $message): bool
+    {
+        $this->message = Horde_Form_Translation::t($message);
+        return false;
+    }
+
 }

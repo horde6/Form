@@ -88,9 +88,7 @@ class EmailType extends BaseType
 
         // Check for too many.
         if (!$this->_allow_multi && count($emails) > 1) {
-            $message = Horde_Form_Translation::t("Only one email address is allowed.");
-            $this->message = $message;
-            return false;
+            return $this->invalid('Only one email address is allowed.');
         }
 
         // Check for all valid and at least one non-empty.
@@ -100,8 +98,7 @@ class EmailType extends BaseType
                 continue;
             }
             if (!$this->validateEmailAddress($email)) {
-                $message = sprintf(Horde_Form_Translation::t("\"%s\" is not a valid email address."), htmlspecialchars($email));
-                $this->message = $message;
+                $this->message = sprintf(Horde_Form_Translation::t("\"%s\" is not a valid email address."), htmlspecialchars($email));
                 return false;
             }
             ++$nonEmpty;
@@ -109,12 +106,9 @@ class EmailType extends BaseType
 
         if (!$nonEmpty && $var->isRequired()) {
             if ($this->_allow_multi) {
-                $message = Horde_Form_Translation::t("You must enter at least one email address.");
-            } else {
-                $message = Horde_Form_Translation::t("You must enter an email address.");
+                return $this->invalid('You must enter at least one email address.');
             }
-            $this->message = $message;
-            return false;
+            return $this->invalid('You must enter an email address.');
         }
 
         return true;

@@ -93,7 +93,6 @@ class ImageType extends BaseType
      * @param Horde_Form_Variable $var  The Form field object to check
      * @param Horde_Variables $vars     The form state to check this field for
      * @param array $value              The field value array - should contain a key ['hash'] which holds the key for the image on temp storage
-     * @param something  $message       Not clear what this field does
      */
 
     public function isValid($var, Horde_Variables|array $vars, $value): bool
@@ -117,15 +116,12 @@ class ImageType extends BaseType
             if (($this->_uploaded->getCode() == UPLOAD_ERR_NO_FILE) &&
                 empty($field['hash'])) {
                 /* Nothing uploaded and no older upload. */
-                $message = Horde_Form_Translation::t("This field is required.");
-                $this->message = $message;
-                return false;
+                return $this->invalid('This field is required.');
             }
 
             if (!empty($field['hash'])) {
                 if ($this->_img && isset($this->_img['error'])) {
-                    $message = $this->_img['error'];
-                    $this->message = $message;
+                    $this->message = $this->_img['error'];
                     return false;
                 }
                 /* Nothing uploaded but older upload present. */
@@ -133,20 +129,16 @@ class ImageType extends BaseType
             }
 
             /* Some other error message. */
-            $message = $this->_uploaded->getMessage();
-            $this->message = $message;
+            $this->message = $this->_uploaded->getMessage();
             return false;
         }
 
         if (empty($this->_img['img']['size'])) {
-            $message = Horde_Form_Translation::t("The image file size could not be determined or it was 0 bytes. The upload may have been interrupted.");
-            $this->message = $message;
-            return false;
+            return $this->invalid('The image file size could not be determined or it was 0 bytes. The upload may have been interrupted.');
         }
 
         if ($this->_max_filesize && $this->_img['img']['size'] > $this->_max_filesize) {
-            $message = sprintf(Horde_Form_Translation::t("The image file was larger than the maximum allowed size (%d bytes)."), $this->_max_filesize);
-            $this->message = $message;
+            $this->message = sprintf(Horde_Form_Translation::t("The image file was larger than the maximum allowed size (%d bytes)."), $this->_max_filesize);
             return false;
         }
 

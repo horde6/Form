@@ -45,9 +45,7 @@ class MlenumType extends BaseType
     public function isValid($var, Horde_Variables|array $vars, $value): bool
     {
         if ($var->isRequired() && (empty($value['1']) || empty($value['2']))) {
-            $message = Horde_Form_Translation::t("This field is required.");
-            $this->message = $message;
-            return false;
+            return $this->invalid('This field is required.');
         }
 
         if (!count($this->_values) || isset($this->_values[$value['1']]) ||
@@ -55,9 +53,7 @@ class MlenumType extends BaseType
             return true;
         }
 
-        $message = Horde_Form_Translation::t("Invalid data submitted.");
-        $this->message = $message;
-        return false;
+        return $this->invalid('Invalid data submitted.');
     }
 
     public function getValues(...$params)

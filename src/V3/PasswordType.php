@@ -6,18 +6,11 @@ class PasswordType extends BaseType
 {
     public function isValid($var, Horde_Variables|array $vars, $value): bool
     {
-        $valid = true;
-
-        if ($var->isRequired()) {
-            $valid = strlen(trim($value)) > 0;
-
-            if (!$valid) {
-                $message = Horde_Form_Translation::t("This field is required.");
-                $this->message = $message;
-            }
+        if ($var->isRequired() && strlen(trim($value)) == 0) {
+            return $this->invalid('This field is required.');
         }
 
-        return $valid;
+        return true;
     }
 
     /**

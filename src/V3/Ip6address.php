@@ -6,22 +6,16 @@ class Ip6adressType extends TextType
 {
     public function isValid($var, Horde_Variables|array $vars, $value): bool
     {
-        $valid = true;
-
         if (strlen(trim($value)) > 0) {
             $valid = @inet_pton($value);
 
             if ($valid === false) {
-                $message = Horde_Form_Translation::t("Please enter a valid IP address.");
-                $this->message = $message;
-
+                return $this->invalid('Please enter a valid IP address.');
             }
         } elseif ($var->isRequired()) {
-            $valid = false;
-            $message = Horde_Form_Translation::t("This field is required.");
-            $this->message = $message;
+            return $this->invalid('This field is required.');
         }
-        // Looks like a bug. Shouldn't we return $valid here?
+
         return true;
      }
 

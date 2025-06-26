@@ -39,21 +39,16 @@ class MultienumType extends EnumType
 
         if (empty($value) && ((string) (int) $value !== $value)) {
             if ($var->isRequired()) {
-                $message = Horde_Form_Translation::t("This field is required.");
-                $this->message = $message;
-                return false;
-            } else {
-                return true;
+                return $this->invalid('This field is required.');
             }
+            return true;
         }
 
         if (count($this->_values) == 0 || isset($this->_values[$value])) {
             return true;
         }
 
-        $message = Horde_Form_Translation::t("Invalid data submitted.");
-        $this->message = $message;
-        return false;
+        return $this->invalid('Invalid data submitted.');
     }
 
     /**

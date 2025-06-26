@@ -7,18 +7,14 @@ class CreditType extends BaseType
     public function isValid($var, Horde_Variables|array $vars, $value): bool
     {
         if (empty($value) && $var->isRequired()) {
-            $message = Horde_Form_Translation::t("This field is required.");
-            $this->message = $message;
-            return false;
+            return $this->invalid('This field is required.');
         }
 
         if (!empty($value)) {
             /* getCardType() will also verify the checksum. */
             $type = $this->getCardType($value);
             if ($type === false || $type == 'unknown') {
-                $message = Horde_Form_Translation::t("This does not seem to be a valid card number.");
-                $this->message = $message;
-                return false;
+                return $this->invalid('This does not seem to be a valid card number.');
             }
         }
 

@@ -38,29 +38,20 @@ class TextType extends BaseType
 
     public function isValid($var, Horde_Variables|array $vars, $value): bool
     {
-        $valid = true;
-
         if (!empty($this->_maxlength) && Horde_String::length($value) > $this->_maxlength) {
-            $valid = false;
-            $message = sprintf(Horde_Form_Translation::t("Value is over the maximum length of %d."), $this->_maxlength);
-            $this->message = $message;
-        } elseif ($var->isRequired() && empty($this->_regex)) {
-            $valid = strlen(trim($value)) > 0;
-
-            if (!$valid) {
-                $message = Horde_Form_Translation::t("This field is required.");
-                $this->message = $message;
-            }
-        } elseif (!empty($this->_regex)) {
-            $valid = preg_match($this->_regex, $value);
-
-            if (!$valid) {
-                $message = Horde_Form_Translation::t("You must enter a valid value.");
-                $this->message = $message;
-            }
+            $this->message = sprintf(Horde_Form_Translation::t("Value is over the maximum length of %d."), $this->_maxlength);
+            return false;
         }
 
-        return $valid;
+        if ($var->isRequired() && empty($this->_regex)) {
+            if (strlen(trim($value)) == 0) {
+                return $this->invalid('This field is required.');
+            }
+        } elseif (!empty($this->_regex) && !preg_match($this->_regex, $value)) {
+            return $this->invalid('You must enter a valid value.');
+        }
+
+        return true;
     }
 
     public function getSize()

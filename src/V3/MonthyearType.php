@@ -35,9 +35,7 @@ class MonthyearType extends BaseType
         }
 
         if (!$vars->get($this->getMonthVar($var)) || !$vars->get($this->getYearVar($var))) {
-            $message = Horde_Form_Translation::t("Please enter a month and a year.");
-            $this->message = $message;
-            return false;
+            return $this->invalid('Please enter a month and a year.');
         }
 
         return true;

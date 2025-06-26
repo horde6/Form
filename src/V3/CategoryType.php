@@ -32,9 +32,7 @@ class CategoryType extends BaseType
     public function isValid($var, Horde_Variables|array $vars, $value): bool
     {
         if (empty($value) && $var->isRequired()) {
-            $message = Horde_Form_Translation::t("This field is required.");
-            $this->message = $message;
-            return false;
+            return $this->invalid('This field is required.');
         }
 
         return true;

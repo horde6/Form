@@ -7,15 +7,11 @@ class PasswordconfirmType extends BaseType
     public function isValid($var, Horde_Variables|array $vars, $value): bool
     {
         if ($var->isRequired() && empty($value['original'])) {
-            $message = Horde_Form_Translation::t("This field is required.");
-            $this->message = $message;
-            return false;
+            return $this->invalid('This field is required.');
         }
 
         if ($value['original'] != $value['confirm']) {
-            $message = Horde_Form_Translation::t("Passwords must match.");
-            $this->message = $message;
-            return false;
+            return $this->invalid('Passwords must match.');
         }
 
         return true;

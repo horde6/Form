@@ -40,7 +40,7 @@ class MatrixType extends BaseType
         $this->_new_input  = $params[3] ?? false;
     }
 
-    public function isValid($var, $vars, $value, $message)
+    public function isValid($var, Horde_Variables|array $vars, $value): bool
     {
         return true;
     }

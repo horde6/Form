@@ -24,15 +24,11 @@ class HourminutesecondType extends BaseType
         }
 
         if (!$this->emptyTimeArray($time) && !$this->checktime($time['hour'], $time['minute'], $time['second'])) {
-            $message = Horde_Form_Translation::t("Please enter a valid time.");
-            $this->message = $message;
-            return false;
+            return $this->invalid('Please enter a valid time.');
         }
 
         if ($this->emptyTimeArray($time) && $var->isRequired()) {
-            $message = Horde_Form_Translation::t("This field is required.");
-            $this->message = $message;
-            return false;
+            return $this->invalid('This field is required.');
         }
 
         return true;

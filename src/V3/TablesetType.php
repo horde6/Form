@@ -31,9 +31,7 @@ class TablesetType extends BaseType
             return true;
         }
 
-        $message = Horde_Form_Translation::t("Invalid data submitted.");
-        $this->message = $message;
-        return false;
+        return $this->invalid('Invalid data submitted.');
     }
 
     public function getHeader()

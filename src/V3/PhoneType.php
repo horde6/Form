@@ -23,14 +23,10 @@ class PhoneType extends BaseType
     {
         if (!strlen(trim($value))) {
             if ($var->isRequired()) {
-                $message = Horde_Form_Translation::t("This field is required.");
-                $this->message = $message;
-                return false;
+                return $this->invalid('This field is required.');
             }
         } elseif (!preg_match('/^\+?[\d()\-\/.\s]*$/u', $value)) {
-            $message = Horde_Form_Translation::t("You must enter a valid phone number, digits only with an optional '+' for the international dialing prefix.");
-            $this->message = $message;
-            return false;
+            return $this->invalid("You must enter a valid phone number, digits only with an optional '+' for the international dialing prefix.");
         }
 
         return true;

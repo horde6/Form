@@ -19,8 +19,7 @@ class DateType extends BaseType
     public function isValid($var, Horde_Variables|array $vars, $value): bool
     {
         if ($var->isRequired() && strlen(trim($value)) == 0) {
-            $message = sprintf(Horde_Form_Translation::t("%s is required"), $var->getHumanName());
-            $this->message = $message;
+            $this->message = sprintf(Horde_Form_Translation::t("%s is required"), $var->getHumanName());
             return false;
         }
 

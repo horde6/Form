@@ -7,18 +7,14 @@ class IntlistType extends BaseType
     public function isValid($var, Horde_Variables|array $vars, $value): bool
     {
         if (empty($value) && $var->isRequired()) {
-            $message = Horde_Form_Translation::t("This field is required.");
-            $this->message = $message;
-            return false;
+            return $this->invalid('This field is required.');
         }
 
         if (empty($value) || preg_match('/^[0-9 ,]+$/', $value)) {
             return true;
         }
 
-        $message = Horde_Form_Translation::t("This field must be a comma or space separated list of integers");
-        $this->message = $message;
-        return false;
+        return $this->invalid('This field must be a comma or space separated list of integers');
     }
 
     /**

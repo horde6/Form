@@ -7,18 +7,14 @@ class TimeType extends BaseType
     public function isValid($var, Horde_Variables|array $vars, $value): bool
     {
         if ($var->isRequired() && empty($value) && ((string) (float) $value !== $value)) {
-            $message = Horde_Form_Translation::t("This field is required.");
-            $this->message = $message;
-            return false;
+            return $this->invalid('This field is required.');
         }
 
         if (empty($value) || preg_match('/^[0-2]?[0-9]:[0-5][0-9]$/', $value)) {
             return true;
         }
 
-        $message = Horde_Form_Translation::t("This field may only contain numbers and the colon.");
-        $this->message = $message;
-        return false;
+        return $this->invalid('This field may only contain numbers and the colon.');
     }
 
     /**
