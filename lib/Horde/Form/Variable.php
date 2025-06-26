@@ -130,6 +130,16 @@ class Horde_Form_Variable
     public $_options = [];
 
     /**
+     * Messages from validate() method.
+     */
+    protected string $message = '';
+
+    public function getMessage()
+    {
+        return $this->message;
+    }
+
+    /**
      * Variable constructor.
      *
      * @param string $humanName      A short description of the variable's
@@ -477,9 +487,6 @@ class Horde_Form_Variable
      *
      * @param Variables $vars  The {@link Variables} instance of the submitted
      *                         form.
-     * @param string $message  A variable passed by reference that will be
-     *                         assigned a descriptive error message if
-     *                         validation failed.
      *
      * @return boolean  True if the variable validated.
      */
@@ -489,25 +496,31 @@ class Horde_Form_Variable
             $vals = $this->getValue($vars);
             if (!is_array($vals)) {
                 if ($this->required) {
-                    $message = Horde_Form_Translation::t("This field is required.");
+                    $this->message = Horde_Form_Translation::t('This field is required.');
                     return false;
-                } else {
-                    return true;
                 }
+                return true;
             }
+
             foreach ($vals as $i => $value) {
                 if ($value === null && $this->required) {
-                    $message = Horde_Form_Translation::t("This field is required.");
+                    $this->message = Horde_Form_Translation::t('This field is required.');
                     return false;
-                } else {
-                    if (!$this->type->isValid($this, $vars, $value, $message)) {
-                        return false;
-                    }
+                }
+
+                $type = $this->type;
+                if (!$type->isValid($this, $vars, $value, $message)) {
+                    $this->message = $type->getMessage();
+                    return false;
                 }
             }
         } else {
             $value = $this->getValue($vars);
-            return $this->type->isValid($this, $vars, $value, $message);
+            $type = $this->type;
+            if (!$type->isValid($this, $vars, $value, $message)) {
+                $this->message = $type->getMessage();
+                return false;
+            }
         }
 
         return true;
