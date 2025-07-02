@@ -2941,8 +2941,8 @@ class Horde_Form_Type_monthyear extends Horde_Form_Type
      */
     public function init(...$params)
     {
-        $start_year = $params[0] ?? null;
-        $end_year = $params[1] ?? null;
+        $start_year = $params['start_year'] ?? $params[0] ?? null;
+        $end_year = $params['end_year'] ?? $params[1] ?? null;
 
         if (empty($start_year)) {
             $start_year = 1920;
@@ -3257,12 +3257,12 @@ class Horde_Form_Type_datetime extends Horde_Form_Type
      */
     public function init(...$params)
     {
-        $start_year = $params[0] ?? '';
-        $end_year = $params[1] ?? '';
-        $picker = $params[2] ?? true;
-        $format_in = $params[3] ?? null;
-        $format_out = $params[4] ?? '%x';
-        $show_seconds = $params[5] ?? false;
+        $start_year = $params['start_year'] ?? $params[0] ?? '';
+        $end_year = $params['end_year'] ?? $params[1] ?? '';
+        $picker = $params['picker'] ?? $params[2] ?? true;
+        $format_in = $params['format_in'] ?? $params[3] ?? null;
+        $format_out = $params['format_out'] ?? $params[4] ?? '%x';
+        $show_seconds = $params['show_seconds'] ?? $params[5] ?? false;
 
         $this->_mdy = new Horde_Form_Type_monthdayyear();
         $this->_mdy->init($start_year, $end_year, $picker, $format_in, $format_out);
@@ -3490,9 +3490,9 @@ class Horde_Form_Type_sorter extends Horde_Form_Type
      */
     public function init(...$params)
     {
-        $values = $params[0];
-        $size = $params[1] ?? 8;
-        $header = $params[2] ?? '';
+        $values = $params['values'] ?? $params[0];
+        $size = $params['size'] ?? $params[1] ?? 8;
+        $header = $params['header'] ?? $params[2] ?? '';
 
         static $horde_sorter_instance = 0;
 
