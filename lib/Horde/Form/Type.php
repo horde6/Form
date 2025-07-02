@@ -1364,7 +1364,7 @@ class Horde_Form_Type_image extends Horde_Form_Type
         if (!isset($this->_img)) {
             $image = $vars->get($var->getVarName());
             if ($image) {
-                $this->loadImageData($image);
+                $image = $this->loadImageData($image);
                 if (isset($image['img'])) {
                     $this->_img = $image;
                     $GLOBALS['session']->set('horde', 'form/' . $this->getRandomId(), $this->_img['img']);
@@ -1398,6 +1398,7 @@ class Horde_Form_Type_image extends Horde_Form_Type
 
         $image['img'] = ['file' => $image['load']['file']];
         unset($image['load']);
+        return $image;
     }
 
     public function getRandomId()
