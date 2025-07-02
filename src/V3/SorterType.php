@@ -14,9 +14,9 @@ class SorterType extends BaseType
      */
     public function init(...$params)
     {
-        $values = $params[0];
-        $size = $params[1] ?? 8;
-        $header = $params[2] ?? '';
+        $values = $params['values'] ?? $params[0];
+        $size = $params['size'] ?? $params[1] ?? 8;
+        $header = $params['header'] ?? $params[2] ?? '';
 
         static $horde_sorter_instance = 0;
 
