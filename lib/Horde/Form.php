@@ -768,9 +768,8 @@ class Horde_Form
         if (is_null($vars)) {
             $vars = $this->_vars;
         }
-        $info = $this->_getInfoFromVariables($this->getVariables(), $vars, $info);
-        $info = $this->_getInfoFromVariables($this->_hiddenVariables, $vars, $info);
-        return $info;
+
+        return $this->_getInfoFromVariables($this->getVariables(true, true), $vars, $info);
     }
 
     /**
