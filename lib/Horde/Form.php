@@ -55,6 +55,7 @@ class Horde_Form
         if (empty($name)) {
             $name = Horde_String::lower(get_class($this));
         }
+        $name = str_replace('\\', '_', $name);
 
         $this->_vars = &$vars;
         $this->_title = $title;
