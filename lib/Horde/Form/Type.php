@@ -4071,7 +4071,7 @@ class Horde_Form_Type_invalid extends Horde_Form_Type
      */
     public function init(...$params)
     {
-        $this->message = $params[0] ?? '';
+        $this->message = $params['message'] ?? $params[0] ?? '';
     }
 
     public function isValid($var, $vars, $value, $message)
