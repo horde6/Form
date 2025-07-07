@@ -40,7 +40,10 @@
     "autoload": {
         "classmap": [
             "lib/"
-        ]
+        ],
+        "psr-4": {
+            "Horde\\Form\\V3\\": "src/"
+        }
     },
     "autoload-dev": {
         "psr-4": {
