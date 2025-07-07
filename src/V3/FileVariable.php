@@ -9,7 +9,7 @@ class FileVariable extends BaseVariable
     {
         if ($this->isRequired()) {
             try {
-                $GLOBALS['browser']->wasFileUploaded($var->getVarName());
+                $GLOBALS['browser']->wasFileUploaded($this->getVarName());
             } catch (Horde_Browser_Exception $e) {
                 $this->message = $e->getMessage();
                 return false;
@@ -19,7 +19,8 @@ class FileVariable extends BaseVariable
         return true;
     }
 
-    public function getInfo($vars)
+    //TODO: Rename back to getInfo() after the V3 transition
+    protected function getInfoV3($vars)
     {
         $name = $this->getVarName();
         $info = [];

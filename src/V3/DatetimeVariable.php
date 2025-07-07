@@ -34,17 +34,17 @@ class DatetimeVariable extends BaseVariable
         $format_out = $params['format_out'] ?? $params[4] ?? '%x';
         $show_seconds = $params['show_seconds'] ?? $params[5] ?? false;
 
-        $this->_mdy = new MonthdayyearVariable();
+        $this->_mdy = new MonthdayyearVariable('', '', true);
         $this->_mdy->init($start_year, $end_year, $picker, $format_in, $format_out);
 
-        $this->_hms = new HourminutesecondVariable();
+        $this->_hms = new HourminutesecondVariable('', '', true);
         $this->_hms->init($show_seconds);
         $this->_show_seconds = $show_seconds;
     }
 
-    public function isValid($var, Horde_Variables|array $vars, $value): bool
+    public function isValid(Horde_Variables|array $vars, $value): bool
     {
-        $date = $vars->get($var->getVarName());
+        $date = $vars->get($this->getVarName());
         if (!$this->_show_seconds && !isset($date['second'])) {
             $date['second'] = '';
         }
@@ -52,13 +52,9 @@ class DatetimeVariable extends BaseVariable
         $hms_empty = $this->emptyTimeArray($date);
 
         /* Require all fields if one field is not empty */
-        if ($var->isRequired() || $mdy_empty != 1 || !$hms_empty) {
-            $old_required = $var->required;
-            $var->required = true;
-
+        if ($this->isRequired() || $mdy_empty != 1 || !$hms_empty) {
             $mdy_valid = $this->_mdy->isValid($vars, $value);
             $hms_valid = $this->_hms->isValid($vars, $value);
-            $var->required = $old_required;
 
             if (!$mdy_valid) {
                 return $this->invalid('You must choose a date.');
@@ -72,19 +68,22 @@ class DatetimeVariable extends BaseVariable
         return true;
     }
 
-    public function getInfo($vars)
+    //TODO: Rename back to getInfo() after the V3 transition
+    protected function getInfoV3($vars)
     {
+
+error_log('GETINFO');
         /* If any component is empty consider it a bad date and return the
          * default. */
         $value = $this->getValue($vars);
         if ($this->emptyDateArray($value) == 1 || $this->emptyTimeArray($value)) {
-            return $this->_getInfo($var->getDefault());
+            return $this->_getInfo($this->getDefault());
         }
 
         return $this->_getInfo($value);
     }
 
-    public function _getInfo($value)
+    private function _getInfo($value)
     {
         // If any component is empty consider it a bad date and return null
         if ($this->emptyDateArray($value) != 0 || $this->emptyTimeArray($value)) {

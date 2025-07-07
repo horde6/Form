@@ -76,7 +76,7 @@ class ImageVariable extends BaseVariable
 
         /* If this was done through the upload button override the submitted
          * value of the form. */
-        if ($vars->get('do_' . $var->getVarName())) {
+        if ($vars->get('do_' . $this->getVarName())) {
             $this->form->setSubmitted(false);
             if ($this->_uploaded instanceof Horde_Browser_Exception) {
                 $this->_img = [
@@ -143,7 +143,8 @@ class ImageVariable extends BaseVariable
         return true;
     }
 
-    public function getInfo($vars)
+    //TODO: Rename back to getInfo() after the V3 transition
+    protected function getInfoV3($vars)
     {
         /* Get the upload. */
         $this->getImage($vars);

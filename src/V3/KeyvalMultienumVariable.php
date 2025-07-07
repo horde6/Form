@@ -5,7 +5,8 @@ use Horde_Form_Translation;
 
 class KeyvalMultienumVariable extends MultienumVariable
 {
-    public function getInfo($vars)
+    //TODO: Rename back to getInfo() after the V3 transition
+    protected function getInfoV3($vars)
     {
         $value = $vars->get($this->getVarName());
         $info = [];

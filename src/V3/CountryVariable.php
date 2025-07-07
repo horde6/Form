@@ -19,7 +19,8 @@ class CountryVariable extends BaseVariable
         return true;
     }
 
-    public function getInfo($vars)
+    //TODO: Rename back to getInfo() after the V3 transition
+    protected function getInfoV3($vars)
     {
         $info = [];
         $name = $this->getVarName();

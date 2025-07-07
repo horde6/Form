@@ -455,13 +455,21 @@ class BaseVariable implements Variable
      *
      * @param Variables $vars  The {@link Variables} instance of the submitted
      *                         form.
-     * @param mixed $info      A variable passed by reference that will be
-     *                         assigned the processed value of the submitted
-     *                         variable value.
      *
-     * @return mixed  Depending on the variable type.
+     * @return mixed           Processed value of the variable, depending on the variable type.
      */
-    public function getInfo($vars)
+
+    // This is a temporary wrapper to support legacy getInfo() calls
+    public function getInfo($vars, ...$args) {
+        // $this->type->getInfo($vars, %this, $info)
+        if (count($args) > 0) {
+            self::Deprecated("Warning: The second ($info) parameter in getinfo() is deprecated/ignored");
+        }
+        return $this->getInfoV3($vars);
+    }
+
+    //TODO: Rename back to getInfo() after the V3 transition
+    protected function getInfoV3($vars)
     {
         return $this->getValue($vars);
     }
@@ -582,13 +590,13 @@ class BaseVariable implements Variable
             $message .= sprintf(' in %s (line %d)', $trace['file'], $trace['line']);
         }
 
-        Horde::log($message, 'ERR');
+        Horde::log($message, 'WARN');
     }
 
     public function getProperty($property)
     {
         if ($property == 'type') {
-            self::Deprecated("Error: Variable property 'type' is deprecated. You should drop '->type'");
+            self::Deprecated("Warning: Variable property 'type' is deprecated. Please remove 'type->'.");
         }
 
         $prop = '_' . $property;

@@ -63,7 +63,8 @@ class MatrixVariable extends BaseVariable
         return $this->_new_input;
     }
 
-    public function getInfo($vars)
+    //TODO: Rename back to getInfo() after the V3 transition
+    protected function getInfoV3($vars)
     {
         $values = $vars->get($this->getVarName());
         if (!empty($values['n']['r']) && isset($values['n']['v'])) {

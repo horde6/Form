@@ -38,7 +38,9 @@ interface Variable
     public function getHelp();
     public function setOption($option, $val);
     public function getOption($option);
-    public function getInfo($vars);
+
+    public function getInfo($vars, ...$args);
+
     public function wasChanged($vars);
     public function validate($vars, $message);
     public function getValue($vars, $index = null);

@@ -1,6 +1,7 @@
 <?php
 namespace Horde\Form\V3;
 use Horde_Variables;
+use Horde_Date;
 use Horde_Form_Translation;
 
 class MonthdayyearVariable extends BaseVariable
@@ -190,7 +191,8 @@ class MonthdayyearVariable extends BaseVariable
      * specified by the $format_in parameter when setting up monthdayyear
      * field.
      */
-    public function getInfo($vars)
+    //TODO: Rename back to getInfo() after the V3 transition
+    protected function getInfoV3($vars)
     {
         return $this->_validateAndFormat($this->getValue($vars));
     }
