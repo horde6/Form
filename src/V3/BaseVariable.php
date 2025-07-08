@@ -505,15 +505,14 @@ class BaseVariable implements Variable
             $vals = $this->getValue($vars);
             if (!is_array($vals)) {
                 if ($this->required) {
-                    $this->message = Horde_Form_Translation::t('This field is required.');
-                    return false;
+                    return $this->invalid('This field is required.');
                 }
                 return true;
             }
 
             foreach ($vals as $i => $value) {
                 if ($value === null && $this->required) {
-                    $this->message = Horde_Form_Translation::t('This field is required.');
+                    return $this->invalid('This field is required.');
                     return false;
                 }
 
