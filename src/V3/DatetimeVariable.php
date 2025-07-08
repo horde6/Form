@@ -154,7 +154,7 @@ class DatetimeVariable extends BaseVariable
         return $this->_mdy->formatDate($date);
     }
 
-    public function about()
+    public function about(): array
     {
         return [
             'name' => Horde_Form_Translation::t("Date and time selection"),

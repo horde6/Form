@@ -76,7 +76,7 @@ class MatrixVariable extends BaseVariable
         return $values['r'] ?? [];
     }
 
-    public function about()
+    public function about(): array
     {
         return [
             'name' => Horde_Form_Translation::t("Field matrix"),

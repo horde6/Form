@@ -66,7 +66,7 @@ class SelectfilesVariable extends BaseVariable
         return $GLOBALS['registry']->call('files/selectlistResults', [$value]);
     }
 
-    public function about()
+    public function about(): array
     {
         return [
             'name' => Horde_Form_Translation::t("File selection"),

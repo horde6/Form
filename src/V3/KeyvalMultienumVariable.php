@@ -19,7 +19,7 @@ class KeyvalMultienumVariable extends MultienumVariable
     /**
      * Return info about field type.
      */
-    public function about()
+    public function about(): array
     {
         $about = parent::about();
         $about['name'] = Horde_Form_Translation::t("Multiple selection, preserving keys");

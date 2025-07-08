@@ -82,7 +82,7 @@ class SorterVariable extends BaseVariable
     /**
      * Return info about field type.
      */
-    public function about()
+    public function about(): array
     {
         return [
             'name' => Horde_Form_Translation::t("Sort order selection"),

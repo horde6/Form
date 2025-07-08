@@ -34,7 +34,7 @@ class IpadressVariable extends TextVariable
     /**
      * Return info about field type.
      */
-    public function about():array
+    public function about(): array
     {
         return [ 'name' => Horde_Form_Translation::t("IP address") ];
     }
