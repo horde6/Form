@@ -459,6 +459,11 @@ class Horde_Form_Variable
         return $this->type->getInfo($vars, $this, $info);
     }
 
+    public function onSubmit($vars)
+    {
+        $this->type->onSubmit($this, $vars);
+    }
+
     /**
      * Returns whether this variable if it had the "trackchange" option set
      * has actually been changed.

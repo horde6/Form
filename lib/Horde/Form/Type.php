@@ -60,7 +60,7 @@ class Horde_Form_Type
      */
     public function init(...$params) {}
 
-    public function onSubmit(...$params) {}
+    public function onSubmit($var, $vars) {}
 
     public function isValid($var, $vars, $value, $message)
     {
@@ -1085,11 +1085,8 @@ class Horde_Form_Type_image extends Horde_Form_Type
     /**
      *     function onSubmit($var, $vars)
      */
-    public function onSubmit(...$params)
+    public function onSubmit($var, $vars)
     {
-        $var = $params[0];
-        $vars = $params[1];
-
         /* Are we removing an image? */
         if ($vars->get('remove_' . $var->getVarName())) {
             $GLOBALS['session']->remove('horde', 'form/' . $this->getRandomId());
@@ -2476,11 +2473,8 @@ class Horde_Form_Type_mlenum extends Horde_Form_Type
     /**
      *     function onSubmit($var, $vars)
      */
-    public function onSubmit(...$params)
+    public function onSubmit($var, $vars)
     {
-        $var = $params[0];
-        $vars = $params[1];
-
         $varname = $var->getVarName();
         $value = $vars->get($varname);
 

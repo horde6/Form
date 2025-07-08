@@ -862,7 +862,7 @@ class Horde_Form
          * submit. */
         $variables = $this->getVariables();
         foreach ($variables as $var) {
-            $var->type->onSubmit($var, $vars);
+            $var->onSubmit($vars);
             /* If changes to var being tracked don't register the form as
              * submitted if old value and new value differ. */
             if ($var->getOption('trackchange')) {

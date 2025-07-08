@@ -28,7 +28,7 @@ class MlenumVariable extends BaseVariable
     }
 
     /**
-     *     function onSubmit($var, $vars)
+     *     function onSubmit($vars)
      */
     public function onSubmit($vars)
     {
