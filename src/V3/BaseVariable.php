@@ -15,6 +15,7 @@
 namespace Horde\Form\V3;
 use Horde_Variables;
 use Horde;
+use Horde_Form_Translation;
 
 /**
  * This class represents a single form variable that may be rendered as one or
@@ -48,14 +49,6 @@ class BaseVariable implements Variable
      * @var string
      */
     public $varName;
-
-    /**
-     * A {@link Horde_Form_Type} instance.
-     *
-     * @var Horde_Form_Type
-     */
-    // FIXME: Eliminate
-    public $_type;
 
     /**
      * Whether this is a required variable.
@@ -184,9 +177,6 @@ class BaseVariable implements Variable
         $this->readonly    = $readonly;
         $this->description = $description;
         $this->_arrayVal   = (strpos($varName, '[]') !== false);
-
-        // FIXME: Temporary workaround, eliminate
-        $this->_type       = $this; // temporary
     }
 
     /**
@@ -505,8 +495,12 @@ class BaseVariable implements Variable
      *
      * @return boolean  True if the variable validated.
      */
-    public function validate($vars, $message)
+    public function validate($vars, ...$args)
     {
+        if (count($args) > 0) {
+            self::Deprecated("Warning: The second ($message) parameter in validate() is deprecated/ignored");
+        }
+
         if ($this->_arrayVal) {
             $vals = $this->getValue($vars);
             if (!is_array($vals)) {
@@ -523,13 +517,13 @@ class BaseVariable implements Variable
                     return false;
                 }
 
-                if (!$this->isValid($vars, $value, $message)) {
+                if (!$this->isValid($vars, $value)) {
                     return false;
                 }
             }
         } else {
             $value = $this->getValue($vars);
-            if (!$this->isValid($vars, $value, $message)) {
+            if (!$this->isValid($vars, $value)) {
                 return false;
             }
         }
@@ -595,8 +589,10 @@ class BaseVariable implements Variable
 
     public function getProperty($property)
     {
+        // TODO: Eliminate after V3 transition
         if ($property == 'type') {
             self::Deprecated("Warning: Variable property 'type' is deprecated. Please remove 'type->'.");
+            return $this;
         }
 
         $prop = '_' . $property;
