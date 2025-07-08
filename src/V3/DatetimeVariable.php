@@ -103,11 +103,6 @@ class DatetimeVariable extends BaseVariable
 
     public function getProperty($property)
     {
-        // TODO: Remove after V3 transition
-        if ($property == 'type') {
-            return parent::getProperty($property);
-        }
-
         if ($property == 'show_seconds') {
             return $this->_hms->getProperty($property);
         }

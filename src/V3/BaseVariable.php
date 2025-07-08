@@ -589,12 +589,6 @@ class BaseVariable implements Variable
 
     public function getProperty($property)
     {
-        // TODO: Eliminate after V3 transition
-        if ($property == 'type') {
-            self::Deprecated("Warning: Variable property 'type' is deprecated. Please remove 'type->'.");
-            return $this;
-        }
-
         $prop = '_' . $property;
         return $this->$prop ?? null;
     }
@@ -604,6 +598,12 @@ class BaseVariable implements Variable
      */
     public function __get($property)
     {
+        // TODO: Eliminate after V3 transition
+        if ($property == 'type') {
+            self::Deprecated("Warning: Variable property 'type' is deprecated, please remove 'type->'");
+            return $this;
+        }
+
         return $this->getProperty($property);
     }
 
