@@ -9,19 +9,6 @@ class LongtextVariable extends TextVariable
     public $_cols;
     public $_helper = [];
 
-    public function isValid(Horde_Variables|array $vars, $value): bool
-    {
-        if ($this->isRequired() && empty($value) && ((string) (int) $value !== $value)) {
-            return $this->invalid('This field is required.');
-        }
-
-        if (empty($value) || preg_match('/^[0-7]+$/', $value)) {
-            return true;
-        }
-
-        return $this->invalid('This field may only contain octal values.');
-    }
-
     /**
      *   Initialize a Longtext field type
      *
@@ -61,6 +48,7 @@ class LongtextVariable extends TextVariable
              * activated. */
             return !empty($this->_helper);
         }
+
         if (empty($this->_helper)) {
             /* No helpers activated at all, return false. */
             return false;
@@ -73,7 +61,7 @@ class LongtextVariable extends TextVariable
     /**
      * Return info about field type.
      */
-    public function about():array
+    public function about(): array
     {
         return [
             'name' => Horde_Form_Translation::t("Long text"),
