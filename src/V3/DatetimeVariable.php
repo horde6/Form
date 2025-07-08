@@ -42,9 +42,8 @@ class DatetimeVariable extends BaseVariable
         $this->_show_seconds = $show_seconds;
     }
 
-    public function isValid(Horde_Variables|array $vars, $value): bool
+    public function isValid(Horde_Variables|array $vars, $date): bool
     {
-        $date = $vars->get($this->getVarName());
         if (!$this->_show_seconds && !isset($date['second'])) {
             $date['second'] = '';
         }
@@ -53,8 +52,8 @@ class DatetimeVariable extends BaseVariable
 
         /* Require all fields if one field is not empty */
         if ($this->isRequired() || $mdy_empty != 1 || !$hms_empty) {
-            $mdy_valid = $this->_mdy->isValid($vars, $value);
-            $hms_valid = $this->_hms->isValid($vars, $value);
+            $mdy_valid = $this->_mdy->isValid($vars, $date);
+            $hms_valid = $this->_hms->isValid($vars, $date);
 
             if (!$mdy_valid) {
                 return $this->invalid('You must choose a date.');
@@ -72,7 +71,6 @@ class DatetimeVariable extends BaseVariable
     protected function getInfoV3($vars)
     {
 
-error_log('GETINFO');
         /* If any component is empty consider it a bad date and return the
          * default. */
         $value = $this->getValue($vars);
@@ -105,11 +103,16 @@ error_log('GETINFO');
 
     public function getProperty($property)
     {
+        // TODO: Remove after V3 transition
+        if ($property == 'type') {
+            return parent::getProperty($property);
+        }
+
         if ($property == 'show_seconds') {
             return $this->_hms->getProperty($property);
-        } else {
-            return $this->_mdy->getProperty($property);
         }
+
+        return $this->_mdy->getProperty($property);
     }
 
     public function setProperty($property, $value)

@@ -1,6 +1,7 @@
 <?php
 namespace Horde\Form\V3;
 use Horde_Variables;
+use Horde_Date;
 use Horde_Form_Translation;
 
 class HourminutesecondVariable extends BaseVariable
@@ -17,9 +18,8 @@ class HourminutesecondVariable extends BaseVariable
         $this->_show_seconds = $params[0] ?? false;
     }
 
-    public function isValid(Horde_Variables|array $vars, $value): bool
+    public function isValid(Horde_Variables|array $vars, $time): bool
     {
-        $time = $vars->get($this->getVarName());
         if (!$this->_show_seconds && count($time) && !isset($time['second'])) {
             $time['second'] = 0;
         }

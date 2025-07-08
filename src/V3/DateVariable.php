@@ -1,6 +1,7 @@
 <?php
 namespace Horde\Form\V3;
 use Horde_Variables;
+use Horde_Date;
 use Horde_Form_Translation;
 
 class DateVariable extends BaseVariable

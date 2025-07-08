@@ -49,9 +49,8 @@ class MonthdayyearVariable extends BaseVariable
         $this->_format_out = $format_out;
     }
 
-    public function isValid(Horde_Variables|array $vars, $value): bool
+    public function isValid(Horde_Variables|array $vars, $date): bool
     {
-        $date = $vars->get($this->getVarName());
         $empty = $this->emptyDateArray($date);
 
         if ($empty == 1 && $this->isRequired()) {
