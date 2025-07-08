@@ -7,7 +7,6 @@ class DatetimeVariable extends BaseVariable
 {
     public $_mdy;
     public $_hms;
-    public $_show_seconds;
 
     /**
      * Return the date supplied as a Horde_Date object.
@@ -39,19 +38,12 @@ class DatetimeVariable extends BaseVariable
 
         $this->_hms = new HourminutesecondVariable('', '', true);
         $this->_hms->init($show_seconds);
-        $this->_show_seconds = $show_seconds;
     }
 
     public function isValid(Horde_Variables|array $vars, $date): bool
     {
-        if (!$this->_show_seconds && !isset($date['second'])) {
-            $date['second'] = '';
-        }
-        $mdy_empty = $this->emptyDateArray($date);
-        $hms_empty = $this->emptyTimeArray($date);
-
         /* Require all fields if one field is not empty */
-        if ($this->isRequired() || $mdy_empty != 1 || !$hms_empty) {
+        if ($this->isRequired() || $this->emptyDateArray($date) != 1 || !$this->emptyTimeArray($date)) {
             $mdy_valid = $this->_mdy->isValid($vars, $date);
             $hms_valid = $this->_hms->isValid($vars, $date);
 
