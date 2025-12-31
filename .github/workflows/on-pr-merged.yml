@@ -23,11 +23,13 @@ jobs:
           ini-values: post_max_size=512M, max_execution_time=360
           coverage: xdebug
           tools: php-cs-fixer, phpunit:${{ matrix.phpunit-versions }}, composer:v2
+
       - name: Setup Github Token as composer credential
         run: composer config -g github-oauth.github.com ${{ secrets.GITHUB_TOKEN }}
+
       - name: Install dependencies and local tools
         run: |
           COMPOSER_ROOT_VERSION=dev-FRAMEWORK_6_0 composer config minimum-stability dev
           COMPOSER_ROOT_VERSION=dev-FRAMEWORK_6_0 composer config prefer-stable true
+          COMPOSER_ROOT_VERSION=dev-FRAMEWORK_6_0 composer config --no-plugins --global allow-plugins.horde/horde-installer-plugin true
           COMPOSER_ROOT_VERSION=dev-FRAMEWORK_6_0 composer install --no-interaction --no-progress
-
