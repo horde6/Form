@@ -23,6 +23,8 @@ class KeyvalMultienumVariable extends MultienumVariable
     {
         $about = parent::about();
         $about['name'] = Horde_Form_Translation::t("Multiple selection, preserving keys");
+
+        return $about;
     }
 
 }

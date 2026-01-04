@@ -2647,6 +2647,8 @@ class Horde_Form_Type_keyval_multienum extends Horde_Form_Type_multienum
     {
         $about = parent::about();
         $about['name'] = Horde_Form_Translation::t("Multiple selection, preserving keys");
+
+        return $about;
     }
 
 }
