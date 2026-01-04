@@ -642,4 +642,9 @@ class BaseVariable implements Variable
         return false;
     }
 
+    public function about(): array
+    {
+        return [ 'name' => $this->getTypeName() ];
+    }
+
 }
