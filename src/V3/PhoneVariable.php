@@ -20,7 +20,7 @@ class PhoneVariable extends BaseVariable
         $this->_size = $params[0] ?? 15;
     }
 
-    public function isValid(Horde_Variables|array $vars, $value): bool
+    public function isValid(Horde_Variables $vars, $value): bool
     {
         if (!strlen(trim($value))) {
             if ($this->isRequired()) {
@@ -36,11 +36,6 @@ class PhoneVariable extends BaseVariable
     public function getSize()
     {
         return $this->_size;
-    }
-
-    public function getChars()
-    {
-        return $this->_chars;
     }
 
     /**

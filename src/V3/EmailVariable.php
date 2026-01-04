@@ -82,7 +82,7 @@ class EmailVariable extends BaseVariable
 
     /**
      */
-    public function isValid(Horde_Variables|array $vars, $value): bool
+    public function isValid(Horde_Variables $vars, $value): bool
     {
         // Split into individual addresses.
         $emails = $this->splitEmailAddresses($value);

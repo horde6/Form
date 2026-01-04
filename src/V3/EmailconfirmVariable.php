@@ -5,7 +5,7 @@ use Horde_Form_Translation;
 
 class EmailconfirmVariable extends BaseVariable
 {
-    public function isValid(Horde_Variables|array $vars, $value): bool
+    public function isValid(Horde_Variables $vars, $value): bool
     {
         if ($this->isRequired() && empty($value['original'])) {
             return $this->invalid('This field is required.');

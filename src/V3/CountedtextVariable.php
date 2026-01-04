@@ -22,7 +22,7 @@ class CountedtextVariable extends LongtextVariable
         $this->_chars = $chars;
     }
 
-    public function isValid(Horde_Variables|array $vars, $value): bool
+    public function isValid(Horde_Variables $vars, $value): bool
     {
         $length = Horde_String::length(trim($value));
 

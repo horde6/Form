@@ -51,7 +51,7 @@ interface Variable
     public function setProperty($property, $value);
     public function init(...$params);
     public function onSubmit($vars);
-    //public function isValid(Horde_Variables|array $vars, $value): bool;
+    //public function isValid(Horde_Variables $vars, $value): bool;
     public function getValues(...$params);
     public function about(): array;
 }

@@ -5,7 +5,7 @@ use Horde_Form_Translation;
 
 class CreditcardVariable extends BaseVariable
 {
-    public function isValid(Horde_Variables|array $vars, $value): bool
+    public function isValid(Horde_Variables $vars, $value): bool
     {
         if (empty($value) && $this->isRequired()) {
             return $this->invalid('This field is required.');
@@ -22,13 +22,14 @@ class CreditcardVariable extends BaseVariable
         return true;
     }
 
+    //TODO: Improve
     public function getChecksum($ccnum)
     {
         $len = strlen($ccnum);
         if (!is_long($len / 2)) {
             $weight = 2;
             $digit = $ccnum[0];
-        } elseif (is_long($len / 2)) {
+        } else {
             $weight = 1;
             $digit = $ccnum[0] * 2;
         }

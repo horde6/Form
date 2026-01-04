@@ -31,7 +31,7 @@ class CategoryVariable extends BaseVariable
         return [ 'name' => Horde_Form_Translation::t("Category") ];
     }
 
-    public function isValid(Horde_Variables|array $vars, $value): bool
+    public function isValid(Horde_Variables $vars, $value): bool
     {
         if (empty($value) && $this->isRequired()) {
             return $this->invalid('This field is required.');

@@ -17,7 +17,7 @@ class TablesetVariable extends BaseVariable
         $this->_header = $params[1];
     }
 
-    public function isValid(Horde_Variables|array $vars, $value): bool
+    public function isValid(Horde_Variables $vars, $value): bool
     {
         if (count($this->_values) == 0 || count($value) == 0) {
             return true;
@@ -40,7 +40,7 @@ class TablesetVariable extends BaseVariable
         return $this->_header;
     }
 
-    public function getValues()
+    public function getValues(...$params): ?array
     {
         return $this->_values;
     }

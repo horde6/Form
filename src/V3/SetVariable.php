@@ -19,7 +19,7 @@ class SetVariable extends BaseVariable
         $this->_checkAll = $params[1] ?? false;
     }
 
-    public function isValid(Horde_Variables|array $vars, $value): bool
+    public function isValid(Horde_Variables $vars, $value): bool
     {
         if ((!is_null($this->_values) && count($this->_values) == 0) || is_null($value) || count($value) == 0) {
             return true;
@@ -35,7 +35,7 @@ class SetVariable extends BaseVariable
 
     }
 
-    public function getValues(...$params)
+    public function getValues(...$params): ?array
     {
         return $this->_values;
     }

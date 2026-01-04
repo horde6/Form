@@ -40,7 +40,7 @@ class MlenumVariable extends BaseVariable
         }
     }
 
-    public function isValid(Horde_Variables|array $vars, $value): bool
+    public function isValid(Horde_Variables $vars, $value): bool
     {
         if ($this->isRequired() && (empty($value['1']) || empty($value['2']))) {
             return $this->invalid('This field is required.');
@@ -54,7 +54,7 @@ class MlenumVariable extends BaseVariable
         return $this->invalid('Invalid data submitted.');
     }
 
-    public function getValues(...$params)
+    public function getValues(...$params): ?array
     {
         return $this->_values;
     }

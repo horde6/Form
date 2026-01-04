@@ -27,7 +27,7 @@ class MultienumVariable extends EnumVariable
         parent::init($values);
     }
 
-    public function isValid(Horde_Variables|array $vars, $value): bool
+    public function isValid(Horde_Variables $vars, $value): bool
     {
         if (is_array($value)) {
             foreach ($value as $val) {

@@ -17,6 +17,10 @@ use Horde_Variables;
 use Horde;
 use Horde_Form_Translation;
 
+ // transitional
+use Horde_Form_Action;
+use Horde_Form;
+
 /**
  * This class represents a single form variable that may be rendered as one or
  * more form fields.
@@ -34,7 +38,7 @@ class BaseVariable implements Variable
      *
      * @var Horde_Form
      */
-    public $form;
+    public Horde_Form $form;
 
     /**
      * A short description of this variable's purpose.
@@ -97,7 +101,7 @@ class BaseVariable implements Variable
      *
      * @var Horde_Form_Action
      */
-    public $_action;
+    public ?Horde_Form_Action $_action;
 
     /**
      * Whether this variable is disabled.
@@ -137,33 +141,6 @@ class BaseVariable implements Variable
         return $this->message;
     }
 
-    /**
-     * Variable constructor.
-     *
-     * @param string $humanName      A short description of the variable's
-     *                               purpose.
-     * @param string $varName        The internally used name.
-     * @param Horde_Form_Type $type  A {@link Horde_Form_Type} instance.
-     * @param boolean $required      Whether this is a required variable.
-     * @param boolean $readonly      Whether this is a readonly variable.
-     * @param string $description    A long description of the variable's
-     *                               purpose, special instructions, etc.
-     */
-    public static function Horde_Form_Variable(
-        $humanName,
-        $varName,
-        $required,
-        $readonly = false,
-        $description = null
-    ) {
-        return new Horde_Form_Variable(
-            $humanName,
-            $varName,
-            $required,
-            $readonly = false,
-            $description = null
-        );
-    }
     public function __construct(
         $humanName,
         $varName,
@@ -176,7 +153,7 @@ class BaseVariable implements Variable
         $this->required    = $required;
         $this->readonly    = $readonly;
         $this->description = $description;
-        $this->_arrayVal   = (strpos($varName, '[]') !== false);
+        $this->_arrayVal   = strpos($varName, '[]') !== false;
     }
 
     /**
@@ -294,13 +271,14 @@ class BaseVariable implements Variable
     /**
      * Returns this variable's type.
      *
-     * @return Horde_Form_Type  This variable's {@link Horde_Form_Type}
-     *                          instance.
+     * @return BaseVariable  This variable's instance.
      */
-    // FIXME: Eliminate
+    // TODO: Eliminate after V3 transition
     public function getType()
     {
-        return $this->type;
+        // TODO: Eliminate after V3 transition
+        self::Deprecated("Warning: Method 'getType()' is deprecated, please remove '->getType()'");
+        return $this;
     }
 
     /**
@@ -340,7 +318,7 @@ class BaseVariable implements Variable
      *
      * @return array  The possible values of this variable or null.
      */
-    public function getValues(...$params)
+    public function getValues(...$params): ?array
     {
         return null;
     }
@@ -443,7 +421,7 @@ class BaseVariable implements Variable
      * Processes the submitted value of this variable according to the rules of
      * the variable type.
      *
-     * @param Variables $vars  The {@link Variables} instance of the submitted
+     * @param Horde_Variables $vars  The {@link Variables} instance of the submitted
      *                         form.
      *
      * @return mixed           Processed value of the variable, depending on the variable type.
@@ -490,7 +468,7 @@ class BaseVariable implements Variable
     /**
      * Validates this variable.
      *
-     * @param Variables $vars  The {@link Variables} instance of the submitted
+     * @param Horde_Variables $vars  The {@link Variables} instance of the submitted
      *                         form.
      *
      * @return boolean  True if the variable validated.
@@ -498,7 +476,7 @@ class BaseVariable implements Variable
     public function validate($vars, ...$args)
     {
         if (count($args) > 0) {
-            self::Deprecated("Warning: The second ($message) parameter in validate() is deprecated/ignored");
+            self::Deprecated("Warning: The second (\$message) parameter in validate() is deprecated/ignored");
         }
 
         if ($this->_arrayVal) {
@@ -513,7 +491,6 @@ class BaseVariable implements Variable
             foreach ($vals as $i => $value) {
                 if ($value === null && $this->required) {
                     return $this->invalid('This field is required.');
-                    return false;
                 }
 
                 if (!$this->isValid($vars, $value)) {
@@ -535,7 +512,7 @@ class BaseVariable implements Variable
      * If an action is attached to this variable, the value will get passed to
      * the action object.
      *
-     * @param Variables $vars  The {@link Variables} instance of the submitted
+     * @param Horde_Variables $vars  The {@link Variables} instance of the submitted
      *                         form.
      * @param integer $index   If the variable is an array variable, this
      *                         specifies the array element to return.
@@ -599,7 +576,7 @@ class BaseVariable implements Variable
     {
         // TODO: Eliminate after V3 transition
         if ($property == 'type') {
-            self::Deprecated("Warning: Variable property 'type' is deprecated, please remove 'type->'");
+            self::Deprecated("Warning: Variable property 'type' is deprecated, please remove '->type'");
             return $this;
         }
 
@@ -617,7 +594,7 @@ class BaseVariable implements Variable
      */
     public function __set($property, $value)
     {
-        return $this->setProperty($property, $value);
+        $this->setProperty($property, $value);
     }
 
     /**
@@ -630,7 +607,7 @@ class BaseVariable implements Variable
     /**
      * Use $this->getMessage() to retrieve error messages.
      */
-    protected function isValid(Horde_Variables|array $vars, $value): bool
+    protected function isValid(Horde_Variables $vars, $value): bool
     {
         $this->message = '<strong>Error:</strong> Variable::isValid() called - should be overridden<br />';
         return false;

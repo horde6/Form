@@ -13,7 +13,7 @@ class NumberVariable extends BaseVariable
         $this->_fraction = $params[0] ?? null;
     }
 
-    public function isValid(Horde_Variables|array $vars, $value): bool
+    public function isValid(Horde_Variables $vars, $value): bool
     {
         if ($this->isRequired() && empty($value) && ((string) (float) $value !== $value)) {
             return $this->invalid('This field is required.');

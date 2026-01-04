@@ -5,7 +5,7 @@ use Horde_Form_Translation;
 
 class PasswordVariable extends BaseVariable
 {
-    public function isValid(Horde_Variables|array $vars, $value): bool
+    public function isValid(Horde_Variables $vars, $value): bool
     {
         if ($this->isRequired() && strlen(trim($value)) == 0) {
             return $this->invalid('This field is required.');

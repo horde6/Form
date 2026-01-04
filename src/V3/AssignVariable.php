@@ -28,7 +28,7 @@ class AssignVariable extends BaseVariable
         $this->_width = $params[5] ?? '200px';
     }
 
-    public function isValid(Horde_Variables|array $vars, $value): bool
+    public function isValid(Horde_Variables $vars, $value): bool
     {
         return true;
     }
@@ -36,7 +36,7 @@ class AssignVariable extends BaseVariable
     /**
      *     function getValues($side)
      */
-    public function getValues(...$params)
+    public function getValues(...$params): ?array
     {
         return empty($params[0]) ? $this->_rightValues : $this->_leftValues;
     }

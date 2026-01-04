@@ -2,6 +2,7 @@
 namespace Horde\Form\V3;
 use Horde_Variables;
 use Horde_Form_Translation;
+use Horde_Themes;
 
 class SoundVariable extends BaseVariable
 {
@@ -17,7 +18,7 @@ class SoundVariable extends BaseVariable
         return $this->_sounds;
     }
 
-    public function isValid(Horde_Variables|array $vars, $value): bool
+    public function isValid(Horde_Variables $vars, $value): bool
     {
         if ($this->isRequired() && empty($value)) {
             return $this->invalid('This field is required.');

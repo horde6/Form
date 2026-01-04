@@ -30,12 +30,12 @@ class SorterVariable extends BaseVariable
         $this->_header = $header;
     }
 
-    public function isValid(Horde_Variables|array $vars, $value): bool
+    public function isValid(Horde_Variables $vars, $value): bool
     {
         return true;
     }
 
-    public function getValues(...$params)
+    public function getValues(...$params): ?array
     {
         return $this->_values;
     }

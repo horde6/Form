@@ -15,7 +15,7 @@ class InvalidVariable extends BaseVariable
         $this->message = $params[0] ?? '';
     }
 
-    public function isValid(Horde_Variables|array $vars, $value): bool
+    public function isValid(Horde_Variables $vars, $value): bool
     {
         return false;
     }

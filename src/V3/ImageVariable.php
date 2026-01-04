@@ -1,7 +1,13 @@
 <?php
 namespace Horde\Form\V3;
+
+use Horde;
 use Horde_Variables;
 use Horde_Form_Translation;
+use Horde_Array;
+use Horde_Browser_Exception;
+use Horde_Mime_Magic;
+use PEAR;
 
 class ImageVariable extends BaseVariable
 {
@@ -38,7 +44,7 @@ class ImageVariable extends BaseVariable
      *
      * @var array
      */
-    public $_img;
+    public ?array $_img;
 
     /**
      * A random id that identifies the image information in the session data.
@@ -93,7 +99,7 @@ class ImageVariable extends BaseVariable
      * @param array $value              The field value array - should contain a key ['hash'] which holds the key for the image on temp storage
      */
 
-    public function isValid(Horde_Variables|array $vars, $value): bool
+    public function isValid(Horde_Variables $vars, $value): bool
     {
         if ($vars->get('remove_' . $this->getVarName())) {
             return true;

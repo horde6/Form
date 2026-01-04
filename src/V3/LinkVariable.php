@@ -23,7 +23,7 @@ class LinkVariable extends BaseVariable
         $this->values = $params[0] ?? null;
     }
 
-    public function isValid(Horde_Variables|array $vars, $value): bool
+    public function isValid(Horde_Variables $vars, $value): bool
     {
         return true;
     }

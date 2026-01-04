@@ -5,7 +5,7 @@ use Horde_Form_Translation;
 
 class AddresslinkVariable extends AddressVariable
 {
-    public function isValid(Horde_Variables|array $vars, $value): bool
+    public function isValid(Horde_Variables $vars, $value): bool
     {
         return true;
     }

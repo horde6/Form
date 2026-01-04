@@ -6,7 +6,7 @@ use Horde_Form_Translation;
 
 class BooleanVariable extends BaseVariable
 {
-    public function isValid(Horde_Variables|array $vars, $value): bool
+    public function isValid(Horde_Variables $vars, $value): bool
     {
         return true;
     }

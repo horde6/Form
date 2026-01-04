@@ -41,7 +41,7 @@ class MatrixVariable extends BaseVariable
         $this->_new_input  = $params[3] ?? false;
     }
 
-    public function isValid(Horde_Variables|array $vars, $value): bool
+    public function isValid(Horde_Variables $vars, $value): bool
     {
         return true;
     }

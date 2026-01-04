@@ -16,7 +16,7 @@ class EnumVariable extends BaseVariable
      *
      * function init($values, $prompt = null)
      *
-     * @param array $values            A hash map where the key is the internal 'value' to process and the value is the caption presented to the user
+     * @param array $values         A hash map where the key is the internal 'value' to process and the value is the caption presented to the user
      * @param string|bool  $prompt  A null value text to prompt user selecting a value. Use a default if boolean true, else use the supplied string. No prompt on false.
      */
     public function init(...$params)
@@ -31,7 +31,7 @@ class EnumVariable extends BaseVariable
         }
     }
 
-     public function isValid(Horde_Variables|array $vars, $value): bool
+    public function isValid(Horde_Variables $vars, $value): bool
      {
         if ($this->isRequired() && $value == '' && !isset($this->_values[$value])) {
             return $this->invalid('This field is required.');
@@ -45,7 +45,7 @@ class EnumVariable extends BaseVariable
         return $this->invalid('Invalid data submitted.');
     }
 
-    public function getValues(...$params)
+    public function getValues(...$params): ?array
     {
         return $this->_values;
     }

@@ -3842,13 +3842,14 @@ class Horde_Form_Type_creditcard extends Horde_Form_Type
         return true;
     }
 
+    //TODO: Improve
     public function getChecksum($ccnum)
     {
         $len = strlen($ccnum);
         if (!is_long($len / 2)) {
             $weight = 2;
             $digit = $ccnum[0];
-        } elseif (is_long($len / 2)) {
+        } else {
             $weight = 1;
             $digit = $ccnum[0] * 2;
         }

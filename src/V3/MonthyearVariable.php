@@ -29,7 +29,7 @@ class MonthyearVariable extends BaseVariable
         $this->_end_year = $end_year;
     }
 
-    public function isValid(Horde_Variables|array $vars, $value): bool
+    public function isValid(Horde_Variables $vars, $value): bool
     {
         if (!$this->isRequired()) {
             return true;
@@ -47,7 +47,7 @@ class MonthyearVariable extends BaseVariable
         return $this->getVarName() . '[month]';
     }
 
-    public function getYearVar($var)
+    public function getYearVar()
     {
         return $this->getVarName() . '[year]';
     }

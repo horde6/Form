@@ -2,10 +2,12 @@
 namespace Horde\Form\V3;
 use Horde_Variables;
 use Horde_Form_Translation;
+use Horde_Browser_Exception;
+use Horde_Util;
 
 class FileVariable extends BaseVariable
 {
-    public function isValid(Horde_Variables|array $vars, $value): bool
+    public function isValid(Horde_Variables $vars, $value): bool
     {
         if ($this->isRequired()) {
             try {

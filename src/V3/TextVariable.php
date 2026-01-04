@@ -38,7 +38,7 @@ class TextVariable extends BaseVariable
         $this->_maxlength = $params[2] ?? null;
     }
 
-    public function isValid(Horde_Variables|array $vars, $value): bool
+    public function isValid(Horde_Variables $vars, $value): bool
     {
         if (!empty($this->_maxlength) && Horde_String::length($value) > $this->_maxlength) {
             $this->message = sprintf(Horde_Form_Translation::t("Value is over the maximum length of %d."), $this->_maxlength);

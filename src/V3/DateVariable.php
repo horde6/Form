@@ -3,6 +3,7 @@ namespace Horde\Form\V3;
 use Horde_Variables;
 use Horde_Date;
 use Horde_Form_Translation;
+use Horde_Date_Exception;
 
 class DateVariable extends BaseVariable
 {
@@ -37,7 +38,7 @@ class DateVariable extends BaseVariable
      *
      * @return string
      */
-    public function getAgo($date)
+    public static function getAgo($date)
     {
         if ($date === null) {
             return '';
@@ -53,27 +54,34 @@ class DateVariable extends BaseVariable
 
         if ($ago < -1) {
             return sprintf(Horde_Form_Translation::t(" (%s days ago)"), abs($ago));
-        } elseif ($ago == -1) {
-            return Horde_Form_Translation::t(" (yesterday)");
-        } elseif ($ago == 0) {
-            return Horde_Form_Translation::t(" (today)");
-        } elseif ($ago == 1) {
-            return Horde_Form_Translation::t(" (tomorrow)");
-        } else {
-            return sprintf(Horde_Form_Translation::t(" (in %s days)"), $ago);
         }
+
+        if ($ago == -1) {
+            return Horde_Form_Translation::t(" (yesterday)");
+        }
+
+        if ($ago == 0) {
+            return Horde_Form_Translation::t(" (today)");
+        }
+
+        if ($ago == 1) {
+            return Horde_Form_Translation::t(" (tomorrow)");
+        }
+
+        return sprintf(Horde_Form_Translation::t(" (in %s days)"), $ago);
     }
 
     public function getFormattedTime($timestamp, $format = null, $showago = true)
     {
+        if (empty($timestamp)) {
+            return '';
+        }
+
         if (empty($format)) {
             $format = $this->_format;
         }
-        if (!empty($timestamp)) {
-            return strftime($format, $timestamp) . ($showago ? Horde_Form_Type_date::getAgo($timestamp) : '');
-        } else {
-            return '';
-        }
+
+        return strftime($format, $timestamp) . ($showago ? $this::getAgo($timestamp) : '');
     }
 
     /**
