@@ -3,6 +3,7 @@ namespace Horde\Form\V3;
 use Horde_Variables;
 use Horde_String;
 use Horde_Form_Translation;
+use Horde_Nls_Loader;
 
 class AddressVariable extends LongtextVariable
 {
@@ -69,14 +70,14 @@ class AddressVariable extends LongtextVariable
                 $info['street'] = $addressParts[1];
             }
             if (!empty($addressParts[2])) {
-                include 'Horde/Nls/Carsigns.php';
+                $carsigns = Horde_Nls_Loader::loadCarsigns();
                 $country = array_search(Horde_String::upper($addressParts[2]), $carsigns);
                 if ($country) {
                     $info['country'] = $country;
                 }
             }
             if (!empty($addressParts[5])) {
-                include 'Horde/Nls/Countries.php';
+                $countries = Horde_Nls_Loader::loadCountries();
                 $country = array_search($addressParts[5], $countries);
                 if ($country) {
                     $info['country'] = Horde_String::lower($country);
