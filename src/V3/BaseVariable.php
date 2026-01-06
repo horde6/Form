@@ -431,7 +431,7 @@ class BaseVariable implements Variable
     public function getInfo($vars, ...$args) {
         // $this->type->getInfo($vars, %this, $info)
         if (count($args) > 0) {
-            self::Deprecated("Warning: The second ($info) parameter in getinfo() is deprecated/ignored");
+            self::Deprecated('Warning: The second ($info) parameter in getinfo() is deprecated/ignored');
         }
         return $this->getInfoV3($vars);
     }
@@ -446,10 +446,10 @@ class BaseVariable implements Variable
      * Returns whether this variable if it had the "trackchange" option set
      * has actually been changed.
      *
-     * @param Variables $vars  The {@link Variables} instance of the submitted
+     * @param Horde_Variables $vars  The {@link Variables} instance of the submitted
      *                         form.
      *
-     * @return boolean  Null if this variable doesn't have the "trackchange"
+     * @return ?boolean Null if this variable doesn't have the "trackchange"
      *                  option set or the form wasn't submitted yet. A boolean
      *                  indicating whether the variable was changed otherwise.
      */
@@ -476,7 +476,7 @@ class BaseVariable implements Variable
     public function validate($vars, ...$args)
     {
         if (count($args) > 0) {
-            self::Deprecated("Warning: The second (\$message) parameter in validate() is deprecated/ignored");
+            self::Deprecated('Warning: The second ($message) parameter in validate() is deprecated/ignored');
         }
 
         if ($this->_arrayVal) {
