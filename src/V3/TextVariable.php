@@ -1,9 +1,17 @@
 <?php
 namespace Horde\Form\V3;
+
 use Horde_Variables;
 use Horde_String;
 use Horde_Form_Translation;
 
+/**
+ * TextVariable type for text input fields.
+ *
+ * @property string $regex The regex pattern for validation
+ * @property int $size The size of the input field
+ * @property int|null $maxlength The maximum number of characters
+ */
 class TextVariable extends BaseVariable
 {
     public $_regex;
@@ -13,23 +21,10 @@ class TextVariable extends BaseVariable
     /**
      * The initialisation function for the text variable type.
      *
-     * function init($regex = '', $size = 40, $maxlength = null)
-     *
-     * @access private
-     *
-     * @param string $regex       Any valid PHP PCRE pattern syntax that
-     *                            needs to be matched for the field to be
-     *                            considered valid. If left empty validity
-     *                            will be checked only for required fields
-     *                            whether they are empty or not.
-     *                            If using this regex test it is advisable
-     *                            to enter a description for this field to
-     *                            warn the user what is expected, as the
-     *                            generated error message is quite generic
-     *                            and will not give any indication where
-     *                            the regex failed.
-     * @param int     $size       The size of the input field.
-     * @param int     $maxlength  The max number of characters.
+     * @param array $params Variable arguments:
+     *                      - $params[0]: string $regex - Any valid PHP PCRE pattern syntax that needs to be matched for the field to be considered valid. If left empty validity will be checked only for required fields whether they are empty or not. If using this regex test it is advisable to enter a description for this field to warn the user what is expected, as the generated error message is quite generic and will not give any indication where the regex failed.
+     *                      - $params[1]: int $size - The size of the input field.
+     *                      - $params[2]: int|null $maxlength - The max number of characters.
      */
     public function init(...$params)
     {
@@ -71,7 +66,7 @@ class TextVariable extends BaseVariable
      */
     public function about(): array
     {
-         return [
+        return [
             'name' => Horde_Form_Translation::t("Text"),
             'params' => [
                 'regex'     => [
@@ -88,6 +83,5 @@ class TextVariable extends BaseVariable
                 ]
             ]
         ];
-   }
-
+    }
 }

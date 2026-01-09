@@ -1,23 +1,27 @@
 <?php
 namespace Horde\Form\V3;
+
 use Horde_Variables;
 use Horde_Form_Translation;
 
 /**
- * Horde_Form_Type for selecting a single value out of a list
- * For selecting multiple values, use Horde_Form_Type_multienum
+ * EnumVariable type for selecting a single value out of a list.
+ * For selecting multiple values, use Horde_Form_Type_multienum.
+ *
+ * @property array $values A hash map where the key is the internal 'value' to process and the value is the caption presented to the user
+ * @property string|bool $prompt A null value text to prompt user selecting a value. Use a default if boolean true, else use the supplied string. No prompt on false.
  */
 class EnumVariable extends BaseVariable
 {
     public $_values;
     public $_prompt;
+
     /**
      * Initialize (kind of constructor)
      *
-     * function init($values, $prompt = null)
-     *
-     * @param array $values         A hash map where the key is the internal 'value' to process and the value is the caption presented to the user
-     * @param string|bool  $prompt  A null value text to prompt user selecting a value. Use a default if boolean true, else use the supplied string. No prompt on false.
+     * @param array $params Variable arguments:
+     *                      - $params[0]: array $values - A hash map where the key is the internal 'value' to process and the value is the caption presented to the user
+     *                      - $params[1]: string|bool $prompt - A null value text to prompt user selecting a value. Use a default if boolean true, else use the supplied string. No prompt on false.
      */
     public function init(...$params)
     {
@@ -32,16 +36,14 @@ class EnumVariable extends BaseVariable
     }
 
     public function isValid(Horde_Variables $vars, $value): bool
-     {
+    {
         if ($this->isRequired() && $value == '' && !isset($this->_values[$value])) {
             return $this->invalid('This field is required.');
         }
-
         if (count($this->_values) == 0 || isset($this->_values[$value]) ||
             ($this->_prompt && empty($value))) {
             return true;
         }
-
         return $this->invalid('Invalid data submitted.');
     }
 
@@ -79,5 +81,4 @@ class EnumVariable extends BaseVariable
             ]
         ];
     }
-
 }

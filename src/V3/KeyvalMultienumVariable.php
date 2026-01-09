@@ -1,8 +1,16 @@
 <?php
 namespace Horde\Form\V3;
+
 use Horde_Variables;
 use Horde_Form_Translation;
 
+/**
+ * KeyvalMultienumVariable type for multiple selection, preserving keys.
+ *
+ * @property array $values A hash map where the key is the internal 'value' to process and the value is the caption presented to the user
+ * @property string|bool $prompt A null value text to prompt user selecting a value. Use a default if boolean true, else use the supplied string. No prompt on false.
+ * @property int $size The number of rows the multienum should display before scrolling
+ */
 class KeyvalMultienumVariable extends MultienumVariable
 {
     //TODO: Rename back to getInfo() after the V3 transition
@@ -23,8 +31,6 @@ class KeyvalMultienumVariable extends MultienumVariable
     {
         $about = parent::about();
         $about['name'] = Horde_Form_Translation::t("Multiple selection, preserving keys");
-
         return $about;
     }
-
 }

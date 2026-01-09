@@ -1,8 +1,19 @@
 <?php
 namespace Horde\Form\V3;
+
 use Horde_Variables;
 use Horde_Form_Translation;
 
+/**
+ * LongtextVariable type for multi-line text input fields.
+ *
+ * @property string $regex The regex pattern for validation
+ * @property int $size The size of the input field
+ * @property int|null $maxlength The maximum number of characters
+ * @property int $rows The number of rows for the textarea
+ * @property int $cols The number of columns for the textarea
+ * @property array $helper Array of helper options
+ */
 class LongtextVariable extends TextVariable
 {
     public $_rows;
@@ -10,11 +21,12 @@ class LongtextVariable extends TextVariable
     public $_helper = [];
 
     /**
-     *   Initialize a Longtext field type
+     * Initialize a Longtext field type
      *
-     *   @param $rows = $params[0] ?? 8;
-     *   @param $cols = $params[1] ?? 80;
-     *   @param $helper = $params[2] ?? array();
+     * @param array $params Variable arguments:
+     *                      - $params[0]: int $rows - Number of rows (default: 8)
+     *                      - $params[1]: int $cols - Number of columns (default: 80)
+     *                      - $params[2]: array $helper - Array of helper options (default: [])
      */
     public function init(...$params)
     {
@@ -81,5 +93,4 @@ class LongtextVariable extends TextVariable
             ]
         ];
     }
-
 }

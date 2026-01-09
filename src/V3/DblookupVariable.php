@@ -1,32 +1,39 @@
 <?php
 namespace Horde\Form\V3;
+
 use Horde_Variables;
 use Horde_Form_Translation;
 use Horde_Db_Exception;
 
+/**
+ * DblookupVariable type for selecting a value from a database lookup.
+ *
+ * @property array $values A hash map where the key is the internal 'value' to process and the value is the caption presented to the user
+ * @property string|bool $prompt A null value text to prompt user selecting a value. Use a default if boolean true, else use the supplied string. No prompt on false.
+ */
 class DblookupVariable extends EnumVariable
 {
     /**
-     * Initialize an dblookup field
+     * Initialize a database lookup field.
      *
-     * @param Horde_Db_Adapter $db
-     * @param string $sql
-     * @param string|null $prompt
-     *
-     * function init($db, $sql, $prompt = null)
+     * @param array $params Variable arguments:
+     *                      - $params[0]: Horde_Db_Adapter $db - Database adapter instance
+     *                      - $params[1]: string $sql - SQL statement for value lookups
+     *                      - $params[2]: string|null $prompt - Prompt text (optional)
      */
     public function init(...$params)
     {
         $db = $params[0];
         $sql = $params[1];
         $prompt = $params[2] ?? null;
-
         $values = [];
+
         try {
             $col = $db->selectValues($sql);
             $values = array_combine($col, $col);
         } catch (Horde_Db_Exception $e) {
         }
+
         parent::init($values, $prompt);
     }
 
@@ -53,5 +60,4 @@ class DblookupVariable extends EnumVariable
             ]
         ];
     }
-
 }

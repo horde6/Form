@@ -1,19 +1,26 @@
 <?php
 namespace Horde\Form\V3;
+
 use Horde_Variables;
 use Horde_Form_Translation;
 
+/**
+ * MultienumVariable type for selecting multiple values from a list.
+ *
+ * @property array $values A hash map where the key is the internal 'value' to process and the value is the caption presented to the user
+ * @property string|bool $prompt A null value text to prompt user selecting a value. Use a default if boolean true, else use the supplied string. No prompt on false.
+ * @property int $size The number of rows the multienum should display before scrolling
+ */
 class MultienumVariable extends EnumVariable
 {
-    public $size = 5;
+    public $_size = 5;
 
     /**
-     * Initialize (kind of constructor)
+     * Initialize a multiple selection enum field.
      *
-     * function init($values, $size = null)
-     *
-     * @param array $values  A hash map where the key is the internal 'value' to process and the value is the caption presented to the user
-     * @param int $size  The number of rows the multienum should display before scrolling
+     * @param array $params Variable arguments:
+     *                      - $params[0]: array $values - A hash map where the key is the internal 'value' to process and the value is the caption presented to the user
+     *                      - $params[1]: int|null $size - The number of rows the multienum should display before scrolling (optional)
      */
     public function init(...$params)
     {
@@ -21,7 +28,7 @@ class MultienumVariable extends EnumVariable
         $size = $params[1] ?? null;
 
         if (!is_null($size)) {
-            $this->size = (int) $size;
+            $this->_size = (int) $size;
         }
 
         parent::init($values);
@@ -71,5 +78,4 @@ class MultienumVariable extends EnumVariable
             ],
         ];
     }
-
 }
