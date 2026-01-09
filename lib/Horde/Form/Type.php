@@ -2666,8 +2666,15 @@ class Horde_Form_Type_radio extends Horde_Form_Type_enum
         return [
             'name' => Horde_Form_Translation::t("Radio selection"),
             'params' => [
-                'values' => ['label' => Horde_Form_Translation::t("Values"),
-                    'type'  => 'stringarray']]];
+                'values' => [
+                    'label' => Horde_Form_Translation::t("Values"),
+                    'type'  => 'stringarray'],
+                'prompt' => [
+                    'label' => Horde_Form_Translation::t("Prompt text"),
+                    'type'  => 'text'
+                ]
+            ]
+        ];
     }
 
 }
