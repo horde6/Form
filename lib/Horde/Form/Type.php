@@ -824,10 +824,20 @@ class Horde_Form_Type_address extends Horde_Form_Type_longtext
         return [
             'name' => Horde_Form_Translation::t("Address"),
             'params' => [
-                'rows' => ['label' => Horde_Form_Translation::t("Number of rows"),
-                    'type'  => 'int'],
-                'cols' => ['label' => Horde_Form_Translation::t("Number of columns"),
-                    'type'  => 'int']]];
+                'rows' => [
+                    'label' => Horde_Form_Translation::t("Number of rows"),
+                    'type'  => 'int'
+                ],
+                'cols' => [
+                    'label' => Horde_Form_Translation::t("Number of columns"),
+                    'type'  => 'int'
+                ],
+                'helper' => [
+                    'label' => Horde_Form_Translation::t("Helpers"),
+                    'type'  => 'stringarray'
+                ]
+            ]
+        ];
     }
 
 }
