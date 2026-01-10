@@ -1,10 +1,12 @@
 <?php
-
 namespace Horde\Form\V3;
 
 use Horde_Variables;
 use Horde_Form_Translation;
 
+/**
+ * CreditcardVariable type for credit card number input fields.
+ */
 class CreditcardVariable extends BaseVariable
 {
     public function isValid(Horde_Variables $vars, $value): bool
@@ -26,21 +28,18 @@ class CreditcardVariable extends BaseVariable
 
     public static function getChecksum(string $ccnum): int
     {
-
         $len = strlen($ccnum);
         $checksum = 0;
         $double = false;
 
         for ($i = $len - 1; $i >= 0; --$i) {
             $digit = (int) $ccnum[$i];
-
             if ($double) {
                 $digit *= 2;
                 if ($digit > 9) {
                     $digit -= 9;
                 }
             }
-
             $checksum += $digit;
             $double = !$double;
         }
@@ -52,7 +51,6 @@ class CreditcardVariable extends BaseVariable
     {
         // Remove spaces and other non-digits
         $ccnum = preg_replace('/\D/', '', $ccnum);
-
         $l = strlen($ccnum);
 
         // Screen checksum first
@@ -106,5 +104,4 @@ class CreditcardVariable extends BaseVariable
     {
         return [ 'name' => Horde_Form_Translation::t("Credit card number") ];
     }
-
 }

@@ -1,8 +1,15 @@
 <?php
 namespace Horde\Form\V3;
+
 use Horde_Variables;
 use Horde_Form_Translation;
 
+/**
+ * CaptchaVariable type for image CAPTCHA fields.
+ *
+ * @property string $text The CAPTCHA text
+ * @property string $font The font to use
+ */
 class CaptchaVariable extends FigletVariable
 {
     /**

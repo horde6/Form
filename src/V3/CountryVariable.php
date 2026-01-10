@@ -1,42 +1,29 @@
 <?php
 namespace Horde\Form\V3;
+
 use Horde_Variables;
-use Horde_Util;
 use Horde_Form_Translation;
-use Horde_Browser_Exception;
+use Horde_Nls;
 
-class CountryVariable extends BaseVariable
+/**
+ * CountryVariable type for country selection dropdown.
+ *
+ * @property array $values A hash map where the key is the internal 'value' to process and the value is the caption presented to the user
+ * @property string|bool $prompt A null value text to prompt user selecting a value. Use a default if boolean true, else use the supplied string. No prompt on false.
+ */
+class CountryVariable extends EnumVariable
 {
-    public function isValid(Horde_Variables $vars, $value): bool
+    /**
+     * Initialize a country field.
+     *
+     * @param array $params Variable arguments:
+     *                      - $params[0]: string|bool|null $prompt - Prompt text for selection
+     */
+    public function init(...$params)
     {
-        if ($this->isRequired()) {
-            try {
-                $GLOBALS['browser']->wasFileUploaded($this->getVarName());
-            } catch (Horde_Browser_Exception $e) {
-                $this->message = $e->getMessage();
-                return false;
-            }
-        }
+        $prompt = $params[0] ?? null;
 
-        return true;
-    }
-
-    //TODO: Rename back to getInfo() after the V3 transition
-    protected function getInfoV3($vars)
-    {
-        $info = [];
-        $name = $this->getVarName();
-        try {
-            $GLOBALS['browser']->wasFileUploaded($name);
-            $info['name'] = Horde_Util::dispelMagicQuotes($_FILES[$name]['name']);
-            $info['type'] = $_FILES[$name]['type'];
-            $info['tmp_name'] = $_FILES[$name]['tmp_name'];
-            $info['file'] = $_FILES[$name]['tmp_name'];
-            $info['error'] = $_FILES[$name]['error'];
-            $info['size'] = $_FILES[$name]['size'];
-        } catch (Horde_Browser_Exception $e) {
-        }
-        return $info;
+        parent::init(Horde_Nls::getCountryISO(), $prompt);
     }
 
     /**
@@ -44,7 +31,14 @@ class CountryVariable extends BaseVariable
      */
     public function about(): array
     {
-        return [ 'name' => Horde_Form_Translation::t("File upload") ];
+        return [
+            'name' => Horde_Form_Translation::t("Country drop down list"),
+            'params' => [
+                'prompt' => [
+                    'label' => Horde_Form_Translation::t("Prompt text"),
+                    'type'  => 'text'
+                ]
+            ]
+        ];
     }
-
 }

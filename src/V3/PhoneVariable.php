@@ -1,8 +1,14 @@
 <?php
 namespace Horde\Form\V3;
+
 use Horde_Variables;
 use Horde_Form_Translation;
 
+/**
+ * PhoneVariable type for phone number input fields.
+ *
+ * @property int $size The size of the input field
+ */
 class PhoneVariable extends BaseVariable
 {
     /**
@@ -13,7 +19,10 @@ class PhoneVariable extends BaseVariable
     public $_size;
 
     /**
-     * @param integer $size  The size of the input field.
+     * Initialize a phone number field.
+     *
+     * @param array $params Variable arguments:
+     *                      - $params[0]: int $size - The size of the input field (default: 15)
      */
     public function init(...$params)
     {

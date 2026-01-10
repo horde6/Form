@@ -1,8 +1,12 @@
 <?php
 namespace Horde\Form\V3;
+
 use Horde_Variables;
 use Horde_Form_Translation;
 
+/**
+ * CategoryVariable type for category selection with option to create new categories.
+ */
 class CategoryVariable extends BaseVariable
 {
     //TODO: Rename back to getInfo() after the V3 transition
@@ -20,15 +24,8 @@ class CategoryVariable extends BaseVariable
                 'value' => $info
             ];
         }
-        return $info;
-    }
 
-    /**
-     * Return info about field type.
-     */
-    public function about(): array
-    {
-        return [ 'name' => Horde_Form_Translation::t("Category") ];
+        return $info;
     }
 
     public function isValid(Horde_Variables $vars, $value): bool
@@ -40,4 +37,11 @@ class CategoryVariable extends BaseVariable
         return true;
     }
 
+    /**
+     * Return info about field type.
+     */
+    public function about(): array
+    {
+        return [ 'name' => Horde_Form_Translation::t("Category") ];
+    }
 }

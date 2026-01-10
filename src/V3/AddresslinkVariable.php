@@ -1,8 +1,19 @@
 <?php
 namespace Horde\Form\V3;
+
 use Horde_Variables;
 use Horde_Form_Translation;
 
+/**
+ * AddresslinkVariable type for address fields with link functionality.
+ *
+ * @property string $regex The regex pattern for validation
+ * @property int $size The size of the input field
+ * @property int|null $maxlength The maximum number of characters
+ * @property int $rows The number of rows for the textarea
+ * @property int $cols The number of columns for the textarea
+ * @property array $helper Array of helper options
+ */
 class AddresslinkVariable extends AddressVariable
 {
     public function isValid(Horde_Variables $vars, $value): bool
@@ -15,7 +26,8 @@ class AddresslinkVariable extends AddressVariable
      */
     public function about(): array
     {
-        return [ 'name' => Horde_Form_Translation::t("Address Link") ];
+        $about = parent::about();
+        $about['name'] = Horde_Form_Translation::t("Address Link");
+        return $about;
     }
-
 }

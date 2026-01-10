@@ -1,10 +1,14 @@
 <?php
 namespace Horde\Form\V3;
+
 use Horde_Variables;
+use Horde_Util;
 use Horde_Form_Translation;
 use Horde_Browser_Exception;
-use Horde_Util;
 
+/**
+ * FileVariable type for file upload fields.
+ */
 class FileVariable extends BaseVariable
 {
     public function isValid(Horde_Variables $vars, $value): bool
@@ -24,8 +28,8 @@ class FileVariable extends BaseVariable
     //TODO: Rename back to getInfo() after the V3 transition
     protected function getInfoV3($vars)
     {
-        $name = $this->getVarName();
         $info = [];
+        $name = $this->getVarName();
         try {
             $GLOBALS['browser']->wasFileUploaded($name);
             $info['name'] = Horde_Util::dispelMagicQuotes($_FILES[$name]['name']);
@@ -36,6 +40,7 @@ class FileVariable extends BaseVariable
             $info['size'] = $_FILES[$name]['size'];
         } catch (Horde_Browser_Exception $e) {
         }
+
         return $info;
     }
 
@@ -44,8 +49,6 @@ class FileVariable extends BaseVariable
      */
     public function about(): array
     {
-        return ['name' => Horde_Form_Translation::t("File upload")];
+        return [ 'name' => Horde_Form_Translation::t("File upload") ];
     }
-
-
 }

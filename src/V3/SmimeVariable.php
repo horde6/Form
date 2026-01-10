@@ -1,8 +1,20 @@
 <?php
 namespace Horde\Form\V3;
+
 use Horde_Variables;
 use Horde_Form_Translation;
 
+/**
+ * SmimeVariable type for S/MIME key input fields.
+ *
+ * @property string $regex The regex pattern for validation
+ * @property int $size The size of the input field
+ * @property int|null $maxlength The maximum number of characters
+ * @property int $rows The number of rows for the textarea
+ * @property int $cols The number of columns for the textarea
+ * @property array $helper Array of helper options
+ * @property string $temp A temporary directory
+ */
 class SmimeVariable extends LongtextVariable
 {
     /**
@@ -13,9 +25,12 @@ class SmimeVariable extends LongtextVariable
     public $_temp;
 
     /**
-     * Init a S/MIME field
+     * Initialize a S/MIME field.
      *
-     * function init($temp_dir = null, $rows = null, $cols = null)
+     * @param array $params Variable arguments:
+     *                      - $params[0]: string|null $temp_dir - A temporary directory
+     *                      - $params[1]: int $rows - Number of rows (default: 8, from parent)
+     *                      - $params[2]: int $cols - Number of columns (default: 80, from parent)
      */
     public function init(...$params)
     {
@@ -60,5 +75,4 @@ class SmimeVariable extends LongtextVariable
             ]
         ];
     }
-
 }

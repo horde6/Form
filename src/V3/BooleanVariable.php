@@ -1,9 +1,13 @@
 <?php
 namespace Horde\Form\V3;
+
 use Horde_Variables;
 use Horde_String;
 use Horde_Form_Translation;
 
+/**
+ * BooleanVariable type for true or false values.
+ */
 class BooleanVariable extends BaseVariable
 {
     public function isValid(Horde_Variables $vars, $value): bool
@@ -24,5 +28,4 @@ class BooleanVariable extends BaseVariable
     {
         return [ 'name' => Horde_Form_Translation::t("True or false") ];
     }
-
 }

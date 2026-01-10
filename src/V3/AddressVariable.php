@@ -1,10 +1,21 @@
 <?php
 namespace Horde\Form\V3;
+
 use Horde_Variables;
 use Horde_String;
 use Horde_Form_Translation;
 use Horde_Nls_Loader;
 
+/**
+ * AddressVariable type for address input fields with parsing capabilities.
+ *
+ * @property string $regex The regex pattern for validation
+ * @property int $size The size of the input field
+ * @property int|null $maxlength The maximum number of characters
+ * @property int $rows The number of rows for the textarea
+ * @property int $cols The number of columns for the textarea
+ * @property array $helper Array of helper options
+ */
 class AddressVariable extends LongtextVariable
 {
     public function parse($address)
@@ -113,6 +124,10 @@ class AddressVariable extends LongtextVariable
                 'cols' => [
                     'label' => Horde_Form_Translation::t("Number of columns"),
                     'type'  => 'int'
+                ],
+                'helper' => [
+                    'label' => Horde_Form_Translation::t("Helpers"),
+                    'type'  => 'stringarray'
                 ]
             ]
         ];

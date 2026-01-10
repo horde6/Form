@@ -1,18 +1,27 @@
 <?php
 namespace Horde\Form\V3;
+
 use Horde_Variables;
 use Horde_String;
 use Horde_Form_Translation;
 
+/**
+ * FigletVariable type for Figlet CAPTCHA fields.
+ *
+ * @property string $text The CAPTCHA text
+ * @property string $font The Figlet font to use
+ */
 class FigletVariable extends BaseVariable
 {
     public $_text;
     public $_font;
 
     /**
-     * Initialize a Figlet form type
+     * Initialize a Figlet form type.
      *
-     * function init($text, $font)
+     * @param array $params Variable arguments:
+     *                      - $params[0]: string $text - The CAPTCHA text
+     *                      - $params[1]: string $font - The Figlet font to use
      */
     public function init(...$params)
     {
@@ -62,5 +71,4 @@ class FigletVariable extends BaseVariable
             ]
         ];
     }
-
 }

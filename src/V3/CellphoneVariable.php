@@ -1,20 +1,23 @@
 <?php
 namespace Horde\Form\V3;
+
 use Horde_Variables;
 use Horde_Form_Translation;
 
+/**
+ * CellphoneVariable type for mobile phone number input fields.
+ *
+ * @property int $size The size of the input field
+ */
 class CellphoneVariable extends PhoneVariable
 {
+    /**
+     * Return info about field type.
+     */
     public function about(): array
     {
-        return [
-            'name' => Horde_Form_Translation::t("Mobile phone number"),
-            'params' => [
-                'size' => [
-                    'label' => Horde_Form_Translation::t("Size"),
-                    'type'  => 'int'
-                ],
-            ],
-        ];
+        $about = parent::about();
+        $about['name'] = Horde_Form_Translation::t("Mobile phone number");
+        return $about;
     }
 }

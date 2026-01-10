@@ -1,8 +1,19 @@
 <?php
 namespace Horde\Form\V3;
+
 use Horde_Variables;
 use Horde_Form_Translation;
 
+/**
+ * AssignVariable type for assignment columns with left/right values.
+ *
+ * @property array $leftValues Left column values
+ * @property array $rightValues Right column values
+ * @property string $leftHeader Left column header
+ * @property string $rightHeader Right column header
+ * @property int $size Number of visible rows
+ * @property string $width Width in CSS units
+ */
 class AssignVariable extends BaseVariable
 {
     public $_leftValues;
@@ -13,10 +24,15 @@ class AssignVariable extends BaseVariable
     public $_width;
 
     /**
-     * Initialize an assignment field
+     * Initialize an assignment field.
      *
-     * function init($leftValues, $rightValues, $leftHeader = '',
-     *     $rightHeader = '', $size = 8, $width = '200px')
+     * @param array $params Variable arguments:
+     *                      - $params[0]: array $leftValues - Left column values
+     *                      - $params[1]: array $rightValues - Right column values
+     *                      - $params[2]: string $leftHeader - Left column header (default: '')
+     *                      - $params[3]: string $rightHeader - Right column header (default: '')
+     *                      - $params[4]: int $size - Number of visible rows (default: 8)
+     *                      - $params[5]: string $width - Width in CSS units (default: '200px')
      */
     public function init(...$params)
     {
@@ -34,7 +50,10 @@ class AssignVariable extends BaseVariable
     }
 
     /**
-     *     function getValues($side)
+     * Get values for the specified side.
+     *
+     * @param array $params Variable arguments:
+     *                      - $params[0]: mixed $side - Which side to get values for (empty/0 = right, truthy = left)
      */
     public function getValues(...$params): ?array
     {
@@ -107,16 +126,19 @@ class AssignVariable extends BaseVariable
         } else {
             [$left, $right] = explode("\t\t", $value);
         }
+
         if (empty($left)) {
             $info['left'] = [];
         } else {
             $info['left'] = explode("\t", $left);
         }
+
         if (empty($right)) {
             $info['right'] = [];
         } else {
             $info['right'] = explode("\t", $right);
         }
+
         return $info;
     }
 
@@ -155,5 +177,4 @@ class AssignVariable extends BaseVariable
             ]
         ];
     }
-
 }

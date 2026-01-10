@@ -1,23 +1,39 @@
 <?php
 namespace Horde\Form\V3;
+
 use Horde_Variables;
 use Horde_String;
 use Horde_Form_Translation;
 
+/**
+ * CountedtextVariable type for text input with character counting.
+ *
+ * @property string $regex The regex pattern for validation
+ * @property int $size The size of the input field
+ * @property int|null $maxlength The maximum number of characters
+ * @property int $rows The number of rows for the textarea
+ * @property int $cols The number of columns for the textarea
+ * @property array $helper Array of helper options
+ * @property int $chars The maximum number of characters allowed
+ */
 class CountedtextVariable extends LongtextVariable
 {
     public $_chars;
 
     /**
-     * Init a longtext field
+     * Initialize a counted text field.
      *
-     * function init($rows = null, $cols = null, $chars = 1000)
+     * @param array $params Variable arguments:
+     *                      - $params[0]: int $rows - Number of rows (default: 8, from parent)
+     *                      - $params[1]: int $cols - Number of columns (default: 80, from parent)
+     *                      - $params[2]: int $chars - Maximum number of characters (default: 1000)
      */
     public function init(...$params)
     {
         $rows = $params[0] ?? null;
         $cols = $params[1] ?? null;
         $chars = $params[2] ?? 1000;
+
         parent::init($rows, $cols);
         $this->_chars = $chars;
     }
@@ -25,7 +41,6 @@ class CountedtextVariable extends LongtextVariable
     public function isValid(Horde_Variables $vars, $value): bool
     {
         $length = Horde_String::length(trim($value));
-
         if ($this->isRequired() && $length <= 0) {
             return $this->invalid('This field is required.');
         }
@@ -62,5 +77,4 @@ class CountedtextVariable extends LongtextVariable
             ]
         ];
     }
-
 }

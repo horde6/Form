@@ -1,18 +1,25 @@
 <?php
 namespace Horde\Form\V3;
+
 use Horde_Variables;
 use Horde_Date;
 use Horde_Form_Translation;
 use Horde_Date_Exception;
 
+/**
+ * DateVariable type for date input fields.
+ *
+ * @property string $format The date format string
+ */
 class DateVariable extends BaseVariable
 {
     public $_format;
 
     /**
-     * Initialize a Set form type
+     * Initialize a date field.
      *
-     * function init($format = '%a %d %B')
+     * @param array $params Variable arguments:
+     *                      - $params[0]: string $format - The date format string (default: '%a %d %B')
      */
     public function init(...$params)
     {
@@ -99,5 +106,4 @@ class DateVariable extends BaseVariable
             ]
         ];
     }
-
 }
