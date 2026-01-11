@@ -1,8 +1,12 @@
 <?php
 namespace Horde\Form\V3;
+
 use Horde_Variables;
 use Horde_Form_Translation;
 
+/**
+ * EmailconfirmVariable type for email input with confirmation field.
+ */
 class EmailconfirmVariable extends BaseVariable
 {
     public function isValid(Horde_Variables $vars, $value): bool
@@ -16,7 +20,6 @@ class EmailconfirmVariable extends BaseVariable
         }
 
         $addr_ob = $GLOBALS['injector']->getInstance('Horde_Mail_Rfc822')->parseAddressList($value['original']);
-
         switch (count($addr_ob)) {
             case 0:
                 return $this->invalid('You did not enter a valid email address.');
@@ -36,5 +39,4 @@ class EmailconfirmVariable extends BaseVariable
     {
         return [ 'name' => Horde_Form_Translation::t("Email with confirmation") ];
     }
-
 }

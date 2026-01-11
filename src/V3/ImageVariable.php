@@ -9,6 +9,13 @@ use Horde_Browser_Exception;
 use Horde_Mime_Magic;
 use PEAR;
 
+/**
+ * ImageVariable type for image upload fields.
+ *
+ * @property bool $show_upload Show the upload button
+ * @property bool $show_keeporig Show the option to upload also original non-modified image
+ * @property int|null $max_filesize Limit the file size
+ */
 class ImageVariable extends BaseVariable
 {
     /**
@@ -54,9 +61,12 @@ class ImageVariable extends BaseVariable
     public $_random;
 
     /**
-     * Init a Country field
+     * Initialize an image upload field.
      *
-     *     function init($show_upload = true, $show_keeporig = false, $max_filesize = null)
+     * @param array $params Variable arguments:
+     *                      - $params[0]: bool $show_upload - Show the upload button (default: true)
+     *                      - $params[1]: bool $show_keeporig - Show the option to upload also original non-modified image (default: false)
+     *                      - $params[2]: int|null $max_filesize - Limit the file size in bytes (default: null)
      */
     public function init(...$params)
     {
@@ -66,7 +76,6 @@ class ImageVariable extends BaseVariable
     }
 
     /**
-     *     function onSubmit($vars)
      */
     public function onSubmit($vars)
     {
@@ -98,7 +107,6 @@ class ImageVariable extends BaseVariable
      * @param Horde_Variables $vars     The form state to check this field for
      * @param array $value              The field value array - should contain a key ['hash'] which holds the key for the image on temp storage
      */
-
     public function isValid(Horde_Variables $vars, $value): bool
     {
         if ($vars->get('remove_' . $this->getVarName())) {
@@ -164,6 +172,7 @@ class ImageVariable extends BaseVariable
         }
 
         $info = $this->_img['img'];
+
         if (empty($info['file'])) {
             unset($info['file']);
             return $info;
@@ -181,6 +190,7 @@ class ImageVariable extends BaseVariable
             /* Requested the saving of original file also. */
             $info['orig_file'] = Horde::getTempDir() . '/' . $info['file'];
             $info['file'] = Horde::getTempDir() . '/mod_' . $info['file'];
+
             /* Check if a modified file actually exists. */
             if (!file_exists($info['file'])) {
                 $info['file'] = $info['orig_file'];
@@ -190,13 +200,13 @@ class ImageVariable extends BaseVariable
             /* Saving of original not required. */
             $mod_file = Horde::getTempDir() . '/mod_' . $info['file'];
             $info['file'] = Horde::getTempDir() . '/' . $info['file'];
-
             if (file_exists($mod_file)) {
                 /* Unlink first (has to be done on Windows machines?) */
                 unlink($info['file']);
                 rename($mod_file, $info['file']);
             }
         }
+
         return $info;
     }
 
@@ -207,19 +217,18 @@ class ImageVariable extends BaseVariable
      * @param Horde_Variables $vars     The form state to check this field for
      *
      */
-    public function _getUpload($vars)
+    private function _getUpload($vars)
     {
         global $session;
 
         /* Don't bother with this function if already called and set
          * up vars. */
         if (!empty($this->_img)) {
-            return true;
+            return;
         }
 
         /* Check if file has been uploaded. */
         $varname = $this->getVarName();
-
         try {
             $GLOBALS['browser']->wasFileUploaded($varname . '[new]');
             $this->_uploaded = true;
@@ -283,6 +292,7 @@ class ImageVariable extends BaseVariable
                 }
             }
         }
+
         if (isset($this->_img['img'])) {
             $session->set('horde', 'form/' . $this->getRandomId(), $this->_img['img']);
         }
@@ -297,6 +307,7 @@ class ImageVariable extends BaseVariable
             /* Index present, fetch the mime type var to check. */
             $keys_path = array_merge([$base, 'type'], $keys);
             $type = Horde_Array::getElement($_FILES, $keys_path);
+
             $keys_path = array_merge([$base, 'tmp_name'], $keys);
             $tmp_name = Horde_Array::getElement($_FILES, $keys_path);
         } else {
@@ -340,17 +351,21 @@ class ImageVariable extends BaseVariable
      */
     public function getImage($vars)
     {
+        global $session;
+
         $this->_getUpload($vars);
+
         if (!isset($this->_img)) {
             $image = $vars->get($this->getVarName());
             if ($image) {
                 $image = $this->loadImageData($image);
                 if (isset($image['img'])) {
                     $this->_img = $image;
-                    $GLOBALS['session']->set('horde', 'form/' . $this->getRandomId(), $this->_img['img']);
+                    $session->set('horde', 'form/' . $this->getRandomId(), $this->_img['img']);
                 }
             }
         }
+
         return $this->_img;
     }
 
@@ -378,6 +393,7 @@ class ImageVariable extends BaseVariable
 
         $image['img'] = [ 'file' => $image['load']['file'] ];
         unset($image['load']);
+
         return $image;
     }
 
@@ -386,6 +402,7 @@ class ImageVariable extends BaseVariable
         if (!isset($this->_random)) {
             $this->_random = uniqid(mt_rand());
         }
+
         return $this->_random;
     }
 
@@ -412,5 +429,4 @@ class ImageVariable extends BaseVariable
             ]
         ];
     }
-
 }

@@ -1,8 +1,20 @@
 <?php
 namespace Horde\Form\V3;
+
 use Horde_Variables;
 use Horde_Form_Translation;
 
+/**
+ * EmailVariable type for email address input fields.
+ *
+ * @property bool $allow_multi Allow multiple addresses
+ * @property bool $strip_domain Protect address from spammers
+ * @property bool $link_compose Link the email address to the compose page when displaying
+ * @property bool $check_smtp Whether to check the domain's SMTP server whether the address exists
+ * @property string $link_name The name to use when linking to the compose page
+ * @property string $delimiters A string containing valid delimiters
+ * @property int $size The size of the input field
+ */
 class EmailVariable extends BaseVariable
 {
     /**
@@ -55,20 +67,15 @@ class EmailVariable extends BaseVariable
     public $_size;
 
     /**
-     * Init an "email" field
+     * Initialize an email field.
      *
-     * @param bool $allow_multi   Allow multiple addresses?
-     * @param bool $strip_domain  Protect address from spammers?
-     * @param bool $link_compose  Link the email address to the compose page
-     *                               when displaying?
-     * @param string $link_name      The name to use when linking to the
-     *                               compose page.
-     * @param string $delimiters     Character to split multiple addresses with.
-     * @param int $size          The size of the input field.
-     *    function init($allow_multi = false, $strip_domain = false,
-     *             $link_compose = false, $link_name = null,
-     *             $delimiters = ',', $size = null)
-     * {
+     * @param array $params Variable arguments:
+     *                      - $params[0]: bool $allow_multi - Allow multiple addresses (default: false)
+     *                      - $params[1]: bool $strip_domain - Protect address from spammers (default: false)
+     *                      - $params[2]: bool $link_compose - Link the email address to the compose page when displaying (default: false)
+     *                      - $params[3]: string|null $link_name - The name to use when linking to the compose page (default: null)
+     *                      - $params[4]: string $delimiters - Character to split multiple addresses with (default: ',')
+     *                      - $params[5]: int|null $size - The size of the input field (default: null)
      */
     public function init(...$params)
     {
@@ -152,6 +159,7 @@ class EmailVariable extends BaseVariable
 
         for ($i = 1, $iMax = strlen($string); $i < $iMax; ++$i) {
             $char = $string[$i];
+
             if (in_array($char, $quotes)) {
                 if ($prev !== '\\') {
                     if ($in_quote === $char) {
@@ -174,6 +182,7 @@ class EmailVariable extends BaseVariable
                 $emails[] = substr($string, $pos, $i - $pos);
                 $pos = $i + 1;
             }
+
             $prev = $char;
         }
 
@@ -196,7 +205,6 @@ class EmailVariable extends BaseVariable
         if ($result && $this->_check_smtp) {
             $result = $this->validateEmailAddressSmtp($email);
         }
-
         return $result;
     }
 
@@ -262,42 +270,6 @@ class EmailVariable extends BaseVariable
     }
 
     /**
-     * Return info about field type.
-     */
-    public function about(): array
-    {
-        return [
-            'name' => Horde_Form_Translation::t("Email"),
-            'params' => [
-                'allow_multi' => [
-                    'label' => Horde_Form_Translation::t("Allow multiple addresses?"),
-                    'type'  => 'boolean'
-                ],
-                'strip_domain' => [
-                    'label' => Horde_Form_Translation::t("Protect address from spammers?"),
-                    'type' => 'boolean'
-                ],
-                'link_compose' => [
-                    'label' => Horde_Form_Translation::t("Link the email address to the compose page when displaying?"),
-                    'type' => 'boolean'
-                ],
-                'link_name' => [
-                    'label' => Horde_Form_Translation::t("The name to use when linking to the compose page"),
-                    'type' => 'text'
-                ],
-                'delimiters' => [
-                    'label' => Horde_Form_Translation::t("Character to split multiple addresses with"),
-                    'type' => 'text'
-                ],
-                'size' => [
-                    'label' => Horde_Form_Translation::t("Size"),
-                    'type'  => 'int'
-                ],
-            ],
-        ];
-    }
-
-    /**
      * RFC3696 Email Parser
      *
      * By Cal Henderson <cal@iamcal.com>
@@ -324,7 +296,6 @@ class EmailVariable extends BaseVariable
         $cr     = "\\x0d";
         $lf     = "\\x0a";
         $crlf       = "(?:$cr$lf)";
-
 
         ####################################################################################
         #
@@ -354,7 +325,6 @@ class EmailVariable extends BaseVariable
         $obs_qp     = "(?:\\x5c[\\x00-\\x7f])";
         $quoted_pair    = "(?:\\x5c$text|$obs_qp)";
 
-
         ####################################################################################
         #
         # obs-FWS         =       1*WSP *(CRLF 1*WSP)
@@ -367,7 +337,6 @@ class EmailVariable extends BaseVariable
         # ccontent        =       ctext / quoted-pair / comment
         # comment         =       "(" *([FWS] ccontent) [FWS] ")"
         # CFWS            =       *([FWS] comment) (([FWS] comment) / FWS)
-
         #
         # note: we translate ccontent only partially to avoid an infinite loop
         # instead, we'll recursively strip *nested* comments before processing
@@ -383,7 +352,6 @@ class EmailVariable extends BaseVariable
         $comment    = "(?:\\x28(?:$fws?$ccontent)*$fws?\\x29)";
         $cfws       = "(?:(?:$fws?$comment)*(?:$fws?$comment|$fws))";
 
-
         #
         # these are the rules for removing *nested* comments. we'll just detect
         # outer comment and replace it with an empty comment, and recurse until
@@ -393,7 +361,6 @@ class EmailVariable extends BaseVariable
         $outer_ccontent_dull    = "(?:$fws?$ctext|$quoted_pair)";
         $outer_ccontent_nest    = "(?:$fws?$comment)";
         $outer_comment      = "(?:\\x28$outer_ccontent_dull*(?:$outer_ccontent_nest$outer_ccontent_dull*)+$fws?\\x29)";
-
 
         ####################################################################################
         #
@@ -412,7 +379,6 @@ class EmailVariable extends BaseVariable
 
         $atext      = "(?:$alpha|$digit|[\\x21\\x23-\\x27\\x2a\\x2b\\x2d\\x2f\\x3d\\x3f\\x5e\\x5f\\x60\\x7b-\\x7e])";
         $atom       = "(?:$cfws?(?:$atext)+$cfws?)";
-
 
         ####################################################################################
         #
@@ -437,7 +403,6 @@ class EmailVariable extends BaseVariable
         $quoted_string  = "(?:$cfws?\\x22(?:$fws?$qcontent)+$fws?\\x22$cfws?)";
         $word       = "(?:$atom|$quoted_string)";
 
-
         ####################################################################################
         #
         # obs-local-part  =       word *("." word)
@@ -446,7 +411,6 @@ class EmailVariable extends BaseVariable
         $obs_local_part = "(?:$word(?:\\x2e$word)*)";
         $obs_domain = "(?:$atom(?:\\x2e$atom)*)";
 
-
         ####################################################################################
         #
         # dot-atom-text   =       1*atext *("." 1*atext)
@@ -454,7 +418,6 @@ class EmailVariable extends BaseVariable
 
         $dot_atom_text  = "(?:$atext+(?:\\x2e$atext+)*)";
         $dot_atom   = "(?:$cfws?$dot_atom_text$cfws?)";
-
 
         ####################################################################################
         #
@@ -470,7 +433,6 @@ class EmailVariable extends BaseVariable
         $dcontent   = "(?:$dtext|$quoted_pair)";
         $domain_literal = "(?:$cfws?\\x5b(?:$fws?$dcontent)*$fws?\\x5d$cfws?)";
 
-
         ####################################################################################
         #
         # local-part      =       dot-atom / quoted-string / obs-local-part
@@ -481,8 +443,6 @@ class EmailVariable extends BaseVariable
         $domain     = "(($dot_atom)|($domain_literal)|($obs_domain))";
         $addr_spec  = "$local_part\\x40$domain";
 
-
-
         #
         # see http://www.dominicsayers.com/isemail/ for details, but this should probably be 254
         #
@@ -491,20 +451,17 @@ class EmailVariable extends BaseVariable
             return 0;
         }
 
-
         #
         # we need to strip nested comments first - we replace them with a simple comment
         #
 
         $email = $this->_rfc3696StripComments($outer_comment, $email, "(x)");
 
-
         #
         # now match what's left
         #
 
         if (!preg_match("!^$addr_spec$!", $email, $m)) {
-
             return 0;
         }
 
@@ -519,7 +476,6 @@ class EmailVariable extends BaseVariable
             'domain-obs'        => $m[8] ?? '',
         ];
 
-
         #
         # we need to now strip comments from $bits[local] and $bits[domain],
         # since we know they're i the right place and we want them out of the
@@ -528,7 +484,6 @@ class EmailVariable extends BaseVariable
 
         $bits['local']  = $this->_rfc3696StripComments($comment, $bits['local']);
         $bits['domain'] = $this->_rfc3696StripComments($comment, $bits['domain']);
-
 
         #
         # length limits on segments
@@ -541,13 +496,11 @@ class EmailVariable extends BaseVariable
             return 0;
         }
 
-
         #
         # restrictions on domain-literals from RFC2821 section 4.1.3
         #
 
         if (strlen($bits['domain-literal'])) {
-
             $Snum           = "(\d{1,3})";
             $IPv4_address_literal   = "$Snum\.$Snum\.$Snum\.$Snum";
 
@@ -562,7 +515,6 @@ class EmailVariable extends BaseVariable
 
             $IPv6v4_comp_part   = "$IPv6_hex(?:\:$IPv6_hex){0,3}";
             $IPv6v4_comp        = "IPv6\:((?:$IPv6v4_comp_part)?\:\:(?:$IPv6v4_comp_part\:)?)$IPv4_address_literal";
-
 
             #
             # IPv4 is simple
@@ -587,7 +539,6 @@ class EmailVariable extends BaseVariable
                 #
 
                 while (1) {
-
                     if (preg_match("!^\[$IPv6_full\]$!", $bits['domain'])) {
                         break;
                     }
@@ -640,7 +591,6 @@ class EmailVariable extends BaseVariable
 
             $labels = explode('.', $bits['domain']);
 
-
             #
             # this is allowed by both dot-atom and obs-domain, but is un-routeable on the
             # public internet, so we'll fail it (e.g. user@localhost)
@@ -649,7 +599,6 @@ class EmailVariable extends BaseVariable
             if (count($labels) == 1) {
                 return 0;
             }
-
 
             #
             # checks on each label
@@ -666,7 +615,6 @@ class EmailVariable extends BaseVariable
                     return 0;
                 }
             }
-
 
             #
             # last label can't be all numeric
@@ -702,4 +650,39 @@ class EmailVariable extends BaseVariable
         }
     }
 
+    /**
+     * Return info about field type.
+     */
+    public function about(): array
+    {
+        return [
+            'name' => Horde_Form_Translation::t("Email"),
+            'params' => [
+                'allow_multi' => [
+                    'label' => Horde_Form_Translation::t("Allow multiple addresses?"),
+                    'type'  => 'boolean'
+                ],
+                'strip_domain' => [
+                    'label' => Horde_Form_Translation::t("Protect address from spammers?"),
+                    'type' => 'boolean'
+                ],
+                'link_compose' => [
+                    'label' => Horde_Form_Translation::t("Link the email address to the compose page when displaying?"),
+                    'type' => 'boolean'
+                ],
+                'link_name' => [
+                    'label' => Horde_Form_Translation::t("The name to use when linking to the compose page"),
+                    'type' => 'text'
+                ],
+                'delimiters' => [
+                    'label' => Horde_Form_Translation::t("Character to split multiple addresses with"),
+                    'type' => 'text'
+                ],
+                'size' => [
+                    'label' => Horde_Form_Translation::t("Size"),
+                    'type'  => 'int'
+                ],
+            ],
+        ];
+    }
 }

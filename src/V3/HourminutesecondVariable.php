@@ -1,17 +1,24 @@
 <?php
 namespace Horde\Form\V3;
+
 use Horde_Variables;
 use Horde_Date;
 use Horde_Form_Translation;
 
+/**
+ * HourminutesecondVariable type for time selection fields.
+ *
+ * @property bool $show_seconds Include a form input for seconds
+ */
 class HourminutesecondVariable extends BaseVariable
 {
     public $_show_seconds;
 
     /**
-     * Initialize a Set form type
+     * Initialize a time selection field.
      *
-     * function init($show_seconds = false)
+     * @param array $params Variable arguments:
+     *                      - $params[0]: bool $show_seconds - Include a form input for seconds (default: false)
      */
     public function init(...$params)
     {
@@ -40,9 +47,11 @@ class HourminutesecondVariable extends BaseVariable
         if (!isset($hour) || $hour == '' || ($hour < 0 || $hour > 23)) {
             return false;
         }
+
         if (!isset($minute) || $minute == '' || ($minute < 0 || $minute > 60)) {
             return false;
         }
+
         if (!isset($second) || $second === '' || ($second < 0 || $second > 60)) {
             return false;
         }
@@ -91,6 +100,7 @@ class HourminutesecondVariable extends BaseVariable
             /* This is just an empty field so return empty parts. */
             return ['hour' => '', 'minute' => '', 'second' => ''];
         }
+
         $time = $this->getTimeOb($time_in);
         return ['hour' => $time->hour,
             'minute' => $time->min,
@@ -120,5 +130,4 @@ class HourminutesecondVariable extends BaseVariable
             ]
         ];
     }
-
 }
