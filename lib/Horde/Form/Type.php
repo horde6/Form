@@ -1242,7 +1242,7 @@ class Horde_Form_Type_image extends Horde_Form_Type
      * @param Horde_Form_Variable $var  The Form field object to check
      *
      */
-    public function _getUpload($vars, $var)
+    private function _getUpload($vars, $var)
     {
         global $session;
 
