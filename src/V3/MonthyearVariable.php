@@ -1,17 +1,26 @@
 <?php
 namespace Horde\Form\V3;
+
 use Horde_Variables;
 use Horde_Form_Translation;
 
+/**
+ * MonthyearVariable type for month and year selection fields.
+ *
+ * @property int $start_year The first available year for input
+ * @property int $end_year The last available year for input
+ */
 class MonthyearVariable extends BaseVariable
 {
     public $_start_year;
     public $_end_year;
 
     /**
-     * Initialize a Month/Year form type
+     * Initialize a month/year field.
      *
-     * function init($start_year = null, $end_year = null)
+     * @param array $params Variable arguments:
+     *                      - $params[0]: int|null $start_year - The first available year for input (default: 1920)
+     *                      - $params[1]: int|null $end_year - The last available year for input (default: current year)
      */
     public function init(...$params)
     {
@@ -71,5 +80,4 @@ class MonthyearVariable extends BaseVariable
             ]
         ];
     }
-
 }

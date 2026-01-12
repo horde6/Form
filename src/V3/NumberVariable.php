@@ -1,13 +1,25 @@
 <?php
 namespace Horde\Form\V3;
+
 use Horde_Variables;
 use Horde_Form_Translation;
 use Horde_Nls;
 
+/**
+ * NumberVariable type for locale-aware number input fields.
+ *
+ * @property int|null $fraction Maximum number of decimal places allowed
+ */
 class NumberVariable extends BaseVariable
 {
     public $_fraction;
 
+    /**
+     * Initialize a number field.
+     *
+     * @param array $params Variable arguments:
+     *                      - $params[0]: int|null $fraction - Maximum number of decimal places allowed (default: null, unlimited)
+     */
     public function init(...$params)
     {
         $this->_fraction = $params[0] ?? null;
@@ -52,10 +64,12 @@ class NumberVariable extends BaseVariable
             /* No locale thousands separator, check for only digits. */
             $pattern .= '(\d+)';
         }
+
         /* If no decimal point specified default to dot. */
         if (empty($linfo['mon_decimal_point'])) {
             $linfo['mon_decimal_point'] = '.';
         }
+
         /* Regex to check for correct decimals (if any). */
         if (empty($this->_fraction)) {
             $fraction = '*';

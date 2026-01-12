@@ -1,8 +1,16 @@
 <?php
 namespace Horde\Form\V3;
+
 use Horde_Variables;
 use Horde_Form_Translation;
 
+/**
+ * StringlistVariable type for string list input fields.
+ *
+ * @property string $regex The regex pattern for validation
+ * @property int $size The size of the input field
+ * @property int|null $maxlength The maximum number of characters
+ */
 class StringlistVariable extends TextVariable
 {
     /**
@@ -10,23 +18,8 @@ class StringlistVariable extends TextVariable
      */
     public function about(): array
     {
-        return [
-            'name' => Horde_Form_Translation::t("String list"),
-            'params' => [
-                'regex'     => [
-                    'label' => Horde_Form_Translation::t("Regex"),
-                    'type'  => 'text'
-                ],
-                'size'      => [
-                    'label' => Horde_Form_Translation::t("Size"),
-                    'type'  => 'int'
-                ],
-                'maxlength' => [
-                    'label' => Horde_Form_Translation::t("Maximum length"),
-                    'type'  => 'int'
-                ]
-            ],
-        ];
+        $about = parent::about();
+        $about['name'] = Horde_Form_Translation::t("String list");
+        return $about;
     }
-
 }

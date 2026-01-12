@@ -1,11 +1,17 @@
 <?php
 namespace Horde\Form\V3;
+
 use Horde_Variables;
 use Horde_Form_Translation;
 
+/**
+ * LinkVariable type for hyperlink display fields.
+ *
+ * @property array $values List of hashes containing link parameters
+ */
 class LinkVariable extends BaseVariable
 {
-   /**
+    /**
      * List of hashes containing link parameters. Possible keys: 'url', 'text',
      * 'target', 'onclick', 'title', 'accesskey', 'class'.
      *
@@ -14,9 +20,10 @@ class LinkVariable extends BaseVariable
     public $values;
 
     /**
-     * Init a Link field
+     * Initialize a link field.
      *
-     * function init($values)
+     * @param array $params Variable arguments:
+     *                      - $params[0]: array|null $values - List of hashes containing link parameters. Possible keys: 'url', 'text', 'target', 'onclick', 'title', 'accesskey', 'class' (default: null)
      */
     public function init(...$params)
     {
@@ -36,12 +43,11 @@ class LinkVariable extends BaseVariable
         return [
             'name' => Horde_Form_Translation::t("Link"),
             'params' => [
-               'values' => [
+                'values' => [
                     'label' => Horde_Form_Translation::t("Values"),
                     'type' => 'array'
                 ]
             ]
         ];
     }
-
 }

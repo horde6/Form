@@ -1,9 +1,19 @@
 <?php
 namespace Horde\Form\V3;
+
 use Horde_Variables;
 use Horde_Date;
 use Horde_Form_Translation;
 
+/**
+ * MonthdayyearVariable type for date selection fields.
+ *
+ * @property int $start_year The first available year for input
+ * @property int $end_year The last available year for input
+ * @property bool $picker Do we show the DHTML calendar
+ * @property string|null $format_in The format to use when sending the date for storage
+ * @property string $format_out The format to use when displaying the date
+ */
 class MonthdayyearVariable extends BaseVariable
 {
     public $_start_year;
@@ -13,19 +23,14 @@ class MonthdayyearVariable extends BaseVariable
     public $_format_out = '%x';
 
     /**
-     * Return the date supplied as a Horde_Date object.
+     * Initialize a date selection field.
      *
-     *     function init($start_year = '', $end_year = '', $picker = true,
-     *             $format_in = null, $format_out = '%x')
-     *
-     * @param int  $start_year  The first available year for input.
-     * @param int  $end_year    The last available year for input.
-     * @param bool $picker      Do we show the DHTML calendar?
-     * @param int  $format_in   The format to use when sending the date
-     *                             for storage. Defaults to Unix epoch.
-     *                             Similar to the strftime() function.
-     * @param int $format_out  The format to use when displaying the
-     *                             date. Similar to the strftime() function.
+     * @param array $params Variable arguments:
+     *                      - $params[0]: int $start_year - The first available year for input (default: current year)
+     *                      - $params[1]: int $end_year - The last available year for input (default: current year + 10)
+     *                      - $params[2]: bool $picker - Do we show the DHTML calendar (default: true)
+     *                      - $params[3]: string|null $format_in - The format to use when sending the date for storage. Defaults to Unix epoch. Similar to the strftime() function. (default: null)
+     *                      - $params[4]: string $format_out - The format to use when displaying the date. Similar to the strftime() function. (default: '%x')
      */
     public function init(...$params)
     {
@@ -52,7 +57,6 @@ class MonthdayyearVariable extends BaseVariable
     public function isValid(Horde_Variables|array $vars, $date): bool
     {
         $empty = $this->emptyDateArray($date);
-
         if ($empty == 1 && $this->isRequired()) {
             return $this->invalid('This field is required.');
         }
@@ -86,6 +90,7 @@ class MonthdayyearVariable extends BaseVariable
         if (!is_array($date)) {
             return (int) empty($date);
         }
+
         $empty = 0;
         /* Check each date array component. */
         foreach (['day', 'month', 'year'] as $key) {
@@ -251,5 +256,4 @@ class MonthdayyearVariable extends BaseVariable
             ]
         ];
     }
-
 }

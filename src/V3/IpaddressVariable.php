@@ -1,9 +1,17 @@
 <?php
 namespace Horde\Form\V3;
+
 use Horde_Variables;
 use Horde_Form_Translation;
 
-class IpadressVariable extends TextVariable
+/**
+ * IpaddressVariable type for IPv4 address input fields.
+ *
+ * @property string $regex The regex pattern for validation
+ * @property int $size The size of the input field
+ * @property int|null $maxlength The maximum number of characters
+ */
+class IpaddressVariable extends TextVariable
 {
     public function isValid(Horde_Variables $vars, $value): bool
     {
@@ -38,5 +46,4 @@ class IpadressVariable extends TextVariable
     {
         return [ 'name' => Horde_Form_Translation::t("IP address") ];
     }
-
 }

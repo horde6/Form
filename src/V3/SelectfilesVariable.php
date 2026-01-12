@@ -1,8 +1,17 @@
 <?php
 namespace Horde\Form\V3;
+
 use Horde_Variables;
 use Horde_Form_Translation;
 
+/**
+ * SelectfilesVariable type for file selection fields.
+ *
+ * @property string $selectid Contains gollem selectfile selectionID
+ * @property string $link_text The text to use in the link
+ * @property string $link_style The style to use for the link
+ * @property bool $icon Create the link with an icon instead of text
+ */
 class SelectfilesVariable extends BaseVariable
 {
     /**
@@ -34,10 +43,13 @@ class SelectfilesVariable extends BaseVariable
     public $_selectid;
 
     /**
-     * Initialize a file selection type
+     * Initialize a file selection field.
      *
-     * function init($selectid, $link_text = null, $link_style = '',
-     *      $icon = false)
+     * @param array $params Variable arguments:
+     *                      - $params[0]: string $selectid - Contains gollem selectfile selectionID
+     *                      - $params[1]: string|null $link_text - The text to use in the link (default: "Select Files")
+     *                      - $params[2]: string $link_style - The style to use for the link (default: '')
+     *                      - $params[3]: bool $icon - Create the link with an icon instead of text (default: false)
      */
     public function init(...$params)
     {
@@ -49,6 +61,7 @@ class SelectfilesVariable extends BaseVariable
         if (is_null($link_text)) {
             $link_text = Horde_Form_Translation::t("Select Files");
         }
+
         $this->_link_text = $link_text;
         $this->_link_style = $link_style;
         $this->_icon = $icon;
@@ -66,6 +79,9 @@ class SelectfilesVariable extends BaseVariable
         return $GLOBALS['registry']->call('files/selectlistResults', [$value]);
     }
 
+    /**
+     * Return info about field type.
+     */
     public function about(): array
     {
         return [
@@ -90,5 +106,4 @@ class SelectfilesVariable extends BaseVariable
             ]
         ];
     }
-
 }

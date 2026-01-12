@@ -1,8 +1,12 @@
 <?php
 namespace Horde\Form\V3;
+
 use Horde_Variables;
 use Horde_Form_Translation;
 
+/**
+ * IntVariable type for integer input fields.
+ */
 class IntVariable extends BaseVariable
 {
     public function isValid(Horde_Variables $vars, $value): bool
@@ -25,5 +29,4 @@ class IntVariable extends BaseVariable
     {
         return [ 'name' => Horde_Form_Translation::t("Integer") ];
     }
-
 }

@@ -1,8 +1,16 @@
 <?php
 namespace Horde\Form\V3;
+
 use Horde_Variables;
 use Horde_Form_Translation;
 
+/**
+ * StringarrayVariable type for string list input fields returning an array.
+ *
+ * @property string $regex The regex pattern for validation
+ * @property int $size The size of the input field
+ * @property int|null $maxlength The maximum number of characters
+ */
 class StringarrayVariable extends StringlistVariable
 {
     //TODO: Rename back to getInfo() after the V3 transition
@@ -16,23 +24,8 @@ class StringarrayVariable extends StringlistVariable
      */
     public function about(): array
     {
-        return [
-            'name' => Horde_Form_Translation::t("String list returning an array"),
-            'params' => [
-                'regex'     => [
-                    'label' => Horde_Form_Translation::t("Regex"),
-                    'type'  => 'text'
-                ],
-                'size'      => [
-                    'label' => Horde_Form_Translation::t("Size"),
-                    'type'  => 'int'
-                ],
-                'maxlength' => [
-                    'label' => Horde_Form_Translation::t("Maximum length"),
-                    'type'  => 'int'
-                ]
-            ],
-        ];
+        $about = parent::about();
+        $about['name'] = Horde_Form_Translation::t("String list returning an array");
+        return $about;
     }
-
 }

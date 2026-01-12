@@ -1,15 +1,26 @@
 <?php
 namespace Horde\Form\V3;
+
 use Horde_Variables;
 use Horde_Form_Translation;
 
+/**
+ * TablesetVariable type for table set input fields.
+ *
+ * @property array $values The values for the table set
+ * @property array $header The headers for the table set
+ */
 class TablesetVariable extends BaseVariable
 {
     public $_values;
     public $_header;
 
     /**
-     *     function init($values, $header)
+     * The initialisation function for the tableset variable type.
+     *
+     * @param array $params Variable arguments:
+     *                      - $params[0]: array $values - The values for the table set.
+     *                      - $params[1]: array $header - The headers for the table set.
      */
     public function init(...$params)
     {
@@ -31,7 +42,6 @@ class TablesetVariable extends BaseVariable
         if (!isset($error)) {
             return true;
         }
-
         return $this->invalid('Invalid data submitted.');
     }
 
@@ -61,7 +71,7 @@ class TablesetVariable extends BaseVariable
                     'label' => Horde_Form_Translation::t("Headers"),
                     'type'  => 'stringlist'
                 ]
-            ],
+            ]
         ];
     }
 }

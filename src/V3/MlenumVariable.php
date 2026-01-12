@@ -1,17 +1,26 @@
 <?php
 namespace Horde\Form\V3;
+
 use Horde_Variables;
 use Horde_Form_Translation;
 
+/**
+ * MlenumVariable type for multi-level dropdown list fields.
+ *
+ * @property array $values Values to select from
+ * @property array $prompts Prompt texts for the dropdowns
+ */
 class MlenumVariable extends BaseVariable
 {
     public $_values;
     public $_prompts;
 
     /**
-     * Initialize an mlenum field
+     * Initialize a multi-level enum field.
      *
-     * function init($values, $prompts = null)
+     * @param array $params Variable arguments:
+     *                      - $params[0]: array $values - Values to select from (passed by reference)
+     *                      - $params[1]: bool|string|array|null $prompts - Prompt text. If true, uses default "-- select --" for both levels. If string, uses same prompt for both levels. If array, uses different prompts for each level. (default: null)
      */
     public function init(...$params)
     {
@@ -27,14 +36,10 @@ class MlenumVariable extends BaseVariable
         }
     }
 
-    /**
-     *     function onSubmit($vars)
-     */
     public function onSubmit($vars)
     {
         $varname = $this->getVarName();
         $value = $vars->get($varname);
-
         if ($value['1'] != $value['old']) {
             $this->form->setSubmitted(false);
         }
@@ -90,5 +95,4 @@ class MlenumVariable extends BaseVariable
             ]
         ];
     }
-
 }

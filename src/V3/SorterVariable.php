@@ -1,8 +1,17 @@
 <?php
 namespace Horde\Form\V3;
+
 use Horde_Variables;
 use Horde_Form_Translation;
 
+/**
+ * SorterVariable type for sort order selection fields.
+ *
+ * @property string $instance Unique instance identifier for multiple sorters on one page
+ * @property array $values Values available for sorting
+ * @property int $size Size of the select list
+ * @property string $header Header text for the select list
+ */
 class SorterVariable extends BaseVariable
 {
     public $_instance;
@@ -11,7 +20,12 @@ class SorterVariable extends BaseVariable
     public $_header;
 
     /**
-     *     function init($values, $size = 8, $header = '')
+     * Initialize a sorter field.
+     *
+     * @param array $params Variable arguments:
+     *                      - $params[0]: array $values - Values available for sorting
+     *                      - $params[1]: int $size - Size of the select list (default: 8)
+     *                      - $params[2]: string $header - Header text for the select list (default: '')
      */
     public function init(...$params)
     {
@@ -25,6 +39,7 @@ class SorterVariable extends BaseVariable
          * sorter so that multiple sorters can be used on one page. */
         $horde_sorter_instance++;
         $this->_instance = 'horde_sorter_' . $horde_sorter_instance;
+
         $this->_values = $values;
         $this->_size   = $size;
         $this->_header = $header;
@@ -65,6 +80,7 @@ class SorterVariable extends BaseVariable
         } else {
             $keys = explode("\t", $keys['array']);
         }
+
         foreach ($keys as $sl_key) {
             $html .= '<option value="' . $sl_key . '">' . htmlspecialchars($this->_values[$sl_key]) . '</option>';
         }
@@ -102,5 +118,4 @@ class SorterVariable extends BaseVariable
             ]
         ];
     }
-
 }

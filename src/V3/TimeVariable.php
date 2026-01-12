@@ -1,8 +1,12 @@
 <?php
 namespace Horde\Form\V3;
+
 use Horde_Variables;
 use Horde_Form_Translation;
 
+/**
+ * TimeVariable type for time input fields.
+ */
 class TimeVariable extends BaseVariable
 {
     public function isValid(Horde_Variables $vars, $value): bool
@@ -10,11 +14,9 @@ class TimeVariable extends BaseVariable
         if ($this->isRequired() && empty($value) && ((string) (float) $value !== $value)) {
             return $this->invalid('This field is required.');
         }
-
         if (empty($value) || preg_match('/^[0-2]?[0-9]:[0-5][0-9]$/', $value)) {
             return true;
         }
-
         return $this->invalid('This field may only contain numbers and the colon.');
     }
 
@@ -25,5 +27,4 @@ class TimeVariable extends BaseVariable
     {
         return [ 'name' => Horde_Form_Translation::t("Time") ];
     }
-
 }

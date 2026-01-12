@@ -1,17 +1,26 @@
 <?php
 namespace Horde\Form\V3;
+
 use Horde_Variables;
 use Horde_Form_Translation;
 
+/**
+ * SetVariable type for checkbox set fields.
+ *
+ * @property array $values Values available for selection
+ * @property bool $checkAll Show "check all" option
+ */
 class SetVariable extends BaseVariable
 {
     public $_values;
     public $_checkAll = false;
 
     /**
-     * Initialize a Set form type
+     * Initialize a set field.
      *
-     * function init($values, $checkAll = false)
+     * @param array $params Variable arguments:
+     *                      - $params[0]: array $values - Values available for selection
+     *                      - $params[1]: bool $checkAll - Show "check all" option (default: false)
      */
     public function init(...$params)
     {
@@ -32,7 +41,6 @@ class SetVariable extends BaseVariable
         }
 
         return true;
-
     }
 
     public function getValues(...$params): ?array
@@ -59,5 +67,4 @@ class SetVariable extends BaseVariable
             ]
         ];
     }
-
 }

@@ -1,13 +1,24 @@
 <?php
 namespace Horde\Form\V3;
+
 use Horde_Variables;
 use Horde_Form_Translation;
 use Horde_Themes;
 
+/**
+ * SoundVariable type for sound selection fields.
+ *
+ * @property array $sounds Available sounds for selection
+ */
 class SoundVariable extends BaseVariable
 {
     public $_sounds = [];
 
+    /**
+     * Initialize a sound selection field.
+     *
+     * @param array $params Variable arguments (none used, sounds are loaded from theme)
+     */
     public function init(...$params)
     {
         $this->_sounds = array_keys(Horde_Themes::soundList());
@@ -38,5 +49,4 @@ class SoundVariable extends BaseVariable
     {
         return [ 'name' => Horde_Form_Translation::t("Sound selection") ];
     }
-
 }

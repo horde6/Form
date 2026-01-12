@@ -1,8 +1,17 @@
 <?php
 namespace Horde\Form\V3;
+
 use Horde_Variables;
 use Horde_Form_Translation;
 
+/**
+ * MatrixVariable type for field matrix input.
+ *
+ * @property array $cols A list of column headers
+ * @property array $rows A hash with row IDs as the keys and row labels as the values
+ * @property array $matrix A two dimensional hash with the field values
+ * @property bool|array $new_input If true, a free text field to add a new row is displayed on the top, a select box if this parameter is a value
+ */
 class MatrixVariable extends BaseVariable
 {
     public $_cols;
@@ -11,7 +20,7 @@ class MatrixVariable extends BaseVariable
     public $_new_input;
 
     /**
-     * Initializes the variable.
+     * Initialize a field matrix.
      *
      * Example:
      * <code>
@@ -22,16 +31,12 @@ class MatrixVariable extends BaseVariable
      *            array(fasle, true, false)),
      *      array('Row 4', 'Row 5'));
      * </code>
-     * function init($cols, $rows = array(), $matrix = array(), $new_input = false)
      *
-     * @param array $cols               A list of column headers.
-     * @param array $rows               A hash with row IDs as the keys and row
-     *                                  labels as the values.
-     * @param array $matrix             A two dimensional hash with the field
-     *                                  values.
-     * @param bool|array $new_input  If true, a free text field to add a new
-     *                                  row is displayed on the top, a select
-     *                                  box if this parameter is a value.
+     * @param array $params Variable arguments:
+     *                      - $params[0]: array $cols - A list of column headers (default: [])
+     *                      - $params[1]: array $rows - A hash with row IDs as the keys and row labels as the values (default: [])
+     *                      - $params[2]: array $matrix - A two dimensional hash with the field values (default: [])
+     *                      - $params[3]: bool|array $new_input - If true, a free text field to add a new row is displayed on the top, a select box if this parameter is a value (default: false)
      */
     public function init(...$params)
     {
@@ -50,14 +55,17 @@ class MatrixVariable extends BaseVariable
     {
         return $this->_cols;
     }
+
     public function getRows()
     {
         return $this->_rows;
     }
+
     public function getMatrix()
     {
         return $this->_matrix;
     }
+
     public function getNewInput()
     {
         return $this->_new_input;
@@ -76,6 +84,9 @@ class MatrixVariable extends BaseVariable
         return $values['r'] ?? [];
     }
 
+    /**
+     * Return info about field type.
+     */
     public function about(): array
     {
         return [
@@ -100,5 +111,4 @@ class MatrixVariable extends BaseVariable
             ]
         ];
     }
-
 }
