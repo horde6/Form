@@ -1353,7 +1353,7 @@ class Horde_Form_Type_image extends Horde_Form_Type
 
                     /* Set the type. */
                     $keys_path = array_merge([$base, 'type'], $keys);
-                    Horde_Array::getElement($_FILES, $keys_path, $type);
+                    Horde_Array::setElement($_FILES, $keys_path, $type);
                 } else {
                     /* Work out the type from the file name. */
                     $type = Horde_Mime_Magic::filenameToMime($_FILES[$field]['name']);
