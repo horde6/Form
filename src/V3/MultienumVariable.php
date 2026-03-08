@@ -34,6 +34,18 @@ class MultienumVariable extends EnumVariable
         parent::init($values);
     }
 
+    /**
+     * Validates multiple selection field value.
+     *
+     * Accepts arrays (multiple selections) or single values. Each selected
+     * value must exist in the configured values list. Required fields must
+     * have at least one selection. Recursively validates array values.
+     *
+     * @param Horde_Variables $vars  Form variables
+     * @param mixed $value           Single value or array of values to validate
+     *
+     * @return bool  True if all values valid, false with error message if invalid
+     */
     public function isValid(Horde_Variables $vars, $value): bool
     {
         if (is_array($value)) {

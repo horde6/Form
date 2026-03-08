@@ -10,6 +10,17 @@ use Horde_Form_Translation;
  */
 class BooleanVariable extends BaseVariable
 {
+    /**
+     * Validates boolean field value.
+     *
+     * Boolean fields always validate successfully as they can only be
+     * checked or unchecked (on or off). No validation errors are possible.
+     *
+     * @param Horde_Variables $vars  Form variables
+     * @param mixed $value           Field value to validate
+     *
+     * @return bool  Always returns true
+     */
     public function isValid(Horde_Variables $vars, $value): bool
     {
         return true;

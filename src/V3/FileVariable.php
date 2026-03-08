@@ -11,6 +11,18 @@ use Horde_Browser_Exception;
  */
 class FileVariable extends BaseVariable
 {
+    /**
+     * Validates file upload field.
+     *
+     * Checks if a file was successfully uploaded using the browser's upload
+     * detection. Required fields must have a file uploaded. Optional fields
+     * pass validation even without a file.
+     *
+     * @param Horde_Variables $vars  Form variables
+     * @param mixed $value           Field value (not used; checks $_FILES directly)
+     *
+     * @return bool  True if valid, false with error message set if required file missing
+     */
     public function isValid(Horde_Variables $vars, $value): bool
     {
         if ($this->isRequired()) {
