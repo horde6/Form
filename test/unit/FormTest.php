@@ -33,6 +33,44 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(Horde_Form::class)]
 class FormTest extends TestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        // Mock the global $injector for tests that use form tokens
+        if (!isset($GLOBALS['injector'])) {
+            $mockTokenSource = new class {
+                public function verify($token) {
+                    return true;
+                }
+            };
+
+            $GLOBALS['injector'] = new class($mockTokenSource) {
+                private $tokenSource;
+
+                public function __construct($tokenSource) {
+                    $this->tokenSource = $tokenSource;
+                }
+
+                public function getInstance($className) {
+                    if ($className === 'Horde_Token') {
+                        return $this->tokenSource;
+                    }
+                    return new \stdClass();
+                }
+            };
+        }
+
+        // Mock the global $session for tests that use form secrets
+        if (!isset($GLOBALS['session'])) {
+            $GLOBALS['session'] = new class {
+                public function get($app, $key) {
+                    return null;
+                }
+            };
+        }
+    }
+
     // ========================================================================
     // Constructor Tests
     // ========================================================================
