@@ -76,6 +76,8 @@ class UpdatefieldAction extends BaseAction
      * @param mixed $renderer  The form renderer
      * @param string $varname  Variable name this action applies to
      * @return string  JavaScript code
+      *
+      * @api
      */
     public function getActionScript(\Horde\Form\Form $form, $renderer, string $varname): string
     {
@@ -89,6 +91,8 @@ class UpdatefieldAction extends BaseAction
      * @param mixed $sourceVal  The source value
      * @param int|null $index  Array index
      * @param bool $arrayVal  Whether dealing with array values
+      *
+      * @api
      */
     public function setValues(\Horde_Variables $vars, $sourceVal, ?int $index = null, bool $arrayVal = false): void
     {
@@ -99,6 +103,8 @@ class UpdatefieldAction extends BaseAction
      * Print JavaScript code for this action.
      *
      * @return string  JavaScript code
+      *
+      * @api
      */
     public function printJavaScript(): string
     {

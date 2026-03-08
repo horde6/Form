@@ -29,6 +29,8 @@ class DatetimeVariable extends BaseVariable
      *                      - $params[3]: string|null $format_in - The format to use when sending the date for storage. Defaults to Unix epoch. Similar to the strftime() function. (default: null)
      *                      - $params[4]: string $format_out - The format to use when displaying the date. Similar to the strftime() function. (default: '%x')
      *                      - $params[5]: bool $show_seconds - Include a form input for seconds (default: false)
+      *
+      * @api
      */
     public function init(...$params)
     {
@@ -160,6 +162,8 @@ class DatetimeVariable extends BaseVariable
 
     /**
      * Return info about field type.
+      *
+      * @api
      */
     public function about(): array
     {

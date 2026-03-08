@@ -20,6 +20,8 @@ class BooleanVariable extends BaseVariable
      * @param mixed $value           Field value to validate
      *
      * @return bool  Always returns true
+      *
+      * @api
      */
     public function isValid(Horde_Variables $vars, $value): bool
     {
@@ -34,6 +36,8 @@ class BooleanVariable extends BaseVariable
 
     /**
      * Return info about field type.
+      *
+      * @api
      */
     public function about(): array
     {

@@ -23,6 +23,8 @@ class AddresslinkVariable extends AddressVariable
 
     /**
      * Return info about field type.
+      *
+      * @api
      */
     public function about(): array
     {

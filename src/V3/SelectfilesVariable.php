@@ -50,6 +50,8 @@ class SelectfilesVariable extends BaseVariable
      *                      - $params[1]: string|null $link_text - The text to use in the link (default: "Select Files")
      *                      - $params[2]: string $link_style - The style to use for the link (default: '')
      *                      - $params[3]: bool $icon - Create the link with an icon instead of text (default: false)
+      *
+      * @api
      */
     public function init(...$params)
     {
@@ -81,6 +83,8 @@ class SelectfilesVariable extends BaseVariable
 
     /**
      * Return info about field type.
+      *
+      * @api
      */
     public function about(): array
     {

@@ -26,6 +26,8 @@ class SorterVariable extends BaseVariable
      *                      - $params[0]: array $values - Values available for sorting
      *                      - $params[1]: int $size - Size of the select list (default: 8)
      *                      - $params[2]: string $header - Header text for the select list (default: '')
+      *
+      * @api
      */
     public function init(...$params)
     {
@@ -97,6 +99,8 @@ class SorterVariable extends BaseVariable
 
     /**
      * Return info about field type.
+      *
+      * @api
      */
     public function about(): array
     {

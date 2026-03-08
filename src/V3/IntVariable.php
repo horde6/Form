@@ -19,6 +19,8 @@ class IntVariable extends BaseVariable
      * @param mixed $value           Field value to validate
      *
      * @return bool  True if valid, false with error message set if invalid
+      *
+      * @api
      */
     public function isValid(Horde_Variables $vars, $value): bool
     {
@@ -35,6 +37,8 @@ class IntVariable extends BaseVariable
 
     /**
      * Return info about field type.
+      *
+      * @api
      */
     public function about(): array
     {

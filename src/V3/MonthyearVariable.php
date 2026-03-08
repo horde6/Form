@@ -21,6 +21,8 @@ class MonthyearVariable extends BaseVariable
      * @param array $params Variable arguments:
      *                      - $params[0]: int|null $start_year - The first available year for input (default: 1920)
      *                      - $params[1]: int|null $end_year - The last available year for input (default: current year)
+      *
+      * @api
      */
     public function init(...$params)
     {
@@ -63,6 +65,8 @@ class MonthyearVariable extends BaseVariable
 
     /**
      * Return info about field type.
+      *
+      * @api
      */
     public function about(): array
     {

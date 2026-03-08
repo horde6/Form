@@ -22,6 +22,8 @@ class FileVariable extends BaseVariable
      * @param mixed $value           Field value (not used; checks $_FILES directly)
      *
      * @return bool  True if valid, false with error message set if required file missing
+      *
+      * @api
      */
     public function isValid(Horde_Variables $vars, $value): bool
     {
@@ -58,6 +60,8 @@ class FileVariable extends BaseVariable
 
     /**
      * Return info about field type.
+      *
+      * @api
      */
     public function about(): array
     {

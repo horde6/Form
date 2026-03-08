@@ -22,6 +22,8 @@ class EnumVariable extends BaseVariable
      * @param array $params Variable arguments:
      *                      - $params[0]: array $values - A hash map where the key is the internal 'value' to process and the value is the caption presented to the user
      *                      - $params[1]: string|bool $prompt - A null value text to prompt user selecting a value. Use a default if boolean true, else use the supplied string. No prompt on false.
+      *
+      * @api
      */
     public function init(...$params)
     {
@@ -64,6 +66,8 @@ class EnumVariable extends BaseVariable
 
     /**
      * Return info about field type.
+      *
+      * @api
      */
     public function about(): array
     {

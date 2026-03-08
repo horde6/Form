@@ -20,6 +20,8 @@ class DateVariable extends BaseVariable
      *
      * @param array $params Variable arguments:
      *                      - $params[0]: string $format - The date format string (default: '%a %d %B')
+      *
+      * @api
      */
     public function init(...$params)
     {
@@ -93,6 +95,8 @@ class DateVariable extends BaseVariable
 
     /**
      * Return info about field type.
+      *
+      * @api
      */
     public function about(): array
     {

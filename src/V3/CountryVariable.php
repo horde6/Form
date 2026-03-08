@@ -18,6 +18,8 @@ class CountryVariable extends EnumVariable
      *
      * @param array $params Variable arguments:
      *                      - $params[0]: string|bool|null $prompt - Prompt text for selection
+      *
+      * @api
      */
     public function init(...$params)
     {
@@ -28,6 +30,8 @@ class CountryVariable extends EnumVariable
 
     /**
      * Return info about field type.
+      *
+      * @api
      */
     public function about(): array
     {

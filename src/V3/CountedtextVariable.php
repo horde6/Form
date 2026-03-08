@@ -27,6 +27,8 @@ class CountedtextVariable extends LongtextVariable
      *                      - $params[0]: int $rows - Number of rows (default: 8, from parent)
      *                      - $params[1]: int $cols - Number of columns (default: 80, from parent)
      *                      - $params[2]: int $chars - Maximum number of characters (default: 1000)
+      *
+      * @api
      */
     public function init(...$params)
     {
@@ -56,6 +58,8 @@ class CountedtextVariable extends LongtextVariable
 
     /**
      * Return info about field type.
+      *
+      * @api
      */
     public function about(): array
     {

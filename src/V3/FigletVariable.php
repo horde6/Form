@@ -22,6 +22,8 @@ class FigletVariable extends BaseVariable
      * @param array $params Variable arguments:
      *                      - $params[0]: string $text - The CAPTCHA text
      *                      - $params[1]: string $font - The Figlet font to use
+      *
+      * @api
      */
     public function init(...$params)
     {
@@ -54,6 +56,8 @@ class FigletVariable extends BaseVariable
 
     /**
      * Return info about field type.
+      *
+      * @api
      */
     public function about(): array
     {

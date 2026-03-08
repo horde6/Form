@@ -105,6 +105,8 @@ abstract class BaseRenderer implements Renderer
      * @param ErrorRenderer|null $errorRenderer  Error renderer
      * @param AssetManager|null $assetManager  Asset manager
      * @param array<string, mixed> $config  Configuration options
+      *
+      * @api
      */
     public function __construct(
         ?ControlRenderer $controlRenderer = null,
@@ -169,6 +171,8 @@ abstract class BaseRenderer implements Renderer
      * Render the complete form.
      *
      * Template method - defines the rendering flow.
+      *
+      * @api
      */
     public function render(Form $form, string $action = '', string $method = 'post'): string
     {
@@ -233,6 +237,8 @@ abstract class BaseRenderer implements Renderer
      * @param array<Variable> $variables  Variables to render
      * @param Form $form  Parent form
      * @return string  Rendered variables
+      *
+      * @internal
      */
     protected function renderVariables(array $variables, Form $form): string
     {
@@ -245,6 +251,8 @@ abstract class BaseRenderer implements Renderer
 
     /**
      * Render a single variable.
+      *
+      * @api
      */
     public function renderVariable(Variable $variable, Form $form): string
     {
@@ -281,6 +289,8 @@ abstract class BaseRenderer implements Renderer
 
     /**
      * Render a form section.
+      *
+      * @api
      */
     public function renderSection(string|int $sectionName, array $variables, Form $form): string
     {
@@ -299,6 +309,8 @@ abstract class BaseRenderer implements Renderer
 
     /**
      * Render validation errors.
+      *
+      * @api
      */
     public function renderErrors(Form $form): string
     {
@@ -312,6 +324,8 @@ abstract class BaseRenderer implements Renderer
 
     /**
      * Render hidden fields.
+      *
+      * @api
      */
     public function renderHidden(Form $form): string
     {
@@ -345,6 +359,8 @@ abstract class BaseRenderer implements Renderer
      * Get CSS class for current row (for striped rows).
      *
      * @return string  CSS class
+      *
+      * @internal
      */
     protected function getRowClass(): string
     {
@@ -362,6 +378,8 @@ abstract class BaseRenderer implements Renderer
      * @param array<string, mixed> $attrs  Attributes (null values are skipped)
      * @param string|null $content  Tag content (null = self-closing)
      * @return string  HTML tag
+      *
+      * @internal
      */
     protected function buildTag(string $tag, array $attrs = [], ?string $content = null): string
     {
@@ -387,6 +405,8 @@ abstract class BaseRenderer implements Renderer
 
     /**
      * Set whether to show form header.
+      *
+      * @api
      */
     public function setShowHeader(bool $show): void
     {
@@ -395,6 +415,8 @@ abstract class BaseRenderer implements Renderer
 
     /**
      * Set required field marker.
+      *
+      * @api
      */
     public function setRequiredMarker(string $marker): void
     {
@@ -403,6 +425,8 @@ abstract class BaseRenderer implements Renderer
 
     /**
      * Set help text marker.
+      *
+      * @api
      */
     public function setHelpMarker(string $marker): void
     {
@@ -411,6 +435,8 @@ abstract class BaseRenderer implements Renderer
 
     /**
      * Set whether to encode form title.
+      *
+      * @api
      */
     public function setEncodeTitle(bool $encode): void
     {
@@ -419,6 +445,8 @@ abstract class BaseRenderer implements Renderer
 
     /**
      * Get control renderer.
+      *
+      * @api
      */
     public function getControlRenderer(): ControlRenderer
     {
@@ -427,6 +455,8 @@ abstract class BaseRenderer implements Renderer
 
     /**
      * Get layout strategy.
+      *
+      * @api
      */
     public function getLayoutStrategy(): LayoutStrategy
     {
@@ -435,6 +465,8 @@ abstract class BaseRenderer implements Renderer
 
     /**
      * Get error renderer.
+      *
+      * @api
      */
     public function getErrorRenderer(): ErrorRenderer
     {
@@ -443,6 +475,8 @@ abstract class BaseRenderer implements Renderer
 
     /**
      * Get asset manager.
+      *
+      * @api
      */
     public function getAssetManager(): AssetManager
     {

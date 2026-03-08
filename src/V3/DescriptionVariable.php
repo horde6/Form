@@ -16,6 +16,8 @@ class DescriptionVariable extends BaseVariable
 
     /**
      * Return info about field type.
+      *
+      * @api
      */
     public function about(): array
     {

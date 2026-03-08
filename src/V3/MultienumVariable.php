@@ -21,6 +21,8 @@ class MultienumVariable extends EnumVariable
      * @param array $params Variable arguments:
      *                      - $params[0]: array $values - A hash map where the key is the internal 'value' to process and the value is the caption presented to the user
      *                      - $params[1]: int|null $size - The number of rows the multienum should display before scrolling (optional)
+      *
+      * @api
      */
     public function init(...$params)
     {
@@ -45,6 +47,8 @@ class MultienumVariable extends EnumVariable
      * @param mixed $value           Single value or array of values to validate
      *
      * @return bool  True if all values valid, false with error message if invalid
+      *
+      * @api
      */
     public function isValid(Horde_Variables $vars, $value): bool
     {
@@ -73,6 +77,8 @@ class MultienumVariable extends EnumVariable
 
     /**
      * Return info about field type.
+      *
+      * @api
      */
     public function about(): array
     {
