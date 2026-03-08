@@ -429,8 +429,12 @@ class BaseVariable implements Variable
      * @param Horde_Variables $vars  The variables object
      * @param mixed ...$args  Ignored (for interface compatibility)
      * @return mixed  The variable value
+     * @deprecated The second parameter ($info) is deprecated/ignored
      */
     public function getInfo($vars, ...$args) {
+        if (count($args) > 0) {
+            self::Deprecated('Warning: The second ($info) parameter in getInfo() is deprecated/ignored');
+        }
         return $this->getInfoV3($vars);
     }
 
