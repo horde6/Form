@@ -115,7 +115,7 @@ class TextTypeTest extends TestCase
     public function testIsValidReturnsFalseWhenExceedsMaxLength(): void
     {
         $type = new Horde_Form_Type_text();
-        $type->init(40, 10);  // Max 10 characters
+        $type->init('', 40, 10);  // regex='', size=40, maxlength=10
 
         $var = $this->createMockVariable(false);
         $vars = new Horde_Variables();
@@ -128,7 +128,7 @@ class TextTypeTest extends TestCase
     public function testIsValidReturnsTrueWhenWithinMaxLength(): void
     {
         $type = new Horde_Form_Type_text();
-        $type->init(40, 20);  // Max 20 characters
+        $type->init('', 40, 20);  // regex='', size=40, maxlength=20
 
         $var = $this->createMockVariable(false);
         $vars = new Horde_Variables();
