@@ -225,6 +225,11 @@ class BaseVariable implements Variable
 
     /**
      * Disables this variable.
+     *
+     * Disabled fields are not submitted by browsers and are skipped
+     * during form processing and validation.
+     *
+     * @return void
      */
     public function disable()
     {
@@ -559,7 +564,19 @@ class BaseVariable implements Variable
 
     // Former Type-related methods
 
-    //TODO: Does not belong here
+    /**
+     * Logs a deprecation warning message.
+     *
+     * Helper method for logging deprecation warnings during the lib/ to V3
+     * migration. Includes file and line number from the call stack.
+     *
+     * @param string $message  The deprecation warning message
+     * @param int $level       Stack trace depth (default: 2)
+     *
+     * @return void
+     *
+     * @todo This method should be removed after V3 transition is complete
+     */
     public static function Deprecated($message, $level = 2) {
         $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, $level + 1);
         if (isset($trace[$level])) {
@@ -570,6 +587,16 @@ class BaseVariable implements Variable
         Horde::log($message, 'WARN');
     }
 
+    /**
+     * Gets internal property value by name.
+     *
+     * Accesses internal properties using underscore-prefixed naming convention
+     * (e.g., 'size' accesses $this->_size).
+     *
+     * @param string $property  Property name (without underscore prefix)
+     *
+     * @return mixed  Property value, or null if not set
+     */
     public function getProperty($property)
     {
         $prop = '_' . $property;
@@ -577,7 +604,15 @@ class BaseVariable implements Variable
     }
 
     /**
-     * Not part of the interface, implementation detail
+     * Magic getter for accessing internal properties.
+     *
+     * Provides property access using underscore-prefixed naming convention.
+     * Special handling for deprecated 'type' property which triggers a
+     * deprecation warning.
+     *
+     * @param string $property  Property name
+     *
+     * @return mixed  Property value, or $this for deprecated 'type' property
      */
     public function __get($property)
     {
@@ -590,6 +625,17 @@ class BaseVariable implements Variable
         return $this->getProperty($property);
     }
 
+    /**
+     * Sets internal property value by name.
+     *
+     * Sets internal properties using underscore-prefixed naming convention
+     * (e.g., 'size' sets $this->_size).
+     *
+     * @param string $property  Property name (without underscore prefix)
+     * @param mixed $value      Value to set
+     *
+     * @return void
+     */
     public function setProperty($property, $value)
     {
         $prop = '_' . $property;
@@ -597,7 +643,14 @@ class BaseVariable implements Variable
     }
 
     /**
-     * Not part of the interface, implementation detail
+     * Magic setter for internal properties.
+     *
+     * Delegates to setProperty() for underscore-prefixed property access.
+     *
+     * @param string $property  Property name
+     * @param mixed $value      Value to set
+     *
+     * @return void
      */
     public function __set($property, $value)
     {
@@ -609,6 +662,17 @@ class BaseVariable implements Variable
      */
     public function init(...$params) {}
 
+    /**
+     * Hook called on form submission.
+     *
+     * Override this method in subclasses to perform actions when the form
+     * containing this variable is submitted. This is called after validation
+     * but before data processing.
+     *
+     * @param Horde_Variables $vars  Submitted form variables
+     *
+     * @return void
+     */
     public function onSubmit($vars) {}
 
     /**
