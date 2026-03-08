@@ -64,6 +64,8 @@ class ConditionalenableAction extends BaseAction
      * @param mixed $renderer  The form renderer
      * @param string $varname  Variable name this action applies to
      * @return string  JavaScript code
+      *
+      * @api
      */
     public function getActionScript(\Horde\Form\Form $form, $renderer, string $varname): string
     {

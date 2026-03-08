@@ -21,6 +21,8 @@ class MlenumVariable extends BaseVariable
      * @param array $params Variable arguments:
      *                      - $params[0]: array $values - Values to select from (passed by reference)
      *                      - $params[1]: bool|string|array|null $prompts - Prompt text. If true, uses default "-- select --" for both levels. If string, uses same prompt for both levels. If array, uses different prompts for each level. (default: null)
+      *
+      * @api
      */
     public function init(...$params)
     {
@@ -78,6 +80,8 @@ class MlenumVariable extends BaseVariable
 
     /**
      * Return info about field type.
+      *
+      * @api
      */
     public function about(): array
     {

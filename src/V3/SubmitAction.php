@@ -51,6 +51,8 @@ class SubmitAction extends BaseAction
      * @param mixed $renderer  The form renderer
      * @param string $varname  Variable name
      * @return string  JavaScript code
+      *
+      * @api
      */
     public function getActionScript(\Horde\Form\Form $form, $renderer, string $varname): string
     {

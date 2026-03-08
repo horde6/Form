@@ -25,6 +25,8 @@ class TextVariable extends BaseVariable
      *                      - $params[0]: string $regex - Any valid PHP PCRE pattern syntax that needs to be matched for the field to be considered valid. If left empty validity will be checked only for required fields whether they are empty or not. If using this regex test it is advisable to enter a description for this field to warn the user what is expected, as the generated error message is quite generic and will not give any indication where the regex failed.
      *                      - $params[1]: int $size - The size of the input field.
      *                      - $params[2]: int|null $maxlength - The max number of characters.
+      *
+      * @api
      */
     public function init(...$params)
     {
@@ -63,6 +65,8 @@ class TextVariable extends BaseVariable
 
     /**
      * Return info about field type.
+      *
+      * @api
      */
     public function about(): array
     {

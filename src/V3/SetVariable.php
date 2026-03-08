@@ -21,6 +21,8 @@ class SetVariable extends BaseVariable
      * @param array $params Variable arguments:
      *                      - $params[0]: array $values - Values available for selection
      *                      - $params[1]: bool $checkAll - Show "check all" option (default: false)
+      *
+      * @api
      */
     public function init(...$params)
     {
@@ -50,6 +52,8 @@ class SetVariable extends BaseVariable
 
     /**
      * Return info about field type.
+      *
+      * @api
      */
     public function about(): array
     {

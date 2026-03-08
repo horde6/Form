@@ -76,6 +76,8 @@ class EmailVariable extends BaseVariable
      *                      - $params[3]: string|null $link_name - The name to use when linking to the compose page (default: null)
      *                      - $params[4]: string $delimiters - Character to split multiple addresses with (default: ',')
      *                      - $params[5]: int|null $size - The size of the input field (default: null)
+      *
+      * @api
      */
     public function init(...$params)
     {
@@ -88,6 +90,8 @@ class EmailVariable extends BaseVariable
     }
 
     /**
+      *
+      * @api
      */
     public function isValid(Horde_Variables $vars, $value): bool
     {
@@ -132,6 +136,8 @@ class EmailVariable extends BaseVariable
      * @param string $string  The RFC 822 formatted email address string
      *
      * @return array  Array of individual email addresses (strings)
+      *
+      * @api
      */
     public function splitEmailAddresses($string)
     {
@@ -205,6 +211,8 @@ class EmailVariable extends BaseVariable
      * @param string $email  An individual email address to validate
      *
      * @return bool  True if email is valid, false otherwise
+      *
+      * @api
      */
     public function validateEmailAddress($email)
     {
@@ -225,6 +233,8 @@ class EmailVariable extends BaseVariable
      * @param string $email  An individual email address to validate
      *
      * @return bool  True if SMTP server accepts the address, false otherwise
+      *
+      * @api
      */
     public function validateEmailAddressSmtp($email)
     {
@@ -304,6 +314,8 @@ class EmailVariable extends BaseVariable
      * @param string $email  Email address to validate
      *
      * @return int  1 if valid RFC 3696 address, 0 otherwise
+      *
+      * @internal
      */
     protected function _isRfc3696ValidEmailAddress($email)
     {
@@ -680,6 +692,8 @@ class EmailVariable extends BaseVariable
      * @param string $replace  Replacement string for matched comments (default: empty string)
      *
      * @return string  Email address with all matching comments removed
+      *
+      * @internal
      */
     protected function _rfc3696StripComments($comment, $email, $replace = '')
     {
@@ -694,6 +708,8 @@ class EmailVariable extends BaseVariable
 
     /**
      * Return info about field type.
+      *
+      * @api
      */
     public function about(): array
     {

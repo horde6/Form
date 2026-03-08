@@ -49,6 +49,8 @@ interface Action
      * Get action trigger events.
      *
      * @return array<string>|null  Event names (e.g., ['onload', 'onchange']) or null
+      *
+      * @api
      */
     public function getTrigger(): ?array;
 
@@ -56,6 +58,8 @@ interface Action
      * Get action ID.
      *
      * @return string  Unique action identifier
+      *
+      * @api
      */
     public function id(): string;
 
@@ -66,6 +70,8 @@ interface Action
      * @param mixed $renderer  The form renderer
      * @param string $varname  Variable name this action applies to
      * @return string  JavaScript code
+      *
+      * @api
      */
     public function getActionScript(Form $form, $renderer, string $varname): string;
 
@@ -73,6 +79,8 @@ interface Action
      * Print JavaScript for this action.
      *
      * Some actions may need to output JavaScript directly.
+      *
+      * @api
      */
     public function printJavaScript(): void;
 
@@ -80,6 +88,8 @@ interface Action
      * Get target field name for this action.
      *
      * @return string|null  Target field name or null
+      *
+      * @api
      */
     public function getTarget(): ?string;
 
@@ -90,6 +100,8 @@ interface Action
      * @param mixed $sourceVal  Source value
      * @param int|null $index  Array index (if applicable)
      * @param bool $arrayVal  Whether value is an array
+      *
+      * @api
      */
     public function setValues($vars, $sourceVal, ?int $index = null, bool $arrayVal = false): void;
 }

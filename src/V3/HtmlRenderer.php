@@ -68,6 +68,8 @@ class HtmlRenderer extends BaseRenderer
      * @param ErrorRenderer|null $errorRenderer  Error renderer
      * @param AssetManager|null $assetManager  Asset manager
      * @param array<string, mixed> $config  Configuration options
+      *
+      * @api
      */
     public function __construct(
         ?ControlRenderer $controlRenderer = null,
@@ -93,6 +95,8 @@ class HtmlRenderer extends BaseRenderer
 
     /**
      * Create default control renderer.
+      *
+      * @internal
      */
     protected function createDefaultControlRenderer(): ControlRenderer
     {
@@ -107,6 +111,8 @@ class HtmlRenderer extends BaseRenderer
 
     /**
      * Create default layout strategy.
+      *
+      * @internal
      */
     protected function createDefaultLayoutStrategy(): LayoutStrategy
     {
@@ -115,6 +121,8 @@ class HtmlRenderer extends BaseRenderer
 
     /**
      * Create default error renderer.
+      *
+      * @internal
      */
     protected function createDefaultErrorRenderer(): ErrorRenderer
     {
@@ -123,6 +131,8 @@ class HtmlRenderer extends BaseRenderer
 
     /**
      * Create default asset manager.
+      *
+      * @internal
      */
     protected function createDefaultAssetManager(): AssetManager
     {
@@ -131,6 +141,8 @@ class HtmlRenderer extends BaseRenderer
 
     /**
      * Render form opening tag.
+      *
+      * @api
      */
     public function renderOpen(\Horde\Form\Form $form, string $action, string $method): string
     {
@@ -153,6 +165,8 @@ class HtmlRenderer extends BaseRenderer
 
     /**
      * Render form closing tag.
+      *
+      * @api
      */
     public function renderClose(): string
     {
@@ -161,6 +175,8 @@ class HtmlRenderer extends BaseRenderer
 
     /**
      * Render form header.
+      *
+      * @api
      */
     public function renderHeader(\Horde\Form\Form $form): string
     {
@@ -189,6 +205,8 @@ class HtmlRenderer extends BaseRenderer
 
     /**
      * Render form buttons.
+      *
+      * @api
      */
     public function renderButtons(\Horde\Form\Form $form): string
     {
@@ -211,6 +229,8 @@ class HtmlRenderer extends BaseRenderer
      * Set rendering mode.
      *
      * @param string $mode  Mode: active, inactive, print
+      *
+      * @api
      */
     public function setMode(string $mode): void
     {
@@ -219,6 +239,8 @@ class HtmlRenderer extends BaseRenderer
 
     /**
      * Get rendering mode.
+      *
+      * @api
      */
     public function getMode(): string
     {
@@ -229,6 +251,8 @@ class HtmlRenderer extends BaseRenderer
      * Set control rendering mode.
      *
      * @param string $mode  Control mode: modern, legacy, fallback
+      *
+      * @api
      */
     public function setControlMode(string $mode): void
     {
@@ -244,6 +268,8 @@ class HtmlRenderer extends BaseRenderer
      * Get control rendering mode.
      *
      * @return string  Control mode
+      *
+      * @api
      */
     public function getControlMode(): string
     {

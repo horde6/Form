@@ -40,6 +40,8 @@ class PgpVariable extends LongtextVariable
      *                      - $params[1]: string|null $temp_dir - A temporary directory
      *                      - $params[2]: int $rows - Number of rows (default: 8, from parent)
      *                      - $params[3]: int $cols - Number of columns (default: 80, from parent)
+      *
+      * @api
      */
     public function init(...$params)
     {
@@ -65,6 +67,8 @@ class PgpVariable extends LongtextVariable
 
     /**
      * Return info about field type.
+      *
+      * @api
      */
     public function about(): array
     {

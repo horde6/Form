@@ -24,6 +24,8 @@ class LinkVariable extends BaseVariable
      *
      * @param array $params Variable arguments:
      *                      - $params[0]: array|null $values - List of hashes containing link parameters. Possible keys: 'url', 'text', 'target', 'onclick', 'title', 'accesskey', 'class' (default: null)
+      *
+      * @api
      */
     public function init(...$params)
     {
@@ -37,6 +39,8 @@ class LinkVariable extends BaseVariable
 
     /**
      * Return info about field type.
+      *
+      * @api
      */
     public function about(): array
     {

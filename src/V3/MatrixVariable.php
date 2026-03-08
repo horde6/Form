@@ -37,6 +37,8 @@ class MatrixVariable extends BaseVariable
      *                      - $params[1]: array $rows - A hash with row IDs as the keys and row labels as the values (default: [])
      *                      - $params[2]: array $matrix - A two dimensional hash with the field values (default: [])
      *                      - $params[3]: bool|array $new_input - If true, a free text field to add a new row is displayed on the top, a select box if this parameter is a value (default: false)
+      *
+      * @api
      */
     public function init(...$params)
     {
@@ -86,6 +88,8 @@ class MatrixVariable extends BaseVariable
 
     /**
      * Return info about field type.
+      *
+      * @api
      */
     public function about(): array
     {

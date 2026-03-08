@@ -14,6 +14,8 @@ class CaptchaVariable extends FigletVariable
 {
     /**
      * Return info about field type.
+      *
+      * @api
      */
     public function about(): array
     {

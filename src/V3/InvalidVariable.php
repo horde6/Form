@@ -16,6 +16,8 @@ class InvalidVariable extends BaseVariable
      *
      * @param array $params Variable arguments:
      *                      - $params[0]: string $message - The error message to display (default: '')
+      *
+      * @api
      */
     public function init(...$params)
     {
@@ -29,6 +31,8 @@ class InvalidVariable extends BaseVariable
 
     /**
      * Return info about field type.
+      *
+      * @api
      */
     public function about(): array
     {

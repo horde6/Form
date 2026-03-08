@@ -19,6 +19,8 @@ class NumberVariable extends BaseVariable
      *
      * @param array $params Variable arguments:
      *                      - $params[0]: int|null $fraction - Maximum number of decimal places allowed (default: null, unlimited)
+      *
+      * @api
      */
     public function init(...$params)
     {
@@ -95,6 +97,8 @@ class NumberVariable extends BaseVariable
 
     /**
      * Return info about field type.
+      *
+      * @api
      */
     public function about(): array
     {

@@ -17,6 +17,8 @@ class RadioVariable extends EnumVariable
 
     /**
      * Return info about field type.
+      *
+      * @api
      */
     public function about(): array
     {
