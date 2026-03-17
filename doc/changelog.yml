@@ -1,4 +1,21 @@
 ---
+3.0.0-beta6:
+  api: 3.0.0-beta6
+  state:
+    release: beta
+    api: beta
+  date: 2026-03-17
+  license:
+    identifier: LGPL-2.1-only
+    uri: https://spdx.org/licenses/LGPL-2.1-only.html
+  notes: |-
+    docs(upgrading): Script based adding of phpdoc references between lib/ code and src/V3/ code
+    Merge pull request #22 from horde/feat/issue-19-baseform-implementation
+    chore(PR#22): Fix Merge conflict.
+    fix: More security casting
+    test: Reduce reliance on real externals in unit tests and prefer named parameters
+    fix: cast to string explicitly.
+    fix: Rely on new Exception class pear stub
 3.0.0-beta5:
   api: 3.0.0-beta5
   state:
