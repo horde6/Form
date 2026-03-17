@@ -192,7 +192,7 @@ class Horde_Form_Variable
      */
     public function setFormOb($form)
     {
-        $this->form = &$form;
+        $this->form = $form;
     }
 
     /**
@@ -303,7 +303,7 @@ class Horde_Form_Variable
      * @return Horde_Form_Type  This variable's {@link Horde_Form_Type}
      *                          instance.
      */
-    public function &getType()
+    public function getType()
     {
         return $this->type;
     }
