@@ -422,7 +422,7 @@ class Horde_Form_Type_text extends Horde_Form_Type
         }
 
         if ($var->isRequired() && empty($this->_regex)) {
-            if (strlen(trim($value)) == 0) {
+            if (strlen(trim((string)$value)) == 0) {
                 return $this->invalid('This field is required.');
             }
         } elseif (!empty($this->_regex) && !preg_match($this->_regex, $value)) {
