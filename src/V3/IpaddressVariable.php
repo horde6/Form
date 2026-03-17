@@ -15,7 +15,7 @@ class IpaddressVariable extends TextVariable
 {
     public function isValid(Horde_Variables $vars, $value): bool
     {
-        if (strlen(trim($value)) > 0) {
+        if (strlen(trim((string)$value)) > 0) {
             $ip = explode('.', $value);
             $valid = (count($ip) == 4);
             if ($valid) {

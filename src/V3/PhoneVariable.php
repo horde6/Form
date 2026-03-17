@@ -31,7 +31,7 @@ class PhoneVariable extends BaseVariable
 
     public function isValid(Horde_Variables $vars, $value): bool
     {
-        if (!strlen(trim($value))) {
+        if (!strlen(trim((string)$value))) {
             if ($this->isRequired()) {
                 return $this->invalid('This field is required.');
             }
