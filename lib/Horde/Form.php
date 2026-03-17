@@ -64,7 +64,7 @@ class Horde_Form
         }
         $name = str_replace('\\', '_', $name);
 
-        $this->_vars = &$vars;
+        $this->_vars = $vars;
         $this->_title = $title;
         $this->_name = $name;
     }
@@ -90,7 +90,7 @@ class Horde_Form
 
     public function setVars($vars)
     {
-        $this->_vars = &$vars;
+        $this->_vars = $vars;
     }
 
     public function getVars()
@@ -182,7 +182,7 @@ class Horde_Form
      *
      * @since 3.0.0-beta4 Changed to private visibility
      */
-    private function getType($type, $params = [])
+    private static function getType($type, $params = [])
     {
         if (strpos($type, ':') !== false) {
             [$app, $type] = explode(':', $type);
@@ -225,6 +225,47 @@ class Horde_Form
 
         $type_ob->init(...$params);
         return $type_ob;
+    }
+
+    /**
+     * Create a new Horde_Form_Variable instance without attaching it to the form.
+     *
+     * This static factory method handles type instantiation and can be used
+     * independently of any form instance. To add a variable to the form, use
+     * addVariable() or insertVariableBefore() instead.
+     *
+     * Note: parameter order differs from addVariable() - $params precedes
+     * $required to better reflect that type parameters are part of the type
+     * definition rather than the variable's role in the form.
+     *
+     * @param string  $humanName   The human-readable label for the field.
+     * @param string  $varName     The internal variable name.
+     * @param string  $type        The field type identifier.
+     * @param array   $params      Type initialization parameters.
+     * @param boolean $required    Whether the field is required.
+     * @param boolean $readonly    Whether the field is read-only.
+     * @param string  $description Optional field description/help text.
+     *
+     * @return Horde_Form_Variable
+     * @throws Horde_Exception If the type class does not exist.
+     */
+    public static function createVariable(
+        $humanName,
+        $varName,
+        $type,
+        $params = [],
+        $required = false,
+        $readonly = false,
+        $description = null,
+    ) {
+        return new Horde_Form_Variable(
+            $humanName,
+            $varName,
+            self::getType($type, $params),
+            $required,
+            $readonly,
+            $description
+        );
     }
 
     public function setSection($section = '', $desc = '', $image = '', $expanded = true)
@@ -354,11 +395,11 @@ class Horde_Form
         $description = null,
         $params = []
     ) {
-        $type = $this->getType($type, $params);
-        $var = new Horde_Form_Variable(
+        $var = self::createVariable(
             $humanName,
             $varName,
             $type,
+            $params,
             $required,
             $readonly,
             $description
@@ -367,14 +408,15 @@ class Horde_Form
         /* Set the form object reference in the var. */
         $var->setFormOb($this);
 
-        if ($var->getTypeName() == 'enum' &&
-            !strlen($type->getPrompt()) &&
+        $typeName = $var->getTypeName(); // same as lower-cased $type
+        if ($typeName == 'enum' &&
+            !strlen($var->type->getPrompt()) &&
             count($var->getValues()) == 1) {
             $vals = array_keys($var->getValues());
             $this->_vars->add($var->varName, $vals[0]);
             $var->_autofilled = true;
-        } elseif ($var->getTypeName() == 'file' ||
-                  $var->getTypeName() == 'image') {
+        } elseif ($typeName == 'file' ||
+                  $typeName == 'image') {
             $this->_enctype = 'multipart/form-data';
         }
         if (empty($this->_currentSection) && $this->_currentSection !== 0) {
@@ -382,7 +424,7 @@ class Horde_Form
         }
 
         if (is_null($before)) {
-            $this->_variables[$this->_currentSection][] = &$var;
+            $this->_variables[$this->_currentSection][] = $var;
         } else {
             $num = 0;
             while (isset($this->_variables[$this->_currentSection][$num]) &&
@@ -390,11 +432,11 @@ class Horde_Form
                 $num++;
             }
             if (!isset($this->_variables[$this->_currentSection][$num])) {
-                $this->_variables[$this->_currentSection][] = &$var;
+                $this->_variables[$this->_currentSection][] = $var;
             } else {
                 $this->_variables[$this->_currentSection] = array_merge(
                     array_slice($this->_variables[$this->_currentSection], 0, $num),
-                    [&$var],
+                    [$var],
                     array_slice($this->_variables[$this->_currentSection], $num)
                 );
             }
@@ -453,17 +495,17 @@ class Horde_Form
         $description = null,
         $params = []
     ) {
-        $type = $this->getType($type, $params);
-        $var = new Horde_Form_Variable(
+        $var = self::createVariable(
             $humanName,
             $varName,
             $type,
+            $params,
             $required,
             $readonly,
             $description
         );
         $var->hide();
-        $this->_hiddenVariables[] = &$var;
+        $this->_hiddenVariables[] = $var;
         return $var;
     }
 
