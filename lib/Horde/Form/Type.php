@@ -12,6 +12,8 @@
  * @package  Form
  */
 
+use Horde\Util\ArrayUtils;
+
 /**
  * Horde_Form_Type Class
  *
@@ -94,6 +96,45 @@ class Horde_Form_Type
     public function about()
     {
         return ['name' => $this->getTypeName()];
+    }
+
+    /**
+     * Factory method to create form type instances
+     *
+     * This is the public API for instantiating form types outside of Form context.
+     * Use this instead of calling Horde_Form::getType() which is private.
+     *
+     * @param string $type Type name (e.g., 'html', 'email') or app-prefixed (e.g., 'turba:TurbaTags')
+     * @param array $params Type parameters to pass to init()
+     *
+     * @return Horde_Form_Type
+     * @throws Horde_Exception If type class does not exist
+     *
+     * @since 3.0.0
+     */
+    public static function create(string $type, array $params = []): Horde_Form_Type
+    {
+        if (strpos($type, ':') !== false) {
+            [$app, $type] = explode(':', $type);
+            $type_class = $app . '_Form_Type_' . $type;
+        } else {
+            $type_class = 'Horde_Form_Type_' . $type;
+        }
+
+        if (!class_exists($type_class)) {
+            throw new Horde_Exception(sprintf(
+                'Nonexistent class "%s" for field type "%s"',
+                $type_class,
+                $type
+            ));
+        }
+
+        $type_obj = new $type_class();
+        if (!empty($params)) {
+            $type_obj->init(...array_values($params));
+        }
+
+        return $type_obj;
     }
 
 }
@@ -1264,19 +1305,19 @@ class Horde_Form_Type_image extends Horde_Form_Type
             $this->_img['img']['type'] = $this->getUploadedFileType($varname . '[new]');
 
             /* Get the other parts of the upload. */
-            Horde_Array::getArrayParts($varname . '[new]', $base, $keys);
+            ArrayUtils::getArrayParts($varname . '[new]', $base, $keys);
 
             /* Get the temporary file name. */
             $keys_path = array_merge([$base, 'tmp_name'], $keys);
-            $this->_img['img']['file'] = Horde_Array::getElement($_FILES, $keys_path);
+            $this->_img['img']['file'] = ArrayUtils::getElement($_FILES, $keys_path);
 
             /* Get the actual file name. */
             $keys_path = array_merge([$base, 'name'], $keys);
-            $this->_img['img']['name'] = Horde_Array::getElement($_FILES, $keys_path);
+            $this->_img['img']['name'] = ArrayUtils::getElement($_FILES, $keys_path);
 
             /* Get the file size. */
             $keys_path = array_merge([$base, 'size'], $keys);
-            $this->_img['img']['size'] = Horde_Array::getElement($_FILES, $keys_path);
+            $this->_img['img']['size'] = ArrayUtils::getElement($_FILES, $keys_path);
 
             /* Get any existing values for the image upload field. */
             $upload = $vars->get($var->getVarName());
@@ -1326,14 +1367,14 @@ class Horde_Form_Type_image extends Horde_Form_Type
     public function getUploadedFileType($field)
     {
         /* Get any index on the field name. */
-        $index = Horde_Array::getArrayParts($field, $base, $keys);
+        $index = ArrayUtils::getArrayParts($field, $base, $keys);
 
         if ($index) {
             /* Index present, fetch the mime type var to check. */
             $keys_path = array_merge([$base, 'type'], $keys);
-            $type = Horde_Array::getElement($_FILES, $keys_path);
+            $type = ArrayUtils::getElement($_FILES, $keys_path);
             $keys_path = array_merge([$base, 'tmp_name'], $keys);
-            $tmp_name = Horde_Array::getElement($_FILES, $keys_path);
+            $tmp_name = ArrayUtils::getElement($_FILES, $keys_path);
         } else {
             /* No index, simple set up of vars to check. */
             $type = $_FILES[$field]['type'];
@@ -1346,14 +1387,14 @@ class Horde_Form_Type_image extends Horde_Form_Type
                 if ($index) {
                     /* Get the name value. */
                     $keys_path = array_merge([$base, 'name'], $keys);
-                    $name = Horde_Array::getElement($_FILES, $keys_path);
+                    $name = ArrayUtils::getElement($_FILES, $keys_path);
 
                     /* Work out the type from the file name. */
                     $type = Horde_Mime_Magic::filenameToMime($name);
 
                     /* Set the type. */
                     $keys_path = array_merge([$base, 'type'], $keys);
-                    Horde_Array::setElement($_FILES, $keys_path, $type);
+                    ArrayUtils::setElement($_FILES, $keys_path, $type);
                 } else {
                     /* Work out the type from the file name. */
                     $type = Horde_Mime_Magic::filenameToMime($_FILES[$field]['name']);

@@ -38,6 +38,7 @@ class FormIntegrationTest extends TestCase
         // 1. Create form
         $vars = new Horde_Variables();
         $form = new Horde_Form($vars, 'Report inappropriate content');
+        $form->useToken(false);
 
         // 2. Add fields
         $form->addHidden('', 'item_id', 'int', true);
@@ -55,6 +56,7 @@ class FormIntegrationTest extends TestCase
         $this->assertFalse($form->validate($vars));
 
         // 4. Simulate submission with missing required field
+        $vars->set('formname', $form->getName());
         $vars->set($form->getName() . '_submitted', '1');
         $vars->set('item_id', 123);
         // reason is missing
@@ -87,6 +89,7 @@ class FormIntegrationTest extends TestCase
     {
         $vars = new Horde_Variables();
         $form = new Horde_Form($vars, 'Task Form');
+        $form->useToken(false);
 
         // Section 1: General
         $form->setSection('general', 'General');
@@ -111,6 +114,7 @@ class FormIntegrationTest extends TestCase
         $this->assertCount(2, $allVars['details']);
 
         // Submit form
+        $vars->set('formname', $form->getName());
         $vars->set($form->getName() . '_submitted', '1');
         $vars->set('name', 'My Task');
         $vars->set('priority', 3);
@@ -212,6 +216,7 @@ class FormIntegrationTest extends TestCase
     {
         $vars = new Horde_Variables();
         $form = new TestContactForm($vars);
+        $form->useToken(false);
 
         // Check that constructor set up fields
         $variables = $form->getVariables();
@@ -224,6 +229,7 @@ class FormIntegrationTest extends TestCase
         $this->assertContains('phone', $varNames);
 
         // Submit form
+        $vars->set('formname', $form->getName());
         $vars->set($form->getName() . '_submitted', '1');
         $vars->set('name', 'John Doe');
         $vars->set('email', 'john@example.com');

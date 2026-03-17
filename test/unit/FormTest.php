@@ -17,6 +17,7 @@
 namespace Horde\Form\Test\Unit;
 
 use Horde_Form;
+use Horde_Form_Type;
 use Horde_Form_Variable;
 use Horde_Variables;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -402,41 +403,25 @@ class FormTest extends TestCase
 
     public function testGetTypeWithStringReturnsTypeObject(): void
     {
-        $vars = new Horde_Variables();
-        $form = new Horde_Form($vars);
-
-        $type = $form->getType('text');
+        $type = Horde_Form_Type::create(type: 'text');
 
         $this->assertInstanceOf(\Horde_Form_Type_text::class, $type);
     }
 
-    public function testGetTypeWithObjectReturnsObject(): void
+    public function testGetTypeWithInvalidTypeThrowsException(): void
     {
-        $vars = new Horde_Variables();
-        $form = new Horde_Form($vars);
+        $this->expectException(\Horde_Exception::class);
+        $this->expectExceptionMessage('Nonexistent class');
 
-        $typeObj = new \Horde_Form_Type_text();
-        $result = $form->getType($typeObj);
-
-        $this->assertSame($typeObj, $result);
-    }
-
-    public function testGetTypeWithInvalidTypeReturnsInvalid(): void
-    {
-        $vars = new Horde_Variables();
-        $form = new Horde_Form($vars);
-
-        $type = $form->getType('nonexistent_type');
-
-        $this->assertInstanceOf(\Horde_Form_Type_invalid::class, $type);
+        Horde_Form_Type::create(type: 'nonexistent_type');
     }
 
     public function testGetTypeWithParametersInitializesType(): void
     {
-        $vars = new Horde_Variables();
-        $form = new Horde_Form($vars);
-
-        $type = $form->getType('enum', [['opt1' => 'Option 1', 'opt2' => 'Option 2']]);
+        $type = Horde_Form_Type::create(
+            type: 'enum',
+            params: [['opt1' => 'Option 1', 'opt2' => 'Option 2']]
+        );
 
         $this->assertInstanceOf(\Horde_Form_Type_enum::class, $type);
         $values = $type->getValues();
@@ -445,11 +430,11 @@ class FormTest extends TestCase
 
     public function testGetTypeConvertsNamedParamsToPositional(): void
     {
-        $vars = new Horde_Variables();
-        $form = new Horde_Form($vars);
-
         // Named parameters should be wrapped in array
-        $type = $form->getType('monthdayyear', ['start_year' => 1900, 'end_year' => 2050]);
+        $type = Horde_Form_Type::create(
+            type: 'monthdayyear',
+            params: ['start_year' => 1900, 'end_year' => 2050]
+        );
 
         $this->assertInstanceOf(\Horde_Form_Type_monthdayyear::class, $type);
     }
@@ -477,6 +462,7 @@ class FormTest extends TestCase
             'formname' => 'test_form'
         ]);
         $form = new Horde_Form($vars, '', 'test_form');
+        $form->useToken(false);
 
         $form->addVariable('Name', 'name', 'text', true);
         $vars->set($form->getName() . '_submitted', '1');
