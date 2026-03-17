@@ -67,6 +67,8 @@ class ImageVariable extends BaseVariable
      *                      - $params[0]: bool $show_upload - Show the upload button (default: true)
      *                      - $params[1]: bool $show_keeporig - Show the option to upload also original non-modified image (default: false)
      *                      - $params[2]: int|null $max_filesize - Limit the file size in bytes (default: null)
+      *
+      * @api
      */
     public function init(...$params)
     {
@@ -76,6 +78,8 @@ class ImageVariable extends BaseVariable
     }
 
     /**
+      *
+      * @api
      */
     public function onSubmit($vars)
     {
@@ -106,6 +110,8 @@ class ImageVariable extends BaseVariable
      * @param Horde_Form_Variable $var  The Form field object to check
      * @param Horde_Variables $vars     The form state to check this field for
      * @param array $value              The field value array - should contain a key ['hash'] which holds the key for the image on temp storage
+      *
+      * @api
      */
     public function isValid(Horde_Variables $vars, $value): bool
     {
@@ -348,6 +354,8 @@ class ImageVariable extends BaseVariable
      *
      * @param Horde_Variables $vars     The form state to check this field for
      * @return array  The current image hash.
+      *
+      * @api
      */
     public function getImage($vars)
     {
@@ -376,6 +384,8 @@ class ImageVariable extends BaseVariable
      *   $image['load']['data'] - the raw image data.
      *
      * @param array $image  The image array.
+      *
+      * @api
      */
     public function loadImageData($image)
     {
@@ -408,6 +418,8 @@ class ImageVariable extends BaseVariable
 
     /**
      * Return info about field type.
+      *
+      * @api
      */
     public function about(): array
     {

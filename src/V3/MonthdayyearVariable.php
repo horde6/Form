@@ -31,6 +31,8 @@ class MonthdayyearVariable extends BaseVariable
      *                      - $params[2]: bool $picker - Do we show the DHTML calendar (default: true)
      *                      - $params[3]: string|null $format_in - The format to use when sending the date for storage. Defaults to Unix epoch. Similar to the strftime() function. (default: null)
      *                      - $params[4]: string $format_out - The format to use when displaying the date. Similar to the strftime() function. (default: '%x')
+      *
+      * @api
      */
     public function init(...$params)
     {
@@ -84,6 +86,8 @@ class MonthdayyearVariable extends BaseVariable
      *
      * @return integer  0 for non-empty, 1 for completely empty or -1 for
      *                  partially empty.
+      *
+      * @api
      */
     public function emptyDateArray($date)
     {
@@ -121,6 +125,8 @@ class MonthdayyearVariable extends BaseVariable
      *                         and UNIX epoch) plus the fourth YYYY-MM-DD.
      *
      * @return array  Array with three elements - year, month and day.
+      *
+      * @api
      */
     public function getDateParts($date_in)
     {
@@ -148,6 +154,8 @@ class MonthdayyearVariable extends BaseVariable
      *                         and UNIX epoch) plus the fourth YYYY-MM-DD.
      *
      * @return Horde_Date  The date object.
+      *
+      * @api
      */
     public function getDateOb($date_in)
     {
@@ -180,6 +188,8 @@ class MonthdayyearVariable extends BaseVariable
      *
      * @return string  The date formatted according to the $format_out
      *                 parameter when setting up the monthdayyear field.
+      *
+      * @api
      */
     public function formatDate($date)
     {
@@ -227,6 +237,8 @@ class MonthdayyearVariable extends BaseVariable
 
     /**
      * Return info about field type.
+      *
+      * @api
      */
     public function about(): array
     {

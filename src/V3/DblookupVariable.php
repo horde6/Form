@@ -20,6 +20,8 @@ class DblookupVariable extends EnumVariable
      *                      - $params[0]: Horde_Db_Adapter $db - Database adapter instance
      *                      - $params[1]: string $sql - SQL statement for value lookups
      *                      - $params[2]: string|null $prompt - Prompt text (optional)
+      *
+      * @api
      */
     public function init(...$params)
     {
@@ -39,6 +41,8 @@ class DblookupVariable extends EnumVariable
 
     /**
      * Return info about field type.
+      *
+      * @api
      */
     public function about(): array
     {

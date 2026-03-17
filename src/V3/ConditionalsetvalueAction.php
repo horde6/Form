@@ -71,6 +71,8 @@ class ConditionalsetvalueAction extends BaseAction
      * @param mixed $renderer  The form renderer
      * @param string $varname  Variable name this action applies to
      * @return string  JavaScript code
+      *
+      * @api
      */
     public function getActionScript(\Horde\Form\Form $form, $renderer, string $varname): string
     {
@@ -89,6 +91,8 @@ class ConditionalsetvalueAction extends BaseAction
      * @param \Horde_Variables $vars  The variables object
      * @param mixed $sourceVal  The source value
      * @param bool $arrayVal  Whether dealing with array values
+      *
+      * @api
      */
     public function setValues(\Horde_Variables $vars, $sourceVal, bool $arrayVal = false): void
     {
@@ -120,6 +124,8 @@ class ConditionalsetvalueAction extends BaseAction
      * Print JavaScript code for this action.
      *
      * @return string  JavaScript code
+      *
+      * @api
      */
     public function printJavaScript(): string
     {
@@ -181,6 +187,8 @@ JS;
      * @param mixed $renderer  The renderer
      * @param string $varname  Variable name
      * @return string  Field ID
+      *
+      * @internal
      */
     protected function getFieldId($renderer, string $varname): string
     {

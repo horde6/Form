@@ -65,6 +65,8 @@ abstract class BaseAction implements Action
      * Create a new action.
      *
      * @param array<string, mixed>|null $params  Action parameters
+      *
+      * @api
      */
     public function __construct(?array $params = null)
     {
@@ -76,6 +78,8 @@ abstract class BaseAction implements Action
      * Get action trigger events.
      *
      * @return array<string>|null  Event names or null
+      *
+      * @api
      */
     public function getTrigger(): ?array
     {
@@ -84,6 +88,8 @@ abstract class BaseAction implements Action
 
     /**
      * Get action ID.
+      *
+      * @api
      */
     public function id(): string
     {
@@ -99,6 +105,8 @@ abstract class BaseAction implements Action
      * @param mixed $renderer  The form renderer
      * @param string $varname  Variable name
      * @return string  JavaScript code
+      *
+      * @api
      */
     public function getActionScript(Form $form, $renderer, string $varname): string
     {
@@ -109,6 +117,8 @@ abstract class BaseAction implements Action
      * Print JavaScript for this action.
      *
      * Default implementation does nothing. Subclasses override if needed.
+      *
+      * @api
      */
     public function printJavaScript(): void
     {
@@ -119,6 +129,8 @@ abstract class BaseAction implements Action
      * Get target field name for this action.
      *
      * @return string|null  Target field name or null
+      *
+      * @api
      */
     public function getTarget(): ?string
     {
@@ -134,6 +146,8 @@ abstract class BaseAction implements Action
      * @param mixed $sourceVal  Source value
      * @param int|null $index  Array index (if applicable)
      * @param bool $arrayVal  Whether value is an array
+      *
+      * @api
      */
     public function setValues($vars, $sourceVal, ?int $index = null, bool $arrayVal = false): void
     {
@@ -154,6 +168,8 @@ abstract class BaseAction implements Action
      * @param array<string, mixed>|null $params  Action parameters
      * @return Action  Created action instance
      * @throws \InvalidArgumentException  If action class not found
+      *
+      * @api
      */
     public static function factory(string|array $action, ?array $params = null): Action
     {

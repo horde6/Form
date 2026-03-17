@@ -115,18 +115,12 @@ class TextTypeTest extends TestCase
     public function testIsValidReturnsFalseWhenExceedsMaxLength(): void
     {
         $type = new Horde_Form_Type_text();
-        // init() uses variadic params: init(regex, size, maxlength)
-        $type->init('', 40, 10);
+        $type->init('', 40, 10);  // regex='', size=40, maxlength=10
 
-        $var = $this->createMockVariable(required: false);
+        $var = $this->createMockVariable(false);
         $vars = new Horde_Variables();
 
-        $result = $type->isValid(
-            var: $var,
-            vars: $vars,
-            value: 'this is too long',
-            message: ''
-        );
+        $result = $type->isValid($var, $vars, 'this is too long', $message = '');
 
         $this->assertFalse($result);
     }
@@ -134,18 +128,12 @@ class TextTypeTest extends TestCase
     public function testIsValidReturnsTrueWhenWithinMaxLength(): void
     {
         $type = new Horde_Form_Type_text();
-        // init() uses variadic params: init(regex, size, maxlength)
-        $type->init('', 40, 20);
+        $type->init('', 40, 20);  // regex='', size=40, maxlength=20
 
-        $var = $this->createMockVariable(required: false);
+        $var = $this->createMockVariable(false);
         $vars = new Horde_Variables();
 
-        $result = $type->isValid(
-            var: $var,
-            vars: $vars,
-            value: 'short',
-            message: ''
-        );
+        $result = $type->isValid($var, $vars, 'short', $message = '');
 
         $this->assertTrue($result);
     }
@@ -153,39 +141,23 @@ class TextTypeTest extends TestCase
     public function testIsValidWithRegex(): void
     {
         $type = new Horde_Form_Type_text();
-        // init() uses variadic params: init(regex, size, maxlength)
-        $type->init('', 40, null);
+        $type->init(40, null);
         // Access protected property via reflection for testing
         $reflection = new \ReflectionClass($type);
         $regexProp = $reflection->getProperty('_regex');
         $regexProp->setAccessible(true);
         $regexProp->setValue($type, '/^[0-9]+$/');
 
-        $var = $this->createMockVariable(required: false);
+        $var = $this->createMockVariable(false);
         $vars = new Horde_Variables();
 
-        $this->assertTrue($type->isValid(
-            var: $var,
-            vars: $vars,
-            value: '12345',
-            message: ''
-        ));
-        $this->assertFalse($type->isValid(
-            var: $var,
-            vars: $vars,
-            value: 'abc',
-            message: ''
-        ));
+        $this->assertTrue($type->isValid($var, $vars, '12345', $message = ''));
+        $this->assertFalse($type->isValid($var, $vars, 'abc', $message = ''));
     }
 
     private function createMockVariable(bool $required): Horde_Form_Variable
     {
         $type = new Horde_Form_Type_text();
-        return new Horde_Form_Variable(
-            humanName: 'Test',
-            varName: 'test',
-            type: $type,
-            required: $required
-        );
+        return new Horde_Form_Variable('Test', 'test', $type, $required);
     }
 }

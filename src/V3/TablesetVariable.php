@@ -21,6 +21,8 @@ class TablesetVariable extends BaseVariable
      * @param array $params Variable arguments:
      *                      - $params[0]: array $values - The values for the table set.
      *                      - $params[1]: array $header - The headers for the table set.
+      *
+      * @api
      */
     public function init(...$params)
     {
@@ -57,6 +59,8 @@ class TablesetVariable extends BaseVariable
 
     /**
      * Return info about field type.
+      *
+      * @api
      */
     public function about(): array
     {

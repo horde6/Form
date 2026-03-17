@@ -149,6 +149,8 @@ class BaseForm implements \Horde\Form\Form
      * @param Horde_Variables|ServerRequestInterface|array $vars  Form data
      * @param string $title  Form display title
      * @param string|null $name  Form name (auto-generated from class if null)
+      *
+      * @api
      */
     public function __construct(
         Horde_Variables|ServerRequestInterface|array $vars,
@@ -177,6 +179,8 @@ class BaseForm implements \Horde\Form\Form
      *
      * @param Horde_Variables|ServerRequestInterface|array $vars
      * @return array<string, mixed>
+      *
+      * @internal
      */
     private function normalizeVars(
         Horde_Variables|ServerRequestInterface|array $vars
@@ -194,6 +198,8 @@ class BaseForm implements \Horde\Form\Form
      * Returns a copy to prevent external mutation.
      *
      * @return array<string, mixed>
+      *
+      * @api
      */
     public function getVars(): array
     {
@@ -206,6 +212,8 @@ class BaseForm implements \Horde\Form\Form
      * Replaces all form data. Accepts same types as constructor.
      *
      * @param Horde_Variables|ServerRequestInterface|array $vars
+      *
+      * @api
      */
     public function setVars(Horde_Variables|ServerRequestInterface|array $vars): void
     {
@@ -218,6 +226,8 @@ class BaseForm implements \Horde\Form\Form
      * @param string $name  Variable name
      * @param mixed $default  Default value if not set
      * @return mixed  Variable value or default
+      *
+      * @api
      */
     public function getVar(string $name, mixed $default = null): mixed
     {
@@ -231,6 +241,8 @@ class BaseForm implements \Horde\Form\Form
      *
      * @param string $name  Variable name
      * @param mixed $value  Variable value
+      *
+      * @api
      */
     public function setVar(string $name, mixed $value): void
     {
@@ -239,6 +251,8 @@ class BaseForm implements \Horde\Form\Form
 
     /**
      * Get form title.
+      *
+      * @api
      */
     public function getTitle(): string
     {
@@ -247,6 +261,8 @@ class BaseForm implements \Horde\Form\Form
 
     /**
      * Set form title.
+      *
+      * @api
      */
     public function setTitle(string $title): void
     {
@@ -255,6 +271,8 @@ class BaseForm implements \Horde\Form\Form
 
     /**
      * Get extra form content.
+      *
+      * @api
      */
     public function getExtra(): string
     {
@@ -263,6 +281,8 @@ class BaseForm implements \Horde\Form\Form
 
     /**
      * Set extra form content (HTML, etc.).
+      *
+      * @api
      */
     public function setExtra(string $extra): void
     {
@@ -271,6 +291,8 @@ class BaseForm implements \Horde\Form\Form
 
     /**
      * Get form name.
+      *
+      * @api
      */
     public function getName(): string
     {
@@ -282,6 +304,8 @@ class BaseForm implements \Horde\Form\Form
      *
      * @param bool|null $token  If specified, sets whether to use tokens
      * @return bool  Current token usage setting
+      *
+      * @api
      */
     public function useToken(?bool $token = null): bool
     {
@@ -300,6 +324,8 @@ class BaseForm implements \Horde\Form\Form
      * @param string $desc  Section description
      * @param string $image  Section icon/image URL
      * @param bool $expanded  Whether section starts expanded
+      *
+      * @api
      */
     public function setSection(
         string|int $section = '',
@@ -321,6 +347,8 @@ class BaseForm implements \Horde\Form\Form
 
     /**
      * Get section description.
+      *
+      * @api
      */
     public function getSectionDesc(string|int $section): string
     {
@@ -329,6 +357,8 @@ class BaseForm implements \Horde\Form\Form
 
     /**
      * Get section image/icon URL.
+      *
+      * @api
      */
     public function getSectionImage(string|int $section): string
     {
@@ -339,6 +369,8 @@ class BaseForm implements \Horde\Form\Form
      * Set which section is currently open.
      *
      * @param string|int $section  Section identifier
+      *
+      * @api
      */
     public function setOpenSection(string|int $section): void
     {
@@ -349,6 +381,8 @@ class BaseForm implements \Horde\Form\Form
      * Get which section is currently open.
      *
      * @return string|int|null  Open section identifier or null
+      *
+      * @api
      */
     public function getOpenSection(): string|int|null
     {
@@ -361,6 +395,8 @@ class BaseForm implements \Horde\Form\Form
      * @param string|int $section  Section identifier
      * @param bool $boolean  If true, return bool; if false, return CSS value
      * @return bool|string  Expanded state as bool or 'block'/'none' for CSS
+      *
+      * @api
      */
     public function getSectionExpandedState(string|int $section, bool $boolean = false): bool|string
     {
@@ -386,6 +422,8 @@ class BaseForm implements \Horde\Form\Form
      * @param string|null $description  Field description/help text
      * @param array $params  Type-specific parameters (e.g., enum values)
      * @return Variable  The created variable instance
+      *
+      * @api
      */
     public function addVariable(
         string $humanName,
@@ -422,6 +460,8 @@ class BaseForm implements \Horde\Form\Form
      * @param string|null $description  Field description/help text
      * @param array $params  Type-specific parameters
      * @return Variable  The created variable instance
+      *
+      * @api
      */
     public function insertVariableBefore(
         ?string $before,
@@ -514,6 +554,8 @@ class BaseForm implements \Horde\Form\Form
      * @param string|null $description  Field description
      * @param array $params  Type-specific parameters
      * @return Variable  Created variable instance
+      *
+      * @internal
      */
     private function createVariable(
         string $humanName,
@@ -559,6 +601,8 @@ class BaseForm implements \Horde\Form\Form
      *
      * @param Variable|string $var  Variable instance or variable name
      * @return bool  True if variable was found and removed
+      *
+      * @api
      */
     public function removeVariable(Variable|string $var): bool
     {
@@ -591,6 +635,8 @@ class BaseForm implements \Horde\Form\Form
      * @param string|null $description  Field description
      * @param array $params  Type-specific parameters
      * @return Variable  The created variable instance
+      *
+      * @api
      */
     public function addHidden(
         string $humanName,
@@ -623,6 +669,8 @@ class BaseForm implements \Horde\Form\Form
      * @param bool $flat  If true, return flat array; if false, return by section
      * @param bool $withHidden  If true, include hidden variables
      * @return array<Variable>|array<string, array<Variable>>
+      *
+      * @api
      */
     public function getVariables(bool $flat = true, bool $withHidden = false): array
     {
@@ -649,6 +697,8 @@ class BaseForm implements \Horde\Form\Form
      *
      * @param array<string>|string|bool $submit  Submit button label(s) or true for default
      * @param string|bool $reset  Reset button label or false for none
+      *
+      * @api
      */
     public function setButtons(array|string|bool $submit, string|bool $reset = false): void
     {
@@ -671,6 +721,8 @@ class BaseForm implements \Horde\Form\Form
      * Append additional submit buttons.
      *
      * @param array<string>|string $submit  Button label(s) to append
+      *
+      * @api
      */
     public function appendButtons(array|string $submit): void
     {
@@ -688,6 +740,8 @@ class BaseForm implements \Horde\Form\Form
      *
      * @param mixed $vars  Optional variables to validate against (null = use form's vars)
      * @return bool  True if validation passed, false if errors exist
+      *
+      * @api
      */
     public function validate($vars = null): bool
     {
@@ -734,6 +788,8 @@ class BaseForm implements \Horde\Form\Form
      * Must call validate() first.
      *
      * @return bool  True if no validation errors exist
+      *
+      * @api
      */
     public function isValid(): bool
     {
@@ -744,6 +800,8 @@ class BaseForm implements \Horde\Form\Form
      * Get validation errors.
      *
      * @return array<string, string>  Map of variable name => error message
+      *
+      * @api
      */
     public function getErrors(): array
     {
@@ -755,6 +813,8 @@ class BaseForm implements \Horde\Form\Form
      *
      * @param string $varName  Variable name
      * @return string|null  Error message or null if no error
+      *
+      * @api
      */
     public function getError(string $varName): ?string
     {
@@ -766,6 +826,8 @@ class BaseForm implements \Horde\Form\Form
      *
      * @param string $varName  Variable name
      * @param string $message  Error message
+      *
+      * @api
      */
     public function setError(string $varName, string $message): void
     {
@@ -776,6 +838,8 @@ class BaseForm implements \Horde\Form\Form
      * Clear all errors or error for specific variable.
      *
      * @param string|null $varName  Variable name to clear (null = clear all)
+      *
+      * @api
      */
     public function clearError(?string $varName = null): void
     {
@@ -793,6 +857,8 @@ class BaseForm implements \Horde\Form\Form
      *
      * @param mixed $vars  Optional variables to extract from (null = use form's vars)
      * @return array<string, mixed>  Associative array of field name => value
+      *
+      * @api
      */
     public function getInfo($vars = null): array
     {
@@ -817,6 +883,8 @@ class BaseForm implements \Horde\Form\Form
      * @param array<Variable> $variables  Variables to extract from
      * @param array $vars  Variable data
      * @return array<string, mixed>  Extracted field values
+      *
+      * @internal
      */
     private function getInfoFromVariables(array $variables, array $vars): array
     {
@@ -848,6 +916,8 @@ class BaseForm implements \Horde\Form\Form
      * Check if form has been submitted.
      *
      * @return bool  True if form was submitted
+      *
+      * @api
      */
     public function isSubmitted(): bool
     {
@@ -867,6 +937,8 @@ class BaseForm implements \Horde\Form\Form
      * Get form encoding type.
      *
      * @return string|null  Encoding type (e.g., 'multipart/form-data') or null
+      *
+      * @api
      */
     public function getEnctype(): ?string
     {

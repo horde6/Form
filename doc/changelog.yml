@@ -1,4 +1,84 @@
 ---
+3.0.0-beta5:
+  api: 3.0.0-beta5
+  state:
+    release: beta
+    api: beta
+  date: 2026-03-15
+  license:
+    identifier: LGPL-2.1-only
+    uri: https://spdx.org/licenses/LGPL-2.1-only.html
+  notes: |-
+    chore(metadata): Commit metadata due to tool failure
+    Merge pull request #21 from horde/feat/separate-compat-interfaces-from-V3
+    fix(test): fix global mocks and TextType init parameter order
+    feat(api): create distinct migration and V3-native interfaces
+    docs(api): add @api and @internal tags to V3 methods, add missing phpdoc
+    docs: complete missing PHPDoc blocks in V3 codebase
+3.0.0-beta4:
+  api: 3.0.0-beta4
+  state:
+    release: beta
+    api: beta
+  date: 2026-03-12
+  license:
+    identifier: LGPL-2.1-only
+    uri: https://spdx.org/licenses/LGPL-2.1-only.html
+  notes: |-
+    fix(test): fix global mocks and TextType init parameter order
+    feat(api): create distinct migration and V3-native interfaces
+    docs(api): add @api and @internal tags to V3 methods, add missing phpdoc
+    docs: complete missing PHPDoc blocks in V3 codebase
+    fix: Restore deprecation warning for legacy getInfo() signature
+    test: add unit and integration tests for Form components
+    style(v3): use statements and correct email address
+    feat(v3): implement all remaining 27 variable type renderers
+    feat(v3): add 15 additional variable type renderers
+    fix(v3): fix 3 failing tests in BaseVariable
+    feat(v3): add controlMode support and three remaining actions
+    test(v3): add comprehensive CRUD form integration test
+    test(v3): add comprehensive V3 test suite
+    feat(v3): implement HTML renderer system
+    feat(v3): add renderer system interfaces and design
+    feat(v3): implement Action system with 5 core actions
+    feat(v3): implement BaseForm with PSR-7 support and multi-type input
+    docs: add V3 migration guide for lib/ vs src/V3 usage
+    fix: Use Horde_Array::setElement() to update image type
+    fix: Make V3 classes friendlier to static code analyzers
+    fix: Make _getUpload() method private
+    fix: wip: Make V3 classes friendlier to static code analyzers
+    fix: Added missing 'helper' to about() in Horde_Form_Type_address
+    fix: wip: Make V3 classes friendlier to static code analyzers
+    fix: wip: Make V3 classes friendlier to static code analyzers
+    fix: Added missing 'prompt' to about() in Horde_Form_Type_radio
+    fix: Aditional V3 fixes
+    V3: Improve credit card validation checks
+    fix: V3: Various fixes
+    fix: V3: use correct about() signature
+    fix: Add missing return to about()
+    Merge pull request #15 from horde/fix_nls_loader
+    fix: Use Horde_Nls_Loader to get instead of non-working include
+    fix: Allow horde/horde-installer-plugin in github workflows
+    fix: Create index(es) for optional named parameters in init() method
+    Update composer.json to autoload V3 classes
+    fix: Update V3 classes
+    fix: getType(): flatten named parameters before calling init()
+    Merge pull request #9 from horde/simplify-getinfo
+    fix: v3: Add "use" statement to CountryVariable class
+    fix: Add onSubmit() method in Horde_Form_Variable class
+    fix: v3: Correct about() method signatures
+    fix: v3: Add missing "use Horde_String"
+    fix: v3: Remove wrong isValid() method from LongtextVariable class
+    fix: v3: Remove unneeded check in DatetimeVariable, simplify the code
+    fix: v3: use invalid() to set the message property
+    fix: v3: Move 'type' property check from getProperty() to __get()
+    fix: v3: Use value passed to isValid() in {DateTime,Hourminutesecond,Monthdayyear}Variable classes
+    fix: v3: Add parameter deprecation warning to validate(), drop $_type property
+    fix: v3: Accept named array key for form init params
+    fix: v3: Implement getInfo() wrapper for seamless transition to V3 classes
+    v3: Merge/convert *Type classes with Horde_Form_Variable into *Variable classes
+    fix: Accept named array key for form init params
+    Simplify Horde_Form's getInfo()
 3.0.0-beta3:
   api: 3.0.0-alpha1
   state:

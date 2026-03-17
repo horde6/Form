@@ -128,11 +128,29 @@ class BaseVariable implements Variable
      */
     protected string $message = '';
 
+    /**
+     * Returns the validation error message.
+     *
+     * @return string  The validation error message
+     *
+     * @api
+     */
     public function getMessage()
     {
         return $this->message;
     }
 
+    /**
+     * Creates a new form variable.
+     *
+     * @param string $humanName    Short description of the variable's purpose
+     * @param string $varName      Internally used variable name
+     * @param bool $required       Whether this is a required variable
+     * @param bool $readonly       Whether this is a readonly variable
+     * @param string|null $description  Long description, special instructions, etc.
+     *
+     * @api
+     */
     public function __construct(
         $humanName,
         $varName,
@@ -153,6 +171,8 @@ class BaseVariable implements Variable
      * Assign this variable to the specified form.
      *
      * @param Horde_Form $form  The form instance to assign this variable to.
+      *
+      * @api
      */
     public function setFormOb($form)
     {
@@ -163,6 +183,8 @@ class BaseVariable implements Variable
      * Sets a default value for this variable.
      *
      * @param mixed $value  A variable value.
+      *
+      * @api
      */
     public function setDefault($value)
     {
@@ -173,6 +195,8 @@ class BaseVariable implements Variable
      * Returns this variable's default value.
      *
      * @return mixed  This variable's default value.
+      *
+      * @api
      */
     public function getDefault()
     {
@@ -189,6 +213,8 @@ class BaseVariable implements Variable
      * ```
      *
      * @param Action $action  An {@link Action} instance.
+      *
+      * @api
      */
     public function setAction($action)
     {
@@ -199,6 +225,8 @@ class BaseVariable implements Variable
      * Returns whether this variable has an attached action.
      *
      * @return boolean  True if this variable has an attached action.
+      *
+      * @api
      */
     public function hasAction()
     {
@@ -207,6 +235,8 @@ class BaseVariable implements Variable
 
     /**
      * Makes this a hidden variable.
+      *
+      * @api
      */
     public function hide()
     {
@@ -217,6 +247,8 @@ class BaseVariable implements Variable
      * Returns whether this is a hidden variable.
      *
      * @return boolean  True if this a hidden variable.
+      *
+      * @api
      */
     public function isHidden()
     {
@@ -225,6 +257,13 @@ class BaseVariable implements Variable
 
     /**
      * Disables this variable.
+     *
+     * Disabled fields are not submitted by browsers and are skipped
+     * during form processing and validation.
+     *
+     * @return void
+      *
+      * @api
      */
     public function disable()
     {
@@ -235,6 +274,8 @@ class BaseVariable implements Variable
      * Returns whether this variable is disabled.
      *
      * @return boolean  True if this variable is disabled.
+      *
+      * @api
      */
     public function isDisabled()
     {
@@ -245,6 +286,8 @@ class BaseVariable implements Variable
      * Return the short description of this variable.
      *
      * @return string  A short description
+      *
+      * @api
      */
     public function getHumanName()
     {
@@ -255,6 +298,8 @@ class BaseVariable implements Variable
      * Returns the internally used variable name.
      *
      * @return string  This variable's internal name.
+      *
+      * @api
      */
     public function getVarName()
     {
@@ -280,6 +325,8 @@ class BaseVariable implements Variable
      * @return string  This variable's {@link Horde_Form_Type} name.
      *
      * Override with a simple return 'literal' string in your own types.
+      *
+      * @api
      */
     public function getTypeName(): string
     {
@@ -290,6 +337,8 @@ class BaseVariable implements Variable
      * Returns whether this is a required variable.
      *
      * @return boolean  True if this is a required variable.
+      *
+      * @api
      */
     public function isRequired()
     {
@@ -300,6 +349,8 @@ class BaseVariable implements Variable
      * Returns whether this is a readonly variable.
      *
      * @return boolean  True if this a readonly variable.
+      *
+      * @api
      */
     public function isReadonly()
     {
@@ -310,6 +361,8 @@ class BaseVariable implements Variable
      * Returns the possible values of this variable.
      *
      * @return array  The possible values of this variable or null.
+      *
+      * @api
      */
     public function getValues(...$params): ?array
     {
@@ -320,6 +373,8 @@ class BaseVariable implements Variable
      * Returns whether this variable has a long description.
      *
      * @return boolean  True if this variable has a long description.
+      *
+      * @api
      */
     public function hasDescription(): bool
     {
@@ -330,6 +385,8 @@ class BaseVariable implements Variable
      * Returns this variable's long description.
      *
      * @return string  This variable's long description.
+      *
+      * @api
      */
     public function getDescription()
     {
@@ -340,6 +397,8 @@ class BaseVariable implements Variable
      * Returns whether this is an array variable.
      *
      * @return boolean  True if this an array variable.
+      *
+      * @api
      */
     public function isArrayVal()
     {
@@ -350,6 +409,8 @@ class BaseVariable implements Variable
      * Returns whether this variable is to upload a file.
      *
      * @return boolean  True if variable is to upload a file.
+      *
+      * @api
      */
     public function isUpload()
     {
@@ -360,6 +421,8 @@ class BaseVariable implements Variable
      * Assigns a help text to this variable.
      *
      * @param string $help  The variable help text.
+      *
+      * @api
      */
     public function setHelp($help)
     {
@@ -371,6 +434,8 @@ class BaseVariable implements Variable
      * Returns whether this variable has some help text assigned.
      *
      * @return boolean  True if this variable has a help text.
+      *
+      * @api
      */
     public function hasHelp()
     {
@@ -381,6 +446,8 @@ class BaseVariable implements Variable
      * Returns the help text of this variable.
      *
      * @return string  This variable's help text.
+      *
+      * @api
      */
     public function getHelp()
     {
@@ -392,6 +459,8 @@ class BaseVariable implements Variable
      *
      * @param string $option  The option name.
      * @param mixed $val      The option's value.
+      *
+      * @api
      */
     public function setOption($option, $val)
     {
@@ -404,6 +473,8 @@ class BaseVariable implements Variable
      * @param string $option  The option name.
      *
      * @return mixed          The option's value.
+      *
+      * @api
      */
     public function getOption($option)
     {
@@ -429,11 +500,29 @@ class BaseVariable implements Variable
      * @param Horde_Variables $vars  The variables object
      * @param mixed ...$args  Ignored (for interface compatibility)
      * @return mixed  The variable value
+     * @deprecated The second parameter ($info) is deprecated/ignored
+      *
+      * @api
      */
     public function getInfo($vars, ...$args) {
+        if (count($args) > 0) {
+            self::Deprecated('Warning: The second ($info) parameter in getInfo() is deprecated/ignored');
+        }
         return $this->getInfoV3($vars);
     }
 
+    /**
+     * Extract variable value from form variables.
+     *
+     * Internal method used by getInfo() wrapper. Subclasses override this
+     * to provide type-specific value extraction logic.
+     *
+     * @param Horde_Variables $vars  Form variables
+     *
+     * @return mixed  Extracted value
+     *
+     * @internal
+     */
     //TODO: Rename back to getInfo() after the V3 transition
     protected function getInfoV3($vars)
     {
@@ -450,6 +539,8 @@ class BaseVariable implements Variable
      * @return ?boolean Null if this variable doesn't have the "trackchange"
      *                  option set or the form wasn't submitted yet. A boolean
      *                  indicating whether the variable was changed otherwise.
+      *
+      * @api
      */
     public function wasChanged($vars)
     {
@@ -470,6 +561,8 @@ class BaseVariable implements Variable
      *                         form.
      *
      * @return boolean  True if the variable validated.
+      *
+      * @api
      */
     public function validate($vars, ...$args)
     {
@@ -555,7 +648,19 @@ class BaseVariable implements Variable
 
     // Former Type-related methods
 
-    //TODO: Does not belong here
+    /**
+     * Logs a deprecation warning message.
+     *
+     * Helper method for logging deprecation warnings during the lib/ to V3
+     * migration. Includes file and line number from the call stack.
+     *
+     * @param string $message  The deprecation warning message
+     * @param int $level       Stack trace depth (default: 2)
+     *
+     * @return void
+     *
+     * @todo This method should be removed after V3 transition is complete
+     */
     public static function Deprecated($message, $level = 2) {
         $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, $level + 1);
         if (isset($trace[$level])) {
@@ -566,6 +671,18 @@ class BaseVariable implements Variable
         Horde::log($message, 'WARN');
     }
 
+    /**
+     * Gets internal property value by name.
+     *
+     * Accesses internal properties using underscore-prefixed naming convention
+     * (e.g., 'size' accesses $this->_size).
+     *
+     * @param string $property  Property name (without underscore prefix)
+     *
+     * @return mixed  Property value, or null if not set
+      *
+      * @api
+     */
     public function getProperty($property)
     {
         $prop = '_' . $property;
@@ -573,7 +690,15 @@ class BaseVariable implements Variable
     }
 
     /**
-     * Not part of the interface, implementation detail
+     * Magic getter for accessing internal properties.
+     *
+     * Provides property access using underscore-prefixed naming convention.
+     * Special handling for deprecated 'type' property which triggers a
+     * deprecation warning.
+     *
+     * @param string $property  Property name
+     *
+     * @return mixed  Property value, or $this for deprecated 'type' property
      */
     public function __get($property)
     {
@@ -586,6 +711,19 @@ class BaseVariable implements Variable
         return $this->getProperty($property);
     }
 
+    /**
+     * Sets internal property value by name.
+     *
+     * Sets internal properties using underscore-prefixed naming convention
+     * (e.g., 'size' sets $this->_size).
+     *
+     * @param string $property  Property name (without underscore prefix)
+     * @param mixed $value      Value to set
+     *
+     * @return void
+      *
+      * @api
+     */
     public function setProperty($property, $value)
     {
         $prop = '_' . $property;
@@ -593,7 +731,14 @@ class BaseVariable implements Variable
     }
 
     /**
-     * Not part of the interface, implementation detail
+     * Magic setter for internal properties.
+     *
+     * Delegates to setProperty() for underscore-prefixed property access.
+     *
+     * @param string $property  Property name
+     * @param mixed $value      Value to set
+     *
+     * @return void
      */
     public function __set($property, $value)
     {
@@ -602,13 +747,30 @@ class BaseVariable implements Variable
 
     /**
      * Initialize (kind of constructor) - Parameter list may vary on overloading
+      *
+      * @api
      */
     public function init(...$params) {}
 
+    /**
+     * Hook called on form submission.
+     *
+     * Override this method in subclasses to perform actions when the form
+     * containing this variable is submitted. This is called after validation
+     * but before data processing.
+     *
+     * @param Horde_Variables $vars  Submitted form variables
+     *
+     * @return void
+      *
+      * @api
+     */
     public function onSubmit($vars) {}
 
     /**
      * Use $this->getMessage() to retrieve error messages.
+      *
+      * @internal
      */
     protected function isValid(Horde_Variables $vars, $value): bool
     {

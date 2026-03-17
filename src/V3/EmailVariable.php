@@ -76,6 +76,8 @@ class EmailVariable extends BaseVariable
      *                      - $params[3]: string|null $link_name - The name to use when linking to the compose page (default: null)
      *                      - $params[4]: string $delimiters - Character to split multiple addresses with (default: ',')
      *                      - $params[5]: int|null $size - The size of the input field (default: null)
+      *
+      * @api
      */
     public function init(...$params)
     {
@@ -88,6 +90,8 @@ class EmailVariable extends BaseVariable
     }
 
     /**
+      *
+      * @api
      */
     public function isValid(Horde_Variables $vars, $value): bool
     {
@@ -123,13 +127,17 @@ class EmailVariable extends BaseVariable
     }
 
     /**
-     * Explodes an RFC 2822 string, ignoring a delimiter if preceded
-     * by a "\" character, or if the delimiter is inside single or
-     * double quotes.
+     * Splits RFC 2822 formatted email address string into individual addresses.
      *
-     * @param string $string     The RFC 822 string.
+     * Parses email address lists, handling quoted strings, escape characters,
+     * and group syntax (name:addr1,addr2;). Ignores delimiters inside quotes
+     * or preceded by backslash.
      *
-     * @return array  The exploded string in an array.
+     * @param string $string  The RFC 822 formatted email address string
+     *
+     * @return array  Array of individual email addresses (strings)
+      *
+      * @api
      */
     public function splitEmailAddresses($string)
     {
@@ -195,9 +203,16 @@ class EmailVariable extends BaseVariable
     }
 
     /**
-     * @param string $email An individual email address to validate.
+     * Validates an email address.
      *
-     * @return boolean
+     * Performs RFC 3696 validation on the email address. If SMTP checking
+     * is enabled, also attempts SMTP validation.
+     *
+     * @param string $email  An individual email address to validate
+     *
+     * @return bool  True if email is valid, false otherwise
+      *
+      * @api
      */
     public function validateEmailAddress($email)
     {
@@ -209,11 +224,17 @@ class EmailVariable extends BaseVariable
     }
 
     /**
-     * Attempt partial delivery of mail to an address to validate it.
+     * Validates email address via SMTP connection.
      *
-     * @param string $email An individual email address to validate.
+     * Attempts partial mail delivery to validate the email address exists.
+     * Connects to the mail server via SMTP and checks if RCPT TO command
+     * succeeds. Uses MX records if available, falls back to domain A record.
      *
-     * @return boolean
+     * @param string $email  An individual email address to validate
+     *
+     * @return bool  True if SMTP server accepts the address, false otherwise
+      *
+      * @api
      */
     public function validateEmailAddressSmtp($email)
     {
@@ -270,13 +291,31 @@ class EmailVariable extends BaseVariable
     }
 
     /**
-     * RFC3696 Email Parser
+     * Validates email address according to RFC 3696 specification.
      *
+     * Performs comprehensive RFC 3696 validation including:
+     * - Local part and domain length limits (64 and 255 chars)
+     * - Address format validation (dot-atom, quoted-string, domain-literal)
+     * - Domain literal validation (IPv4 and IPv6 addresses)
+     * - Label validation (length, hyphens, numeric TLD checks)
+     * - Comment stripping and nested comment handling
+     *
+     * Implementation uses complex regex patterns built from RFC grammar rules
+     * to validate all address components. Handles obsolete syntax from RFC 2822
+     * and domain literals from RFC 2821.
+     *
+     * RFC3696 Email Parser
      * By Cal Henderson <cal@iamcal.com>
      *
      * This code is dual licensed:
      * CC Attribution-ShareAlike 2.5 - http://creativecommons.org/licenses/by-sa/2.5/
      * GPLv3 - http://www.gnu.org/copyleft/gpl.html
+     *
+     * @param string $email  Email address to validate
+     *
+     * @return int  1 if valid RFC 3696 address, 0 otherwise
+      *
+      * @internal
      */
     protected function _isRfc3696ValidEmailAddress($email)
     {
@@ -629,8 +668,17 @@ class EmailVariable extends BaseVariable
     }
 
     /**
-     * RFC3696 Email Parser
+     * Strips RFC 2822 comments from email address string.
      *
+     * Recursively removes comments matching the provided regex pattern until
+     * no more matches are found. Comments in RFC 2822 format are enclosed in
+     * parentheses and can be nested. This method handles nested comments by
+     * repeatedly applying the regex replacement until the string stabilizes.
+     *
+     * Used during RFC 3696 email validation to remove comments from the
+     * local part and domain before performing length and format checks.
+     *
+     * RFC3696 Email Parser
      * By Cal Henderson <cal@iamcal.com>
      *
      * This code is dual licensed:
@@ -638,6 +686,14 @@ class EmailVariable extends BaseVariable
      * GPLv3 - http://www.gnu.org/copyleft/gpl.html
      *
      * $Revision: 5039 $
+     *
+     * @param string $comment  Regex pattern matching RFC 2822 comment syntax
+     * @param string $email    Email address string to process
+     * @param string $replace  Replacement string for matched comments (default: empty string)
+     *
+     * @return string  Email address with all matching comments removed
+      *
+      * @internal
      */
     protected function _rfc3696StripComments($comment, $email, $replace = '')
     {
@@ -652,6 +708,8 @@ class EmailVariable extends BaseVariable
 
     /**
      * Return info about field type.
+      *
+      * @api
      */
     public function about(): array
     {

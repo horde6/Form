@@ -23,6 +23,8 @@ class PhoneVariable extends BaseVariable
      *
      * @param array $params Variable arguments:
      *                      - $params[0]: int $size - The size of the input field (default: 15)
+      *
+      * @api
      */
     public function init(...$params)
     {
@@ -49,6 +51,8 @@ class PhoneVariable extends BaseVariable
 
     /**
      * Return info about field type.
+      *
+      * @api
      */
     public function about(): array
     {

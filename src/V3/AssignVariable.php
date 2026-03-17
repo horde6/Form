@@ -33,6 +33,8 @@ class AssignVariable extends BaseVariable
      *                      - $params[3]: string $rightHeader - Right column header (default: '')
      *                      - $params[4]: int $size - Number of visible rows (default: 8)
      *                      - $params[5]: string $width - Width in CSS units (default: '200px')
+      *
+      * @api
      */
     public function init(...$params)
     {
@@ -54,6 +56,8 @@ class AssignVariable extends BaseVariable
      *
      * @param array $params Variable arguments:
      *                      - $params[0]: mixed $side - Which side to get values for (empty/0 = right, truthy = left)
+      *
+      * @api
      */
     public function getValues(...$params): ?array
     {
@@ -144,6 +148,8 @@ class AssignVariable extends BaseVariable
 
     /**
      * Return info about field type.
+      *
+      * @api
      */
     public function about(): array
     {

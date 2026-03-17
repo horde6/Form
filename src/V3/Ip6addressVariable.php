@@ -29,6 +29,8 @@ class Ip6addressVariable extends TextVariable
 
     /**
      * Return info about field type.
+      *
+      * @api
      */
     public function about(): array
     {

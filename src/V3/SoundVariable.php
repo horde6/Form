@@ -18,6 +18,8 @@ class SoundVariable extends BaseVariable
      * Initialize a sound selection field.
      *
      * @param array $params Variable arguments (none used, sounds are loaded from theme)
+      *
+      * @api
      */
     public function init(...$params)
     {
@@ -44,6 +46,8 @@ class SoundVariable extends BaseVariable
 
     /**
      * Return info about field type.
+      *
+      * @api
      */
     public function about(): array
     {

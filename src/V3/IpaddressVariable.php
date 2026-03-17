@@ -41,6 +41,8 @@ class IpaddressVariable extends TextVariable
 
     /**
      * Return info about field type.
+      *
+      * @api
      */
     public function about(): array
     {

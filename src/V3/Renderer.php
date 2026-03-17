@@ -56,6 +56,8 @@ interface Renderer
      * @param string $action  Form action URL
      * @param string $method  HTTP method (get/post)
      * @return string  Complete rendered output
+      *
+      * @api
      */
     public function render(Form $form, string $action = '', string $method = 'post'): string;
 
@@ -66,6 +68,8 @@ interface Renderer
      * @param string $action  Form action URL
      * @param string $method  HTTP method
      * @return string  Opening form tag
+      *
+      * @api
      */
     public function renderOpen(Form $form, string $action, string $method): string;
 
@@ -73,6 +77,8 @@ interface Renderer
      * Render form closing tag.
      *
      * @return string  Closing form tag
+      *
+      * @api
      */
     public function renderClose(): string;
 
@@ -81,6 +87,8 @@ interface Renderer
      *
      * @param Form $form  The form to render
      * @return string  Form header HTML
+      *
+      * @api
      */
     public function renderHeader(Form $form): string;
 
@@ -90,6 +98,8 @@ interface Renderer
      * @param Variable $variable  The variable to render
      * @param Form $form  The parent form
      * @return string  Rendered field
+      *
+      * @api
      */
     public function renderVariable(Variable $variable, Form $form): string;
 
@@ -100,6 +110,8 @@ interface Renderer
      * @param array<Variable> $variables  Variables in this section
      * @param Form $form  The parent form
      * @return string  Rendered section
+      *
+      * @api
      */
     public function renderSection(string|int $sectionName, array $variables, Form $form): string;
 
@@ -108,6 +120,8 @@ interface Renderer
      *
      * @param Form $form  The form to render
      * @return string  Form buttons HTML
+      *
+      * @api
      */
     public function renderButtons(Form $form): string;
 
@@ -116,6 +130,8 @@ interface Renderer
      *
      * @param Form $form  The form to render
      * @return string  Errors HTML
+      *
+      * @api
      */
     public function renderErrors(Form $form): string;
 
@@ -124,6 +140,8 @@ interface Renderer
      *
      * @param Form $form  The form to render
      * @return string  Hidden fields HTML
+      *
+      * @api
      */
     public function renderHidden(Form $form): string;
 }

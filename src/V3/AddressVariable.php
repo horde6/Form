@@ -111,6 +111,8 @@ class AddressVariable extends LongtextVariable
 
     /**
      * Return info about field type.
+      *
+      * @api
      */
     public function about(): array
     {

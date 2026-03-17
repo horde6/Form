@@ -27,6 +27,8 @@ class LongtextVariable extends TextVariable
      *                      - $params[0]: int $rows - Number of rows (default: 8)
      *                      - $params[1]: int $cols - Number of columns (default: 80)
      *                      - $params[2]: array $helper - Array of helper options (default: [])
+      *
+      * @api
      */
     public function init(...$params)
     {
@@ -72,6 +74,8 @@ class LongtextVariable extends TextVariable
 
     /**
      * Return info about field type.
+      *
+      * @api
      */
     public function about(): array
     {

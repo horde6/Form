@@ -19,6 +19,8 @@ class HourminutesecondVariable extends BaseVariable
      *
      * @param array $params Variable arguments:
      *                      - $params[0]: bool $show_seconds - Include a form input for seconds (default: false)
+      *
+      * @api
      */
     public function init(...$params)
     {
@@ -42,6 +44,20 @@ class HourminutesecondVariable extends BaseVariable
         return true;
     }
 
+    /**
+     * Validates time component values.
+     *
+     * Checks that hour (0-23), minute (0-60), and second (0-60) are within
+     * valid ranges and not empty. All three components must be set.
+     *
+     * @param int|string $hour    Hour value (0-23)
+     * @param int|string $minute  Minute value (0-60)
+     * @param int|string $second  Second value (0-60)
+     *
+     * @return bool  True if all components are valid, false otherwise
+      *
+      * @api
+     */
     public function checktime($hour, $minute, $second)
     {
         if (!isset($hour) || $hour == '' || ($hour < 0 || $hour > 23)) {
@@ -68,6 +84,8 @@ class HourminutesecondVariable extends BaseVariable
      *                         UNIX epoch).
      *
      * @return Horde_Date  The time object.
+      *
+      * @api
      */
     public function getTimeOb($time_in)
     {
@@ -89,6 +107,8 @@ class HourminutesecondVariable extends BaseVariable
      *                         UNIX epoch).
      *
      * @return array  Array with three elements - hour, minute and seconds.
+      *
+      * @api
      */
     public function getTimeParts($time_in)
     {
@@ -107,6 +127,18 @@ class HourminutesecondVariable extends BaseVariable
             'second' => $time->sec];
     }
 
+    /**
+     * Checks if time array is empty.
+     *
+     * A time array is considered empty if hour and minute are not set or have
+     * empty string values. If seconds are shown, second must also be empty.
+     *
+     * @param array|mixed $time  Time array with 'hour', 'minute', 'second' keys
+     *
+     * @return bool  True if time array is empty, false otherwise
+      *
+      * @api
+     */
     public function emptyTimeArray($time)
     {
         return (is_array($time)
@@ -117,6 +149,8 @@ class HourminutesecondVariable extends BaseVariable
 
     /**
      * Return info about field type.
+      *
+      * @api
      */
     public function about(): array
     {

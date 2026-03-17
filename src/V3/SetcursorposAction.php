@@ -65,6 +65,8 @@ class SetcursorposAction extends BaseAction
      * @param mixed $renderer  The form renderer
      * @param string $varname  Variable name this action applies to
      * @return string  JavaScript code
+      *
+      * @api
      */
     public function getActionScript(\Horde\Form\Form $form, $renderer, string $varname): string
     {
@@ -83,6 +85,8 @@ class SetcursorposAction extends BaseAction
      * Print JavaScript code for this action.
      *
      * @return string  JavaScript code
+      *
+      * @api
      */
     public function printJavaScript(): string
     {

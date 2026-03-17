@@ -37,7 +37,6 @@
         "phpstan/phpstan": "^2"
     },
     "suggest": {},
-    "minimum-stability": "alpha",
     "autoload": {
         "classmap": [
             "lib/"
@@ -52,13 +51,6 @@
         }
     },
     "config": {
-        "allow-plugins": {
-            "horde/horde-installer-plugin": true
-        }
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-FRAMEWORK_6_0": "3.x-dev"
-        }
+        "allow-plugins": {}
     }
 }

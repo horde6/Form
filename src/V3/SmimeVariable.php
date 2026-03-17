@@ -31,6 +31,8 @@ class SmimeVariable extends LongtextVariable
      *                      - $params[0]: string|null $temp_dir - A temporary directory
      *                      - $params[1]: int $rows - Number of rows (default: 8, from parent)
      *                      - $params[2]: int $cols - Number of columns (default: 80, from parent)
+      *
+      * @api
      */
     public function init(...$params)
     {
@@ -54,6 +56,8 @@ class SmimeVariable extends LongtextVariable
 
     /**
      * Return info about field type.
+      *
+      * @api
      */
     public function about(): array
     {
