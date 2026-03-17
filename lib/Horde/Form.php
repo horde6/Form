@@ -19,6 +19,8 @@ if (!class_exists('Horde_Form_Type'))
     require_once 'Horde/Form/Type.php';
 }
 
+use Horde\Util\ArrayUtils;
+
 /**
  * Horde_Form Master Class.
  *
@@ -55,7 +57,8 @@ class Horde_Form
     public function __construct($vars, $title = '', $name = null)
     {
         if (empty($name)) {
-            $name = Horde_String::lower(get_class($this));
+            static $counter = 0;
+            $name = Horde_String::lower(get_class($this)) . '_' . (++$counter);
         }
         $name = str_replace('\\', '_', $name);
 
@@ -161,9 +164,21 @@ class Horde_Form
     }
 
     /**
-     * Initialize a Horde_Form_Type object from a type id
+     * Initialize a Horde_Form_Type object from a type id (internal use only)
      *
+     * This method is private as of 3.0.0-beta4 to encapsulate parameter normalization logic.
+     * External code should use Horde_Form_Type::create() instead for instantiating types.
+     *
+     * For legacy code not yet migrated to src/V3, use Horde_Form_Type::create($type, $params)
+     * which provides the same functionality with a stable public API.
+     *
+     * @param string $type Type identifier
+     * @param array $params Type initialization parameters
+     *
+     * @return Horde_Form_Type
      * @throws Horde_Exception
+     *
+     * @since 3.0.0-beta4 Changed to private visibility
      */
     private function getType($type, $params = [])
     {
@@ -254,6 +269,50 @@ class Horde_Form
         } else {
             return 'none';
         }
+    }
+
+    /**
+     * Get information about all form sections.
+     *
+     * Returns an array of section metadata for all sections in the form.
+     * Useful for rendering section navigation or inspecting section structure.
+     * Migration aid for V3 compatibility.
+     *
+     * @return array  Array of section info keyed by section name, each containing:
+     *                - title: Section description/title
+     *                - image: Section image (if any)
+     *                - expanded: Whether section is expanded (boolean)
+     *
+     * @since 3.0.0
+     */
+    public function getSectionInfo(): array
+    {
+        $info = [];
+        foreach ($this->_sections as $section => $data) {
+            $info[$section] = [
+                'title' => $data['desc'] ?? '',
+                'image' => $data['image'] ?? '',
+                'expanded' => $data['expanded'] ?? true,
+            ];
+        }
+        return $info;
+    }
+
+    /**
+     * Get the form encoding type.
+     *
+     * Returns the encoding type needed for the form (e.g., 'multipart/form-data'
+     * for forms with file upload fields). This is automatically set when file
+     * or image field types are added to the form.
+     * Migration aid for V3 compatibility.
+     *
+     * @return string|null  The encoding type, or null if not set
+     *
+     * @since 3.0.0
+     */
+    public function getEnctype(): ?string
+    {
+        return $this->_enctype;
     }
 
     /**
@@ -682,6 +741,9 @@ class Horde_Form
             $vars = $this->_vars;
         }
 
+        // Clear previous validation errors
+        $this->_errors = [];
+
         /* Get submitted status. */
         if ($this->isSubmitted() || $canAutoFill) {
             /* Form was submitted or can autofill; check for any variable
@@ -777,7 +839,7 @@ class Horde_Form
 
     public function isValid()
     {
-        return ($this->_autofilled || count($this->_errors) == 0);
+        return count($this->_errors) == 0;
     }
 
     public function execute()
@@ -832,10 +894,10 @@ class Horde_Form
             } else {
                 // A field name like example[key1][key2][key3]
                 $varName = $var->getVarName();
-                if (Horde_Array::getArrayParts($varName, $base, $keys)) {
+                if (ArrayUtils::getArrayParts($varName, $base, $keys)) {
                     $res = $var->getInfo($vars, $varName);
                     $path = array_merge([$base], $keys);
-                    Horde_Array::setElement($info, $path, $res);
+                    ArrayUtils::setElement($info, $path, $res);
                 } else {
                     if (!isset($info[$varName])) {
                         $info[$varName] = null;
@@ -867,11 +929,7 @@ class Horde_Form
     public function isSubmitted()
     {
         if (is_null($this->_submitted)) {
-            if ($this->_vars->get('formname') == $this->getName()) {
-                $this->_submitted = true;
-            } else {
-                $this->_submitted = false;
-            }
+            return ($this->_vars->get('formname') == $this->getName());
         }
 
         return $this->_submitted;

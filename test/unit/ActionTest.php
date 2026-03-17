@@ -97,9 +97,13 @@ class ActionTest extends TestCase
     {
         $action = new Horde_Form_Action();
         $form = $this->createMock(Horde_Form::class);
-        $renderer = null;
+        $renderer = $this->createMock(\Horde_Form_Renderer::class);
 
-        $script = $action->getActionScript($form, $renderer, 'varname');
+        $script = $action->getActionScript(
+            form: $form,
+            renderer: $renderer,
+            varname: 'varname'
+        );
 
         $this->assertEquals('', $script);
     }
@@ -120,7 +124,13 @@ class ActionTest extends TestCase
         $vars = new Horde_Variables();
 
         // Should not throw exception
-        $action->setValues($vars, 'value', null, false);
+        // Note: setValues uses positional params ($vars, $sourceVal, $index, $arrayVal)
+        $action->setValues(
+            vars: $vars,
+            sourceVal: 'value',
+            index: null,
+            arrayVal: false
+        );
 
         $this->assertTrue(true);
     }

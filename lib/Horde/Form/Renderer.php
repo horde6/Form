@@ -11,6 +11,8 @@
  * @package  Form
  */
 
+use Horde\Util\ArrayUtils;
+
 /**
  * The Horde_Form_Renderer class provides HTML and other renderings of
  * forms for the Horde_Form:: package.
@@ -235,7 +237,7 @@ class Horde_Form_Renderer
                     // past. The actual forms need to be fixed instead.
                     if ($var->isHidden() || !$var->isReadonly()) {
                         $varname = $var->getVarName();
-                        if (Horde_Array::getArrayParts($varname, $base, $keys)) {
+                        if (ArrayUtils::getArrayParts($varname, $base, $keys)) {
                             array_unshift($keys, $base);
                             $place = &$vars;
                             while ($key = array_shift($keys)) {

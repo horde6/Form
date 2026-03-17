@@ -12,6 +12,8 @@
  * @package  Form
  */
 
+use Horde\Exception\PEAR;
+
 /**
  * The Horde_Form_Action class provides an API for adding actions to
  * Horde_Form variables.
