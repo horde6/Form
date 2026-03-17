@@ -928,7 +928,7 @@ class Horde_Form
             }
             // An ArrayVal is a value with a varName ending with []
             if ($var->isArrayVal()) {
-                $values = $var->getInfo($vars, $values);
+                $values = $var->getInfo($vars, null);
                 if (is_array($values)) {
                     $varName = str_replace('[]', '', $var->getVarName());
                     foreach ($values as $i => $val) {
@@ -939,14 +939,11 @@ class Horde_Form
                 // A field name like example[key1][key2][key3]
                 $varName = $var->getVarName();
                 if (ArrayUtils::getArrayParts($varName, $base, $keys)) {
-                    $res = $var->getInfo($vars, $varName);
+                    $res = $var->getInfo($vars, null);
                     $path = array_merge([$base], $keys);
                     ArrayUtils::setElement($info, $path, $res);
                 } else {
-                    if (!isset($info[$varName])) {
-                        $info[$varName] = null;
-                    }
-                    $info[$varName] = $var->getInfo($vars, $info[$varName]);
+                    $info[$varName] = $var->getInfo($vars, null);
                 }
             }
         }

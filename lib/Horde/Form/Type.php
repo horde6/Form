@@ -1177,6 +1177,7 @@ class Horde_Form_Type_file extends Horde_Form_Type
 
     public function getInfo($vars, $var, $info)
     {
+        $info = [];
         $name = $var->getVarName();
         try {
             $GLOBALS['browser']->wasFileUploaded($name);
@@ -1251,7 +1252,7 @@ class Horde_Form_Type_image extends Horde_Form_Type
     public $_random;
 
     /**
-     * Init a Country field
+     * Init an image upload field
      *
      *     function init($show_upload = true, $show_keeporig = false, $max_filesize = null)
      */
@@ -1354,8 +1355,7 @@ class Horde_Form_Type_image extends Horde_Form_Type
 
         /* Check if we have image data */
         if (!isset($this->_img) || !isset($this->_img['img'])) {
-            $info = '';
-            return $info;
+            return '';
         }
 
         $info = $this->_img['img'];
@@ -3613,13 +3613,13 @@ class Horde_Form_Type_datetime extends Horde_Form_Type
          * default. */
         $value = $var->getValue($vars);
         if ($this->emptyDateArray($value) == 1 || $this->emptyTimeArray($value)) {
-            return $this->_getInfo($var->getDefault(), $info);
+            return $this->_getInfo($var->getDefault());
         }
 
-        return $this->_getInfo($value, $info);
+        return $this->_getInfo($value);
     }
 
-    public function _getInfo($value, $info)
+    private function _getInfo($value)
     {
         // If any component is empty consider it a bad date and return null
         if ($this->emptyDateArray($value) != 0 || $this->emptyTimeArray($value)) {
@@ -4077,6 +4077,7 @@ class Horde_Form_Type_assign extends Horde_Form_Type
 
     public function getInfo($vars, $var, $info)
     {
+        $info = [];
         $value = $vars->get($var->getVarName() . '__values');
         if (strpos($value, "\t\t") === false) {
             $left = $value;

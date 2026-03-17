@@ -448,15 +448,13 @@ class Horde_Form_Variable
      *
      * @param Variables $vars  The {@link Variables} instance of the submitted
      *                         form.
-     * @param mixed $info      A variable passed by reference that will be
-     *                         assigned the processed value of the submitted
-     *                         variable value.
+     * @param mixed $info      Unused, to be removed in V3.
      *
      * @return mixed  Depending on the variable type.
      */
     public function getInfo($vars, $info)
     {
-        return $this->type->getInfo($vars, $this, $info);
+        return $this->type->getInfo($vars, $this, null);
     }
 
     public function onSubmit($vars)
