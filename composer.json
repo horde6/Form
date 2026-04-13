@@ -1,5 +1,8 @@
 {
-    "name": "horde/form",
+    "name": "horde6/form",
+    "replace": {
+        "horde/form": "^3 || dev-FRAMEWORK_6_0"
+    },
     "description": "Form library",
     "type": "library",
     "homepage": "https://www.horde.org/libraries/Horde_Form",
