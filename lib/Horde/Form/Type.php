@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright 2001-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2001-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -14,6 +14,7 @@
 
 use Horde\Date\FormatterInterface;
 use Horde\Util\ArrayUtils;
+
 use function PHP81_BC\strftime;
 
 /**
@@ -144,7 +145,7 @@ class Horde_Form_Type
 /**
  * Horde_Form_Type_spacer form type.
  *
- * @see \Horde\Form\V3\SpacerVariable PSR-4 equivalent in src/V3/
+ * @see Horde\Form\V3\SpacerVariable PSR-4 equivalent in src/V3/
  */
 class Horde_Form_Type_spacer extends Horde_Form_Type
 {
@@ -166,7 +167,7 @@ class Horde_Form_Type_spacer extends Horde_Form_Type
 /**
  * Horde_Form_Type_header form type.
  *
- * @see \Horde\Form\V3\HeaderVariable PSR-4 equivalent in src/V3/
+ * @see Horde\Form\V3\HeaderVariable PSR-4 equivalent in src/V3/
  */
 class Horde_Form_Type_header extends Horde_Form_Type
 {
@@ -188,7 +189,7 @@ class Horde_Form_Type_header extends Horde_Form_Type
 /**
  * Horde_Form_Type_description form type.
  *
- * @see \Horde\Form\V3\DescriptionVariable PSR-4 equivalent in src/V3/
+ * @see Horde\Form\V3\DescriptionVariable PSR-4 equivalent in src/V3/
  */
 class Horde_Form_Type_description extends Horde_Form_Type
 {
@@ -213,7 +214,7 @@ class Horde_Form_Type_description extends Horde_Form_Type
 /**
  * Horde_Form_Type_html form type.
  *
- * @see \Horde\Form\V3\HtmlVariable PSR-4 equivalent in src/V3/
+ * @see Horde\Form\V3\HtmlVariable PSR-4 equivalent in src/V3/
  */
 class Horde_Form_Type_html extends Horde_Form_Type
 {
@@ -235,7 +236,7 @@ class Horde_Form_Type_html extends Horde_Form_Type
 /**
  * Horde_Form_Type_number form type.
  *
- * @see \Horde\Form\V3\NumberVariable PSR-4 equivalent in src/V3/
+ * @see Horde\Form\V3\NumberVariable PSR-4 equivalent in src/V3/
  */
 class Horde_Form_Type_number extends Horde_Form_Type
 {
@@ -332,7 +333,7 @@ class Horde_Form_Type_number extends Horde_Form_Type
 /**
  * Horde_Form_Type_int form type.
  *
- * @see \Horde\Form\V3\IntVariable PSR-4 equivalent in src/V3/
+ * @see Horde\Form\V3\IntVariable PSR-4 equivalent in src/V3/
  */
 class Horde_Form_Type_int extends Horde_Form_Type
 {
@@ -362,7 +363,7 @@ class Horde_Form_Type_int extends Horde_Form_Type
 /**
  * Horde_Form_Type_octal form type.
  *
- * @see \Horde\Form\V3\OctalVariable PSR-4 equivalent in src/V3/
+ * @see Horde\Form\V3\OctalVariable PSR-4 equivalent in src/V3/
  */
 class Horde_Form_Type_octal extends Horde_Form_Type
 {
@@ -392,7 +393,7 @@ class Horde_Form_Type_octal extends Horde_Form_Type
 /**
  * Horde_Form_Type_intlist form type.
  *
- * @see \Horde\Form\V3\IntlistVariable PSR-4 equivalent in src/V3/
+ * @see Horde\Form\V3\IntlistVariable PSR-4 equivalent in src/V3/
  */
 class Horde_Form_Type_intlist extends Horde_Form_Type
 {
@@ -425,7 +426,7 @@ class Horde_Form_Type_intlist extends Horde_Form_Type
 /**
  * Horde_Form_Type_text form type.
  *
- * @see \Horde\Form\V3\TextVariable PSR-4 equivalent in src/V3/
+ * @see Horde\Form\V3\TextVariable PSR-4 equivalent in src/V3/
  */
 class Horde_Form_Type_text extends Horde_Form_Type
 {
@@ -469,7 +470,7 @@ class Horde_Form_Type_text extends Horde_Form_Type
         }
 
         if ($var->isRequired() && empty($this->_regex)) {
-            if (strlen(trim((string)$value)) == 0) {
+            if (strlen(trim((string) $value)) == 0) {
                 return $this->invalid('This field is required.');
             }
         } elseif (!empty($this->_regex) && !preg_match($this->_regex, $value)) {
@@ -510,7 +511,7 @@ class Horde_Form_Type_text extends Horde_Form_Type
 /**
  * Horde_Form_Type_stringlist form type.
  *
- * @see \Horde\Form\V3\StringlistVariable PSR-4 equivalent in src/V3/
+ * @see Horde\Form\V3\StringlistVariable PSR-4 equivalent in src/V3/
  */
 class Horde_Form_Type_stringlist extends Horde_Form_Type_text
 {
@@ -536,7 +537,7 @@ class Horde_Form_Type_stringlist extends Horde_Form_Type_text
 /**
  * Horde_Form_Type_stringarray form type.
  *
- * @see \Horde\Form\V3\StringarrayVariable PSR-4 equivalent in src/V3/
+ * @see Horde\Form\V3\StringarrayVariable PSR-4 equivalent in src/V3/
  */
 class Horde_Form_Type_stringarray extends Horde_Form_Type_stringlist
 {
@@ -568,7 +569,7 @@ class Horde_Form_Type_stringarray extends Horde_Form_Type_stringlist
 /**
  * Horde_Form_Type_phone form type.
  *
- * @see \Horde\Form\V3\PhoneVariable PSR-4 equivalent in src/V3/
+ * @see Horde\Form\V3\PhoneVariable PSR-4 equivalent in src/V3/
  */
 class Horde_Form_Type_phone extends Horde_Form_Type
 {
@@ -624,7 +625,7 @@ class Horde_Form_Type_phone extends Horde_Form_Type
 /**
  * Horde_Form_Type_cellphone form type.
  *
- * @see \Horde\Form\V3\CellphoneVariable PSR-4 equivalent in src/V3/
+ * @see Horde\Form\V3\CellphoneVariable PSR-4 equivalent in src/V3/
  */
 class Horde_Form_Type_cellphone extends Horde_Form_Type_phone
 {
@@ -641,7 +642,7 @@ class Horde_Form_Type_cellphone extends Horde_Form_Type_phone
 /**
  * Horde_Form_Type_ipaddress form type.
  *
- * @see \Horde\Form\V3\IpaddressVariable PSR-4 equivalent in src/V3/
+ * @see Horde\Form\V3\IpaddressVariable PSR-4 equivalent in src/V3/
  */
 class Horde_Form_Type_ipaddress extends Horde_Form_Type_text
 {
@@ -652,9 +653,9 @@ class Horde_Form_Type_ipaddress extends Horde_Form_Type_text
             $valid = count($ip) == 4;
             if ($valid) {
                 foreach ($ip as $part) {
-                    if (!is_numeric($part) ||
-                        $part > 255 ||
-                        $part < 0) {
+                    if (!is_numeric($part)
+                        || $part > 255
+                        || $part < 0) {
                         $valid = false;
                         break;
                     }
@@ -684,7 +685,7 @@ class Horde_Form_Type_ipaddress extends Horde_Form_Type_text
 /**
  * Horde_Form_Type_ip6address form type.
  *
- * @see \Horde\Form\V3\Ip6addressVariable PSR-4 equivalent in src/V3/
+ * @see Horde\Form\V3\Ip6addressVariable PSR-4 equivalent in src/V3/
  */
 class Horde_Form_Type_ip6address extends Horde_Form_Type_text
 {
@@ -715,7 +716,7 @@ class Horde_Form_Type_ip6address extends Horde_Form_Type_text
 /**
  * Horde_Form_Type_longtext form type.
  *
- * @see \Horde\Form\V3\LongtextVariable PSR-4 equivalent in src/V3/
+ * @see Horde\Form\V3\LongtextVariable PSR-4 equivalent in src/V3/
  */
 class Horde_Form_Type_longtext extends Horde_Form_Type_text
 {
@@ -791,7 +792,7 @@ class Horde_Form_Type_longtext extends Horde_Form_Type_text
 /**
  * Horde_Form_Type_countedtext form type.
  *
- * @see \Horde\Form\V3\CountedtextVariable PSR-4 equivalent in src/V3/
+ * @see Horde\Form\V3\CountedtextVariable PSR-4 equivalent in src/V3/
  */
 class Horde_Form_Type_countedtext extends Horde_Form_Type_longtext
 {
@@ -854,7 +855,7 @@ class Horde_Form_Type_countedtext extends Horde_Form_Type_longtext
 /**
  * Horde_Form_Type_address form type.
  *
- * @see \Horde\Form\V3\AddressVariable PSR-4 equivalent in src/V3/
+ * @see Horde\Form\V3\AddressVariable PSR-4 equivalent in src/V3/
  */
 class Horde_Form_Type_address extends Horde_Form_Type_longtext
 {
@@ -898,8 +899,8 @@ class Horde_Form_Type_address extends Horde_Form_Type_longtext
         } elseif (preg_match('/(?s)(.*?)(?-s)\r?\n(.*)\s*,\s*(\w+)\.?\s+(\d+|[a-zA-Z]\d[a-zA-Z]\s?\d[a-zA-Z]\d)/', $address, $addressParts)) {
             /* American/Canadian address style. */
             $info = ['country' => 'us'];
-            if (!empty($addressParts[4]) &&
-                preg_match('|[a-zA-Z]\d[a-zA-Z]\s?\d[a-zA-Z]\d|', $addressParts[4])) {
+            if (!empty($addressParts[4])
+                && preg_match('|[a-zA-Z]\d[a-zA-Z]\s?\d[a-zA-Z]\d|', $addressParts[4])) {
                 $info['country'] = 'ca';
             }
             if (!empty($addressParts[1])) {
@@ -959,17 +960,17 @@ class Horde_Form_Type_address extends Horde_Form_Type_longtext
             'params' => [
                 'rows' => [
                     'label' => Horde_Form_Translation::t("Number of rows"),
-                    'type'  => 'int'
+                    'type'  => 'int',
                 ],
                 'cols' => [
                     'label' => Horde_Form_Translation::t("Number of columns"),
-                    'type'  => 'int'
+                    'type'  => 'int',
                 ],
                 'helper' => [
                     'label' => Horde_Form_Translation::t("Helpers"),
-                    'type'  => 'stringarray'
-                ]
-            ]
+                    'type'  => 'stringarray',
+                ],
+            ],
         ];
     }
 
@@ -978,7 +979,7 @@ class Horde_Form_Type_address extends Horde_Form_Type_longtext
 /**
  * Horde_Form_Type_addresslink form type.
  *
- * @see \Horde\Form\V3\AddresslinkVariable PSR-4 equivalent in src/V3/
+ * @see Horde\Form\V3\AddresslinkVariable PSR-4 equivalent in src/V3/
  */
 class Horde_Form_Type_addresslink extends Horde_Form_Type_address
 {
@@ -1000,7 +1001,7 @@ class Horde_Form_Type_addresslink extends Horde_Form_Type_address
 /**
  * Horde_Form_Type_pgp form type.
  *
- * @see \Horde\Form\V3\PgpVariable PSR-4 equivalent in src/V3/
+ * @see Horde\Form\V3\PgpVariable PSR-4 equivalent in src/V3/
  */
 class Horde_Form_Type_pgp extends Horde_Form_Type_longtext
 {
@@ -1069,7 +1070,7 @@ class Horde_Form_Type_pgp extends Horde_Form_Type_longtext
 /**
  * Horde_Form_Type_smime form type.
  *
- * @see \Horde\Form\V3\SmimeVariable PSR-4 equivalent in src/V3/
+ * @see Horde\Form\V3\SmimeVariable PSR-4 equivalent in src/V3/
  */
 class Horde_Form_Type_smime extends Horde_Form_Type_longtext
 {
@@ -1126,7 +1127,7 @@ class Horde_Form_Type_smime extends Horde_Form_Type_longtext
 /**
  * Horde_Form_Type_country form type.
  *
- * @see \Horde\Form\V3\CountryVariable PSR-4 equivalent in src/V3/
+ * @see Horde\Form\V3\CountryVariable PSR-4 equivalent in src/V3/
  */
 class Horde_Form_Type_country extends Horde_Form_Type_enum
 {
@@ -1158,7 +1159,7 @@ class Horde_Form_Type_country extends Horde_Form_Type_enum
 /**
  * Horde_Form_Type_file form type.
  *
- * @see \Horde\Form\V3\FileVariable PSR-4 equivalent in src/V3/
+ * @see Horde\Form\V3\FileVariable PSR-4 equivalent in src/V3/
  */
 class Horde_Form_Type_file extends Horde_Form_Type
 {
@@ -1183,7 +1184,11 @@ class Horde_Form_Type_file extends Horde_Form_Type
         $name = $var->getVarName();
         try {
             $GLOBALS['browser']->wasFileUploaded($name);
-            $info['name'] = Horde_Util::dispelMagicQuotes($_FILES[$name]['name']);
+            /**
+             * WARNING: Horde_Util::dispelMagicQuotes() removed in PSR-4 version
+             * Magic quotes are obsolete in PHP 8+. Remove this call.
+             */
+$info['name'] = Horde_Util::dispelMagicQuotes($_FILES[$name]['name']);
             $info['type'] = $_FILES[$name]['type'];
             $info['tmp_name'] = $_FILES[$name]['tmp_name'];
             $info['file'] = $_FILES[$name]['tmp_name'];
@@ -1207,7 +1212,7 @@ class Horde_Form_Type_file extends Horde_Form_Type
 /**
  * Horde_Form_Type_image form type.
  *
- * @see \Horde\Form\V3\ImageVariable PSR-4 equivalent in src/V3/
+ * @see Horde\Form\V3\ImageVariable PSR-4 equivalent in src/V3/
  */
 class Horde_Form_Type_image extends Horde_Form_Type
 {
@@ -1311,13 +1316,13 @@ class Horde_Form_Type_image extends Horde_Form_Type
         /* The upload generated a PEAR Error. */
         if ($this->_uploaded instanceof Horde_Browser_Exception) {
             /* Not required and no image upload attempted. */
-            if (!$var->isRequired() && empty($field['hash']) &&
-                $this->_uploaded->getCode() == UPLOAD_ERR_NO_FILE) {
+            if (!$var->isRequired() && empty($field['hash'])
+                && $this->_uploaded->getCode() == UPLOAD_ERR_NO_FILE) {
                 return true;
             }
 
-            if (($this->_uploaded->getCode() == UPLOAD_ERR_NO_FILE) &&
-                empty($field['hash'])) {
+            if (($this->_uploaded->getCode() == UPLOAD_ERR_NO_FILE)
+                && empty($field['hash'])) {
                 /* Nothing uploaded and no older upload. */
                 return $this->invalid('This field is required.');
             }
@@ -1471,9 +1476,9 @@ class Horde_Form_Type_image extends Horde_Form_Type
                 return;
             }
 
-            if ($this->_uploaded->getCode() == 4 &&
-                !empty($upload['hash']) &&
-                $session->exists('horde', 'form/' . $upload['hash'])) {
+            if ($this->_uploaded->getCode() == 4
+                && !empty($upload['hash'])
+                && $session->exists('horde', 'form/' . $upload['hash'])) {
                 $this->_img['img'] = $session->get('horde', 'form/' . $upload['hash']);
                 $session->remove('horde', 'form/' . $upload['hash']);
                 if (isset($this->_img['error'])) {
@@ -1609,7 +1614,7 @@ class Horde_Form_Type_image extends Horde_Form_Type
 /**
  * Horde_Form_Type_boolean form type.
  *
- * @see \Horde\Form\V3\BooleanVariable PSR-4 equivalent in src/V3/
+ * @see Horde\Form\V3\BooleanVariable PSR-4 equivalent in src/V3/
  */
 class Horde_Form_Type_boolean extends Horde_Form_Type
 {
@@ -1637,7 +1642,7 @@ class Horde_Form_Type_boolean extends Horde_Form_Type
 /**
  * Horde_Form_Type_link form type.
  *
- * @see \Horde\Form\V3\LinkVariable PSR-4 equivalent in src/V3/
+ * @see Horde\Form\V3\LinkVariable PSR-4 equivalent in src/V3/
  */
 class Horde_Form_Type_link extends Horde_Form_Type
 {
@@ -1674,8 +1679,8 @@ class Horde_Form_Type_link extends Horde_Form_Type
             'params' => [
                 'values' => [
                     'label' => Horde_Form_Translation::t("Values"),
-                    'type' => 'array']
-/*                'url' => [
+                    'type' => 'array'],
+                /*                'url' => [
                     'label' => Horde_Form_Translation::t("Link URL"),
                     'type' => 'text'],
                 'text' => [
@@ -1697,7 +1702,7 @@ class Horde_Form_Type_link extends Horde_Form_Type
                     'label' => Horde_Form_Translation::t("Link CSS class"),
                     'type' => 'text'],
 */
-            ]
+            ],
         ];
     }
 
@@ -1706,7 +1711,7 @@ class Horde_Form_Type_link extends Horde_Form_Type
 /**
  * Horde_Form_Type_email form type.
  *
- * @see \Horde\Form\V3\EmailVariable PSR-4 equivalent in src/V3/
+ * @see Horde\Form\V3\EmailVariable PSR-4 equivalent in src/V3/
  */
 class Horde_Form_Type_email extends Horde_Form_Type
 {
@@ -1873,9 +1878,9 @@ class Horde_Form_Type_email extends Horde_Form_Type
                 }
             } elseif ($char == ':') {
                 $in_group = true;
-            } elseif (strpos($this->_delimiters, $char) !== false &&
-                      $prev !== '\\' &&
-                      is_null($in_quote)) {
+            } elseif (strpos($this->_delimiters, $char) !== false
+                      && $prev !== '\\'
+                      && is_null($in_quote)) {
                 $emails[] = substr($string, $pos, $i - $pos);
                 $pos = $i + 1;
             }
@@ -1917,8 +1922,8 @@ class Horde_Form_Type_email extends Horde_Form_Type
         [, $maildomain] = explode('@', $email, 2);
 
         // Try to get the real mailserver from MX records.
-        if (function_exists('getmxrr') &&
-            @getmxrr($maildomain, $mxhosts, $mxpriorities)) {
+        if (function_exists('getmxrr')
+            && @getmxrr($maildomain, $mxhosts, $mxpriorities)) {
             // MX record found.
             array_multisort($mxpriorities, $mxhosts);
             $mailhost = $mxhosts[0];
@@ -2405,7 +2410,7 @@ class Horde_Form_Type_email extends Horde_Form_Type
 /**
  * Horde_Form_Type_matrix form type.
  *
- * @see \Horde\Form\V3\MatrixVariable PSR-4 equivalent in src/V3/
+ * @see Horde\Form\V3\MatrixVariable PSR-4 equivalent in src/V3/
  */
 class Horde_Form_Type_matrix extends Horde_Form_Type
 {
@@ -2486,21 +2491,21 @@ class Horde_Form_Type_matrix extends Horde_Form_Type
             'params' => [
                 'cols' => [
                     'label' => Horde_Form_Translation::t("Column titles"),
-                    'type'  => 'stringarray'
+                    'type'  => 'stringarray',
                 ],
                 'rows' => [
                     'label' => Horde_Form_Translation::t("Row titles"),
-                    'type'  => 'stringarray'
+                    'type'  => 'stringarray',
                 ],
                 'matrix' => [
                     'label' => Horde_Form_Translation::t("Values"),
-                    'type'  => 'stringarray'
+                    'type'  => 'stringarray',
                 ],
                 'new_input' => [
                     'label' => Horde_Form_Translation::t("New Input"),
-                    'type'  => 'boolean'
-                ]
-            ]
+                    'type'  => 'boolean',
+                ],
+            ],
         ];
     }
 
@@ -2509,7 +2514,7 @@ class Horde_Form_Type_matrix extends Horde_Form_Type
 /**
  * Horde_Form_Type_emailConfirm form type.
  *
- * @see \Horde\Form\V3\EmailconfirmVariable PSR-4 equivalent in src/V3/
+ * @see Horde\Form\V3\EmailconfirmVariable PSR-4 equivalent in src/V3/
  */
 class Horde_Form_Type_emailConfirm extends Horde_Form_Type
 {
@@ -2550,7 +2555,7 @@ class Horde_Form_Type_emailConfirm extends Horde_Form_Type
 /**
  * Horde_Form_Type_password form type.
  *
- * @see \Horde\Form\V3\PasswordVariable PSR-4 equivalent in src/V3/
+ * @see Horde\Form\V3\PasswordVariable PSR-4 equivalent in src/V3/
  */
 class Horde_Form_Type_password extends Horde_Form_Type
 {
@@ -2576,7 +2581,7 @@ class Horde_Form_Type_password extends Horde_Form_Type
 /**
  * Horde_Form_Type_passwordconfirm form type.
  *
- * @see \Horde\Form\V3\PasswordconfirmVariable PSR-4 equivalent in src/V3/
+ * @see Horde\Form\V3\PasswordconfirmVariable PSR-4 equivalent in src/V3/
  */
 class Horde_Form_Type_passwordconfirm extends Horde_Form_Type
 {
@@ -2616,7 +2621,7 @@ class Horde_Form_Type_passwordconfirm extends Horde_Form_Type
 /**
  * Horde_Form_Type_enum form type.
  *
- * @see \Horde\Form\V3\EnumVariable PSR-4 equivalent in src/V3/
+ * @see Horde\Form\V3\EnumVariable PSR-4 equivalent in src/V3/
  */
 class Horde_Form_Type_enum extends Horde_Form_Type
 {
@@ -2648,8 +2653,8 @@ class Horde_Form_Type_enum extends Horde_Form_Type
             return $this->invalid('This field is required.');
         }
 
-        if (count($this->_values) == 0 || isset($this->_values[$value]) ||
-            ($this->_prompt && empty($value))) {
+        if (count($this->_values) == 0 || isset($this->_values[$value])
+            || ($this->_prompt && empty($value))) {
             return true;
         }
 
@@ -2690,7 +2695,7 @@ class Horde_Form_Type_enum extends Horde_Form_Type
 /**
  * Horde_Form_Type_mlenum form type.
  *
- * @see \Horde\Form\V3\MlenumVariable PSR-4 equivalent in src/V3/
+ * @see Horde\Form\V3\MlenumVariable PSR-4 equivalent in src/V3/
  */
 class Horde_Form_Type_mlenum extends Horde_Form_Type
 {
@@ -2735,8 +2740,8 @@ class Horde_Form_Type_mlenum extends Horde_Form_Type
             return $this->invalid('This field is required.');
         }
 
-        if (!count($this->_values) || isset($this->_values[$value['1']]) ||
-            (!empty($this->_prompts) && empty($value['1']))) {
+        if (!count($this->_values) || isset($this->_values[$value['1']])
+            || (!empty($this->_prompts) && empty($value['1']))) {
             return true;
         }
 
@@ -2783,7 +2788,7 @@ class Horde_Form_Type_mlenum extends Horde_Form_Type
 /**
  * Horde_Form_Type_multienum form type.
  *
- * @see \Horde\Form\V3\MultienumVariable PSR-4 equivalent in src/V3/
+ * @see Horde\Form\V3\MultienumVariable PSR-4 equivalent in src/V3/
  */
 class Horde_Form_Type_multienum extends Horde_Form_Type_enum
 {
@@ -2854,7 +2859,7 @@ class Horde_Form_Type_multienum extends Horde_Form_Type_enum
 /**
  * Horde_Form_Type_keyval_multienum form type.
  *
- * @see \Horde\Form\V3\KeyvalMultienumVariable PSR-4 equivalent in src/V3/
+ * @see Horde\Form\V3\KeyvalMultienumVariable PSR-4 equivalent in src/V3/
  */
 class Horde_Form_Type_keyval_multienum extends Horde_Form_Type_multienum
 {
@@ -2884,7 +2889,7 @@ class Horde_Form_Type_keyval_multienum extends Horde_Form_Type_multienum
 /**
  * Horde_Form_Type_radio form type.
  *
- * @see \Horde\Form\V3\RadioVariable PSR-4 equivalent in src/V3/
+ * @see Horde\Form\V3\RadioVariable PSR-4 equivalent in src/V3/
  */
 class Horde_Form_Type_radio extends Horde_Form_Type_enum
 {
@@ -2904,9 +2909,9 @@ class Horde_Form_Type_radio extends Horde_Form_Type_enum
                     'type'  => 'stringarray'],
                 'prompt' => [
                     'label' => Horde_Form_Translation::t("Prompt text"),
-                    'type'  => 'text'
-                ]
-            ]
+                    'type'  => 'text',
+                ],
+            ],
         ];
     }
 
@@ -2915,7 +2920,7 @@ class Horde_Form_Type_radio extends Horde_Form_Type_enum
 /**
  * Horde_Form_Type_set form type.
  *
- * @see \Horde\Form\V3\SetVariable PSR-4 equivalent in src/V3/
+ * @see Horde\Form\V3\SetVariable PSR-4 equivalent in src/V3/
  */
 class Horde_Form_Type_set extends Horde_Form_Type
 {
@@ -2963,13 +2968,13 @@ class Horde_Form_Type_set extends Horde_Form_Type
             'params' => [
                 'values' => [
                     'label' => Horde_Form_Translation::t("Values"),
-                    'type'  => 'stringarray'
+                    'type'  => 'stringarray',
                 ],
                 'checkAll' => [
                     'label' => Horde_Form_Translation::t("Check all"),
-                    'type'  => 'boolean'
-                ]
-            ]
+                    'type'  => 'boolean',
+                ],
+            ],
         ];
     }
 
@@ -2978,7 +2983,7 @@ class Horde_Form_Type_set extends Horde_Form_Type
 /**
  * Horde_Form_Type_date form type.
  *
- * @see \Horde\Form\V3\DateVariable PSR-4 equivalent in src/V3/
+ * @see Horde\Form\V3\DateVariable PSR-4 equivalent in src/V3/
  */
 class Horde_Form_Type_date extends Horde_Form_Type
 {
@@ -3131,9 +3136,9 @@ class Horde_Form_Type_date extends Horde_Form_Type
             'params' => [
                 'format' => [
                     'label' => Horde_Form_Translation::t("Format"),
-                    'type'  => 'string'
-                ]
-            ]
+                    'type'  => 'string',
+                ],
+            ],
         ];
     }
 
@@ -3142,7 +3147,7 @@ class Horde_Form_Type_date extends Horde_Form_Type
 /**
  * Horde_Form_Type_time form type.
  *
- * @see \Horde\Form\V3\TimeVariable PSR-4 equivalent in src/V3/
+ * @see Horde\Form\V3\TimeVariable PSR-4 equivalent in src/V3/
  */
 class Horde_Form_Type_time extends Horde_Form_Type
 {
@@ -3172,7 +3177,7 @@ class Horde_Form_Type_time extends Horde_Form_Type
 /**
  * Horde_Form_Type_hourminutesecond form type.
  *
- * @see \Horde\Form\V3\HourminutesecondVariable PSR-4 equivalent in src/V3/
+ * @see Horde\Form\V3\HourminutesecondVariable PSR-4 equivalent in src/V3/
  */
 class Horde_Form_Type_hourminutesecond extends Horde_Form_Type
 {
@@ -3293,7 +3298,7 @@ class Horde_Form_Type_hourminutesecond extends Horde_Form_Type
 /**
  * Horde_Form_Type_monthyear form type.
  *
- * @see \Horde\Form\V3\MonthyearVariable PSR-4 equivalent in src/V3/
+ * @see Horde\Form\V3\MonthyearVariable PSR-4 equivalent in src/V3/
  */
 class Horde_Form_Type_monthyear extends Horde_Form_Type
 {
@@ -3327,8 +3332,8 @@ class Horde_Form_Type_monthyear extends Horde_Form_Type
             return true;
         }
 
-        if (!$vars->get($this->getMonthVar($var)) ||
-            !$vars->get($this->getYearVar($var))) {
+        if (!$vars->get($this->getMonthVar($var))
+            || !$vars->get($this->getYearVar($var))) {
             return $this->invalid('Please enter a month and a year.');
         }
 
@@ -3363,7 +3368,7 @@ class Horde_Form_Type_monthyear extends Horde_Form_Type
 /**
  * Horde_Form_Type_monthdayyear form type.
  *
- * @see \Horde\Form\V3\MonthdayyearVariable PSR-4 equivalent in src/V3/
+ * @see Horde\Form\V3\MonthdayyearVariable PSR-4 equivalent in src/V3/
  */
 class Horde_Form_Type_monthdayyear extends Horde_Form_Type
 {
@@ -3666,9 +3671,9 @@ class Horde_Form_Type_monthdayyear extends Horde_Form_Type
                 return [
                     'year' => $date->year,
                     'month' => $date->month,
-                    'day' => $date->mday
+                    'day' => $date->mday,
                 ];
-            } catch (Horde_Date_Exception | RuntimeException $e) {
+            } catch (Horde_Date_Exception|RuntimeException $e) {
                 // Parsing failed, fall through to validation
             }
         }
@@ -3733,7 +3738,7 @@ class Horde_Form_Type_monthdayyear extends Horde_Form_Type
 /**
  * Horde_Form_Type_datetime form type.
  *
- * @see \Horde\Form\V3\DatetimeVariable PSR-4 equivalent in src/V3/
+ * @see Horde\Form\V3\DatetimeVariable PSR-4 equivalent in src/V3/
  */
 class Horde_Form_Type_datetime extends Horde_Form_Type
 {
@@ -3930,7 +3935,7 @@ class Horde_Form_Type_datetime extends Horde_Form_Type
 /**
  * Horde_Form_Type_colorpicker form type.
  *
- * @see \Horde\Form\V3\ColorpickerVariable PSR-4 equivalent in src/V3/
+ * @see Horde\Form\V3\ColorpickerVariable PSR-4 equivalent in src/V3/
  */
 class Horde_Form_Type_colorpicker extends Horde_Form_Type
 {
@@ -3960,7 +3965,7 @@ class Horde_Form_Type_colorpicker extends Horde_Form_Type
 /**
  * Horde_Form_Type_sound form type.
  *
- * @see \Horde\Form\V3\SoundVariable PSR-4 equivalent in src/V3/
+ * @see Horde\Form\V3\SoundVariable PSR-4 equivalent in src/V3/
  */
 class Horde_Form_Type_sound extends Horde_Form_Type
 {
@@ -4002,7 +4007,7 @@ class Horde_Form_Type_sound extends Horde_Form_Type
 /**
  * Horde_Form_Type_sorter form type.
  *
- * @see \Horde\Form\V3\SorterVariable PSR-4 equivalent in src/V3/
+ * @see Horde\Form\V3\SorterVariable PSR-4 equivalent in src/V3/
  */
 class Horde_Form_Type_sorter extends Horde_Form_Type
 {
@@ -4101,7 +4106,7 @@ class Horde_Form_Type_sorter extends Horde_Form_Type
 /**
  * Horde_Form_Type_selectfiles form type.
  *
- * @see \Horde\Form\V3\SelectfilesVariable PSR-4 equivalent in src/V3/
+ * @see Horde\Form\V3\SelectfilesVariable PSR-4 equivalent in src/V3/
  */
 class Horde_Form_Type_selectfiles extends Horde_Form_Type
 {
@@ -4186,7 +4191,7 @@ class Horde_Form_Type_selectfiles extends Horde_Form_Type
 /**
  * Horde_Form_Type_assign form type.
  *
- * @see \Horde\Form\V3\AssignVariable PSR-4 equivalent in src/V3/
+ * @see Horde\Form\V3\AssignVariable PSR-4 equivalent in src/V3/
  */
 class Horde_Form_Type_assign extends Horde_Form_Type
 {
@@ -4331,7 +4336,7 @@ class Horde_Form_Type_assign extends Horde_Form_Type
 /**
  * Horde_Form_Type_creditcard form type.
  *
- * @see \Horde\Form\V3\CreditcardVariable PSR-4 equivalent in src/V3/
+ * @see Horde\Form\V3\CreditcardVariable PSR-4 equivalent in src/V3/
  */
 class Horde_Form_Type_creditcard extends Horde_Form_Type
 {
@@ -4394,29 +4399,29 @@ class Horde_Form_Type_creditcard extends Horde_Form_Type
         }
 
         // Check for Visa.
-        if ((($l == 16) || ($l == 13)) &&
-            ($ccnum[0] == 4)) {
+        if ((($l == 16) || ($l == 13))
+            && ($ccnum[0] == 4)) {
             return 'visa';
         }
 
         // Check for MasterCard.
-        if (($l == 16) &&
-            ($ccnum[0] == 5) &&
-            ($ccnum[1] >= 1) &&
-            ($ccnum[1] <= 5)) {
+        if (($l == 16)
+            && ($ccnum[0] == 5)
+            && ($ccnum[1] >= 1)
+            && ($ccnum[1] <= 5)) {
             return 'mastercard';
         }
 
         // Check for Amex.
-        if (($l == 15) &&
-            ($ccnum[0] == 3) &&
-            (($ccnum[1] == 4) || ($ccnum[1] == 7))) {
+        if (($l == 15)
+            && ($ccnum[0] == 3)
+            && (($ccnum[1] == 4) || ($ccnum[1] == 7))) {
             return 'amex';
         }
 
         // Check for Discover (Novus).
-        if (strlen($ccnum) == 16 &&
-            substr($ccnum, 0, 4) == '6011') {
+        if (strlen($ccnum) == 16
+            && substr($ccnum, 0, 4) == '6011') {
             return 'discover';
         }
 
@@ -4437,7 +4442,7 @@ class Horde_Form_Type_creditcard extends Horde_Form_Type
 /**
  * Horde_Form_Type_obrowser form type.
  *
- * @see \Horde\Form\V3\ObrowserVariable PSR-4 equivalent in src/V3/
+ * @see Horde\Form\V3\ObrowserVariable PSR-4 equivalent in src/V3/
  */
 class Horde_Form_Type_obrowser extends Horde_Form_Type
 {
@@ -4459,7 +4464,7 @@ class Horde_Form_Type_obrowser extends Horde_Form_Type
 /**
  * Horde_Form_Type_dblookup form type.
  *
- * @see \Horde\Form\V3\DblookupVariable PSR-4 equivalent in src/V3/
+ * @see Horde\Form\V3\DblookupVariable PSR-4 equivalent in src/V3/
  */
 class Horde_Form_Type_dblookup extends Horde_Form_Type_enum
 {
@@ -4509,7 +4514,7 @@ class Horde_Form_Type_dblookup extends Horde_Form_Type_enum
 /**
  * Horde_Form_Type_figlet form type.
  *
- * @see \Horde\Form\V3\FigletVariable PSR-4 equivalent in src/V3/
+ * @see Horde\Form\V3\FigletVariable PSR-4 equivalent in src/V3/
  */
 class Horde_Form_Type_figlet extends Horde_Form_Type
 {
@@ -4570,7 +4575,7 @@ class Horde_Form_Type_figlet extends Horde_Form_Type
 /**
  * Horde_Form_Type_captcha form type.
  *
- * @see \Horde\Form\V3\CaptchaVariable PSR-4 equivalent in src/V3/
+ * @see Horde\Form\V3\CaptchaVariable PSR-4 equivalent in src/V3/
  */
 class Horde_Form_Type_captcha extends Horde_Form_Type_figlet
 {
@@ -4594,7 +4599,7 @@ class Horde_Form_Type_captcha extends Horde_Form_Type_figlet
 /**
  * Horde_Form_Type_category form type.
  *
- * @see \Horde\Form\V3\CategoryVariable PSR-4 equivalent in src/V3/
+ * @see Horde\Form\V3\CategoryVariable PSR-4 equivalent in src/V3/
  */
 class Horde_Form_Type_category extends Horde_Form_Type
 {
@@ -4633,7 +4638,7 @@ class Horde_Form_Type_category extends Horde_Form_Type
 /**
  * Horde_Form_Type_invalid form type.
  *
- * @see \Horde\Form\V3\InvalidVariable PSR-4 equivalent in src/V3/
+ * @see Horde\Form\V3\InvalidVariable PSR-4 equivalent in src/V3/
  */
 class Horde_Form_Type_invalid extends Horde_Form_Type
 {
@@ -4662,9 +4667,9 @@ class Horde_Form_Type_invalid extends Horde_Form_Type
             'params' => [
                 'message' => [
                     'label' => Horde_Form_Translation::t("Text"),
-                    'type'  => 'text'
-                ]
-            ]
+                    'type'  => 'text',
+                ],
+            ],
         ];
     }
 

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright 2003-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2003-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -22,7 +22,7 @@
  * @copyright 2003-2017 Horde LLC
  * @license   http://www.horde.org/licenses/lgpl21 LGPL
  * @package   Form
- 
+
  *
  * @see Horde\Form\V3\ReloadAction PSR-4 equivalent in src/V3/ReloadAction.php
  */

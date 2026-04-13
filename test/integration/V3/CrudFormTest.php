@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /**
@@ -32,7 +33,7 @@ use Horde_Variables;
 /**
  * CRUD Form integration test.
  *
- * @author    Ralf Lang <lang@b1-systems.de>
+ * @author    Ralf Lang <ralf.lang@ralf-lang.de>
  * @category  Horde
  * @copyright 2026 Horde LLC
  * @license   http://www.horde.org/licenses/lgpl21 LGPL 2.1
@@ -490,7 +491,7 @@ class CrudFormTest extends TestCase
             expanded: true
         );
         $form->addVariable('Status', 'status', 'enum', true, false, null, [
-            'values' => ['active' => 'Active', 'inactive' => 'Inactive']
+            'values' => ['active' => 'Active', 'inactive' => 'Inactive'],
         ]);
         $form->addVariable('Notifications', 'notifications', 'boolean', false);
 

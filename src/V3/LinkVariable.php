@@ -1,4 +1,5 @@
 <?php
+
 namespace Horde\Form\V3;
 
 use Horde_Variables;
@@ -8,7 +9,7 @@ use Horde_Form_Translation;
  * LinkVariable type for hyperlink display fields.
  *
  * @property array $values List of hashes containing link parameters
- 
+
  *
  * PSR-4 implementation.
  *
@@ -54,9 +55,9 @@ class LinkVariable extends BaseVariable
             'params' => [
                 'values' => [
                     'label' => Horde_Form_Translation::t("Values"),
-                    'type' => 'array'
-                ]
-            ]
+                    'type' => 'array',
+                ],
+            ],
         ];
     }
 }

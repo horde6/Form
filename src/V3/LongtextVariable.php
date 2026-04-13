@@ -1,4 +1,5 @@
 <?php
+
 namespace Horde\Form\V3;
 
 use Horde_Variables;
@@ -13,7 +14,7 @@ use Horde_Form_Translation;
  * @property int $rows The number of rows for the textarea
  * @property int $cols The number of columns for the textarea
  * @property array $helper Array of helper options
- 
+
  *
  * PSR-4 implementation.
  *
@@ -89,17 +90,17 @@ class LongtextVariable extends TextVariable
             'params' => [
                 'rows'   => [
                     'label' => Horde_Form_Translation::t("Number of rows"),
-                    'type'  => 'int'
+                    'type'  => 'int',
                 ],
                 'cols'   => [
                     'label' => Horde_Form_Translation::t("Number of columns"),
-                    'type'  => 'int'
+                    'type'  => 'int',
                 ],
                 'helper' => [
                     'label' => Horde_Form_Translation::t("Helpers"),
-                    'type'  => 'stringarray'
-                ]
-            ]
+                    'type'  => 'stringarray',
+                ],
+            ],
         ];
     }
 }

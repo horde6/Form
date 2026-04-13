@@ -3,7 +3,7 @@
 /**
  * Test the Horde_Auth:: class.
  *
- * Copyright 2010-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2010-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -16,11 +16,13 @@
  */
 
 namespace Horde\Form\Test\Unit;
+
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Horde_Form;
 use Horde_Variables;
+use ArrayObject;
 
 #[CoversNothing]
 class BasicFormTest extends TestCase
@@ -69,7 +71,7 @@ class BasicFormTest extends TestCase
 
     public function testGetVariablesVarIsIdenticToInputVarIfObject()
     {
-        $vars = new \ArrayObject();
+        $vars = new ArrayObject();
         $form = new Horde_Form($vars, name: 'testForm');
         // getVars is not getVariables!
         $this->assertSame($vars, $form->getVars());
@@ -95,7 +97,7 @@ class BasicFormTest extends TestCase
         $this->assertArrayHasKey('testField1', $result);
         $this->assertArrayHasKey('testField2', $result);
         $this->assertEquals('value1', $result['testField1']);
-        $this->assertEquals('value2', $result['testField2']);   
+        $this->assertEquals('value2', $result['testField2']);
     }
 
     public function testGetInfoWithMultiEnum()
@@ -116,12 +118,13 @@ class BasicFormTest extends TestCase
     public function testGetInfoWithMultiFieldArrayPartsMultiEnum()
     {
         $vars = new Horde_Variables(
-        [
-            'states' => [
-                '1' => [11, 12, 13, 14],
-                '2' => [21],
+            [
+                'states' => [
+                    '1' => [11, 12, 13, 14],
+                    '2' => [21],
+                ],
             ]
-        ]);
+        );
         $info = [];
         $list1 = [
             11 => 'Option A1',
@@ -142,11 +145,23 @@ class BasicFormTest extends TestCase
 
         $form = new Horde_Form($vars, name: 'testFormWithMultiFieldMultiEnum');
         $form->addVariable(
-                'type1', "states[1]", 'multienum', false, false, null,
-                array ($list1, 4));
+            'type1',
+            "states[1]",
+            'multienum',
+            false,
+            false,
+            null,
+            [$list1, 4]
+        );
         $form->addVariable(
-                'type2', "states[2]", 'multienum', false, false, null,
-                array ($list2, 4));
+            'type2',
+            "states[2]",
+            'multienum',
+            false,
+            false,
+            null,
+            [$list2, 4]
+        );
         $result = $form->getInfo(null, $info);
         $this->assertIsArray($result);
         $this->assertCount(2, $result['states']);

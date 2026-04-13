@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Copyright 2001-2007 Robert E. Coyle <robertecoyle@hotmail.com>
- * Copyright 2001-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2001-2026 Robert E. Coyle <robertecoyle@hotmail.com>
+ * Copyright 2001-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -14,8 +14,7 @@
  * @package  Form
  */
 // Restrict legacy loader
-if (!class_exists('Horde_Form_Type'))
-{
+if (!class_exists('Horde_Form_Type')) {
     require_once 'Horde/Form/Type.php';
 }
 
@@ -24,7 +23,7 @@ use Horde\Util\ArrayUtils;
 /**
  * Horde_Form Master Class.
  *
- * @see \Horde\Form\V3\BaseForm PSR-4 equivalent in src/V3/
+ * @see Horde\Form\V3\BaseForm PSR-4 equivalent in src/V3/
  *
  * @author    Robert E. Coyle <robertecoyle@hotmail.com>
  * @author    Chuck Hagenbuch <chuck@horde.org>
@@ -409,14 +408,14 @@ class Horde_Form
         $var->setFormOb($this);
 
         $typeName = $var->getTypeName(); // same as lower-cased $type
-        if ($typeName == 'enum' &&
-            !strlen($var->type->getPrompt()) &&
-            count($var->getValues()) == 1) {
+        if ($typeName == 'enum'
+            && !strlen($var->type->getPrompt())
+            && count($var->getValues()) == 1) {
             $vals = array_keys($var->getValues());
             $this->_vars->add($var->varName, $vals[0]);
             $var->_autofilled = true;
-        } elseif ($typeName == 'file' ||
-                  $typeName == 'image') {
+        } elseif ($typeName == 'file'
+                  || $typeName == 'image') {
             $this->_enctype = 'multipart/form-data';
         }
         if (empty($this->_currentSection) && $this->_currentSection !== 0) {
@@ -427,8 +426,8 @@ class Horde_Form
             $this->_variables[$this->_currentSection][] = $var;
         } else {
             $num = 0;
-            while (isset($this->_variables[$this->_currentSection][$num]) &&
-                   $this->_variables[$this->_currentSection][$num]->getVarName() != $before) {
+            while (isset($this->_variables[$this->_currentSection][$num])
+                   && $this->_variables[$this->_currentSection][$num]->getVarName() != $before) {
                 $num++;
             }
             if (!isset($this->_variables[$this->_currentSection][$num])) {
@@ -464,8 +463,8 @@ class Horde_Form
     {
         foreach (array_keys($this->_variables) as $section) {
             foreach (array_keys($this->_variables[$section]) as $i) {
-                if ((is_a($var, 'Horde_Form_Variable') && $this->_variables[$section][$i] === $var) ||
-                    ($this->_variables[$section][$i]->getVarName() == $var)) {
+                if ((is_a($var, 'Horde_Form_Variable') && $this->_variables[$section][$i] === $var)
+                    || ($this->_variables[$section][$i]->getVarName() == $var)) {
                     // Slice out the variable to be removed.
                     $this->_variables[$section] = array_merge(
                         array_slice($this->_variables[$section], 0, $i),
@@ -810,8 +809,8 @@ class Horde_Form
             try {
                 $tokenSource = $GLOBALS['injector']->getInstance('Horde_Token');
                 $passedToken = $vars->get($this->_name . '_formToken');
-                if (!empty($passedToken) &&
-                    !$tokenSource->verify($passedToken)) {
+                if (!empty($passedToken)
+                    && !$tokenSource->verify($passedToken)) {
                     $this->_errors['_formToken'] = Horde_Form_Translation::t("This form has already been processed.");
                 }
             } catch (Horde_Exception $e) {
@@ -993,8 +992,8 @@ class Horde_Form
              * submitted if old value and new value differ. */
             if ($var->getOption('trackchange')) {
                 $varname = $var->getVarName();
-                if (!is_null($vars->get('formname')) &&
-                    $vars->get($varname) != $vars->get('__old_' . $varname)) {
+                if (!is_null($vars->get('formname'))
+                    && $vars->get($varname) != $vars->get('__old_' . $varname)) {
                     $this->_submitted = false;
                 }
             }

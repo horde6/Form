@@ -10,7 +10,7 @@
  * @category   Horde
  * @package    Form
  * @subpackage UnitTests
- * @author     Ralf Lang <lang@b1-systems.de>
+ * @author     Ralf Lang <ralf.lang@ralf-lang.de>
  * @license    http://www.horde.org/licenses/lgpl21 LGPL-2.1
  */
 
@@ -31,6 +31,7 @@ use PHPUnit\Framework\TestCase;
  * @category   Horde
  * @package    Form
  * @subpackage UnitTests
+ * @coversNothing
  */
 class V3FormIntegrationTest extends TestCase
 {
@@ -62,7 +63,7 @@ class V3FormIntegrationTest extends TestCase
         $var->init([
             'tech' => 'Technology',
             'science' => 'Science',
-            'art' => 'Art'
+            'art' => 'Art',
         ], true);
 
         $this->assertTrue($var->validate($vars));
@@ -237,7 +238,7 @@ class V3FormIntegrationTest extends TestCase
         $vars = new Horde_Variables([
             'email' => 'invalid-email',
             'age' => '150',
-            'category' => 'nonexistent'
+            'category' => 'nonexistent',
         ]);
 
         // Test multiple validation failures
@@ -258,7 +259,7 @@ class V3FormIntegrationTest extends TestCase
     public function testArrayFieldHandling(): void
     {
         $vars = new Horde_Variables([
-            'items' => ['item1', 'item2', 'item3']
+            'items' => ['item1', 'item2', 'item3'],
         ]);
 
         $var = new TextVariable('Items', 'items[]', false);

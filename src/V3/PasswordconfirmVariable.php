@@ -1,4 +1,5 @@
 <?php
+
 namespace Horde\Form\V3;
 
 use Horde_Variables;
@@ -6,7 +7,7 @@ use Horde_Form_Translation;
 
 /**
  * PasswordconfirmVariable type for password input with confirmation field.
- 
+
  *
  * PSR-4 implementation.
  *

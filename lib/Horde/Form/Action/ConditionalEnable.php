@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright 2002-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2002-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -34,7 +34,7 @@
  * @copyright 2002-2017 Horde LLC
  * @license   http://www.horde.org/licenses/lgpl21 LGPL
  * @package   Form
- 
+
  *
  * @see Horde\Form\V3\ConditionalenableAction PSR-4 equivalent in src/V3/ConditionalenableAction.php
  */

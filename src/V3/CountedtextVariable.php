@@ -1,4 +1,5 @@
 <?php
+
 namespace Horde\Form\V3;
 
 use Horde_Variables;
@@ -15,7 +16,7 @@ use Horde_Form_Translation;
  * @property int $cols The number of columns for the textarea
  * @property array $helper Array of helper options
  * @property int $chars The maximum number of characters allowed
- 
+
  *
  * PSR-4 implementation.
  *
@@ -73,17 +74,17 @@ class CountedtextVariable extends LongtextVariable
             'params' => [
                 'rows'  => [
                     'label' => Horde_Form_Translation::t("Number of rows"),
-                    'type'  => 'int'
+                    'type'  => 'int',
                 ],
                 'cols'  => [
                     'label' => Horde_Form_Translation::t("Number of columns"),
-                    'type'  => 'int'
+                    'type'  => 'int',
                 ],
                 'chars' => [
                     'label' => Horde_Form_Translation::t("Number of characters"),
-                    'type'  => 'int'
-                ]
-            ]
+                    'type'  => 'int',
+                ],
+            ],
         ];
     }
 }

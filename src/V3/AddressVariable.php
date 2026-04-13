@@ -1,4 +1,5 @@
 <?php
+
 namespace Horde\Form\V3;
 
 use Horde_Variables;
@@ -15,7 +16,7 @@ use Horde_Nls_Loader;
  * @property int $rows The number of rows for the textarea
  * @property int $cols The number of columns for the textarea
  * @property array $helper Array of helper options
- 
+
  *
  * PSR-4 implementation.
  *
@@ -63,8 +64,8 @@ class AddressVariable extends LongtextVariable
         } elseif (preg_match('/(?s)(.*?)(?-s)\r?\n(.*)\s*,\s*(\w+)\.?\s+(\d+|[a-zA-Z]\d[a-zA-Z]\s?\d[a-zA-Z]\d)/', $address, $addressParts)) {
             /* American/Canadian address style. */
             $info = [ 'country' => 'us' ];
-            if (!empty($addressParts[4]) &&
-                preg_match('|[a-zA-Z]\d[a-zA-Z]\s?\d[a-zA-Z]\d|', $addressParts[4])) {
+            if (!empty($addressParts[4])
+                && preg_match('|[a-zA-Z]\d[a-zA-Z]\s?\d[a-zA-Z]\d|', $addressParts[4])) {
                 $info['country'] = 'ca';
             }
             if (!empty($addressParts[1])) {
@@ -126,17 +127,17 @@ class AddressVariable extends LongtextVariable
             'params' => [
                 'rows' => [
                     'label' => Horde_Form_Translation::t("Number of rows"),
-                    'type'  => 'int'
+                    'type'  => 'int',
                 ],
                 'cols' => [
                     'label' => Horde_Form_Translation::t("Number of columns"),
-                    'type'  => 'int'
+                    'type'  => 'int',
                 ],
                 'helper' => [
                     'label' => Horde_Form_Translation::t("Helpers"),
-                    'type'  => 'stringarray'
-                ]
-            ]
+                    'type'  => 'stringarray',
+                ],
+            ],
         ];
     }
 }

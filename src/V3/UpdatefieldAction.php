@@ -1,8 +1,9 @@
 <?php
+
 declare(strict_types=1);
 
 /**
- * Copyright 2002-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2002-2026 Horde LLC (http://www.horde.org/)
  * Copyright 2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
@@ -16,6 +17,8 @@ declare(strict_types=1);
  */
 
 namespace Horde\Form\V3;
+
+use Horde_Variables;
 
 /**
  * UpdateFieldAction updates the value of one form variable as the variable(s)
@@ -59,7 +62,7 @@ namespace Horde\Form\V3;
  * @copyright 2026 Horde LLC
  * @license   http://www.horde.org/licenses/lgpl21 LGPL 2.1
  * @package   Form
- 
+
  *
  * PSR-4 implementation.
  *
@@ -92,14 +95,14 @@ class UpdatefieldAction extends BaseAction
     /**
      * This action doesn't set values server-side (JavaScript only).
      *
-     * @param \Horde_Variables $vars  The variables object
+     * @param Horde_Variables $vars  The variables object
      * @param mixed $sourceVal  The source value
      * @param int|null $index  Array index
      * @param bool $arrayVal  Whether dealing with array values
       *
       * @api
      */
-    public function setValues(\Horde_Variables $vars, $sourceVal, ?int $index = null, bool $arrayVal = false): void
+    public function setValues(Horde_Variables $vars, $sourceVal, ?int $index = null, bool $arrayVal = false): void
     {
         // This action is JavaScript-only, no server-side logic needed
     }
@@ -155,13 +158,13 @@ class UpdatefieldAction extends BaseAction
         $argsStr = implode(' + ', $args);
 
         return <<<JS
-// Update field function for action {$this->id}
-function updateField_{$this->id}() {
-    var target = document.getElementById('{$target}');
-    if (target) {
-        target.value = ({$argsStr}).replace(/(^ +| +$)/, '').replace(/ +/g, ' ');
-    }
-}
-JS;
+            // Update field function for action {$this->id}
+            function updateField_{$this->id}() {
+                var target = document.getElementById('{$target}');
+                if (target) {
+                    target.value = ({$argsStr}).replace(/(^ +| +$)/, '').replace(/ +/g, ' ');
+                }
+            }
+            JS;
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace Horde\Form\V3;
 
 use Horde_Variables;
@@ -10,7 +11,7 @@ use Horde_Date_Exception;
  * DateVariable type for date input fields.
  *
  * @property string $format The date format string
- 
+
  *
  * PSR-4 implementation.
  *
@@ -35,7 +36,7 @@ class DateVariable extends BaseVariable
 
     protected function isValid(Horde_Variables|array $vars, $value): bool
     {
-        if ($this->isRequired() && strlen(trim((string)$value)) == 0) {
+        if ($this->isRequired() && strlen(trim((string) $value)) == 0) {
             $this->message = sprintf(Horde_Form_Translation::t("%s is required"), $this->getHumanName());
             return false;
         }
@@ -110,9 +111,9 @@ class DateVariable extends BaseVariable
             'params' => [
                 'format' => [
                     'label' => Horde_Form_Translation::t("Format"),
-                    'type'  => 'string'
-                ]
-            ]
+                    'type'  => 'string',
+                ],
+            ],
         ];
     }
 }

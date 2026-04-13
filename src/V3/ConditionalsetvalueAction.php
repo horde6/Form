@@ -1,8 +1,9 @@
 <?php
+
 declare(strict_types=1);
 
 /**
- * Copyright 2002-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2002-2026 Horde LLC (http://www.horde.org/)
  * Copyright 2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
@@ -16,6 +17,8 @@ declare(strict_types=1);
  */
 
 namespace Horde\Form\V3;
+
+use Horde_Variables;
 
 /**
  * ConditionalSetValueAction sets the value of one form variable based on
@@ -54,7 +57,7 @@ namespace Horde\Form\V3;
  * @copyright 2026 Horde LLC
  * @license   http://www.horde.org/licenses/lgpl21 LGPL 2.1
  * @package   Form
- 
+
  *
  * PSR-4 implementation.
  *
@@ -93,13 +96,13 @@ class ConditionalsetvalueAction extends BaseAction
     /**
      * Set values in the variables object based on the source value.
      *
-     * @param \Horde_Variables $vars  The variables object
+     * @param Horde_Variables $vars  The variables object
      * @param mixed $sourceVal  The source value
      * @param bool $arrayVal  Whether dealing with array values
       *
       * @api
      */
-    public function setValues(\Horde_Variables $vars, $sourceVal, bool $arrayVal = false): void
+    public function setValues(Horde_Variables $vars, $sourceVal, bool $arrayVal = false): void
     {
         $map = $this->params['map'] ?? [];
         $target = $this->params['target'] ?? '';
@@ -139,51 +142,51 @@ class ConditionalsetvalueAction extends BaseAction
         // Build JavaScript array for the map
         $jsMap = [];
         foreach ($map as $key => $val) {
-            $jsMap[] = json_encode((string)$key) . ': ' . json_encode((string)$val);
+            $jsMap[] = json_encode((string) $key) . ': ' . json_encode((string) $val);
         }
         $jsMapStr = '{' . implode(', ', $jsMap) . '}';
 
         return <<<JS
-// Map value function for action {$this->id}
-var _map_{$this->id} = {$jsMapStr};
+            // Map value function for action {$this->id}
+            var _map_{$this->id} = {$jsMapStr};
 
-function mapValue_{$this->id}(sourceId, targetId) {
-    var source = document.getElementById(sourceId);
-    var target = document.getElementById(targetId);
+            function mapValue_{$this->id}(sourceId, targetId) {
+                var source = document.getElementById(sourceId);
+                var target = document.getElementById(targetId);
 
-    if (!source || !target) {
-        return;
-    }
+                if (!source || !target) {
+                    return;
+                }
 
-    var sourceValue = source.value;
-    if (source.selectedIndex !== undefined) {
-        // For select elements, use selected option value
-        sourceValue = source.options[source.selectedIndex]?.value || '';
-    }
+                var sourceValue = source.value;
+                if (source.selectedIndex !== undefined) {
+                    // For select elements, use selected option value
+                    sourceValue = source.options[source.selectedIndex]?.value || '';
+                }
 
-    // Check if we have a mapping for this value
-    if (_map_{$this->id}[sourceValue] !== undefined) {
-        var newval = _map_{$this->id}[sourceValue];
-        var replace = true;
-    } else {
-        var newval = '';
-        var replace = false;
+                // Check if we have a mapping for this value
+                if (_map_{$this->id}[sourceValue] !== undefined) {
+                    var newval = _map_{$this->id}[sourceValue];
+                    var replace = true;
+                } else {
+                    var newval = '';
+                    var replace = false;
 
-        // Check if current target value is in our map
-        for (var key in _map_{$this->id}) {
-            if (target.value == _map_{$this->id}[key]) {
-                replace = true;
-                break;
+                    // Check if current target value is in our map
+                    for (var key in _map_{$this->id}) {
+                        if (target.value == _map_{$this->id}[key]) {
+                            replace = true;
+                            break;
+                        }
+                    }
+                }
+
+                // Only update if we should replace
+                if (replace) {
+                    target.value = newval;
+                }
             }
-        }
-    }
-
-    // Only update if we should replace
-    if (replace) {
-        target.value = newval;
-    }
-}
-JS;
+            JS;
     }
 
     /**

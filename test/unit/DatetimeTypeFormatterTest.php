@@ -17,7 +17,12 @@ use Horde_Form_Type_datetime;
 use Horde\Date\Formatter\IcuFormatter;
 use Horde\Date\Formatter\DateTimeFormatter;
 use PHPUnit\Framework\TestCase;
+use InvalidArgumentException;
+use ReflectionClass;
 
+/**
+ * @coversNothing
+ */
 class DatetimeTypeFormatterTest extends TestCase
 {
     protected string $oldTimezone;
@@ -151,7 +156,7 @@ class DatetimeTypeFormatterTest extends TestCase
      */
     public function testInitRejectsString(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Formatter must be null or an instance of FormatterInterface');
 
         $type = new Horde_Form_Type_datetime();
@@ -163,7 +168,7 @@ class DatetimeTypeFormatterTest extends TestCase
      */
     public function testInitRejectsArray(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Formatter must be null or an instance of FormatterInterface');
 
         $type = new Horde_Form_Type_datetime();
@@ -194,7 +199,7 @@ class DatetimeTypeFormatterTest extends TestCase
         $type->init('', '', true, null, 'yyyy-MM-dd', false, $formatter, 'de_DE', 'Europe/Berlin');
 
         // Access the internal _mdy component to verify it received the formatter
-        $reflection = new \ReflectionClass($type);
+        $reflection = new ReflectionClass($type);
         $mdyProperty = $reflection->getProperty('_mdy');
         $mdyProperty->setAccessible(true);
         $mdy = $mdyProperty->getValue($type);

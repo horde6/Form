@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2001-2007 Robert E. Coyle <robertecoyle@hotmail.com>
+ * Copyright 2001-2026 Robert E. Coyle <robertecoyle@hotmail.com>
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -12,12 +12,13 @@
  */
 
 use Horde\Util\ArrayUtils;
+use Horde\Util\Util;
 
 /**
  * The Horde_Form_Renderer class provides HTML and other renderings of
  * forms for the Horde_Form:: package.
  *
- * @see \Horde\Form\V3\BaseRenderer PSR-4 equivalent in src/V3/
+ * @see Horde\Form\V3\BaseRenderer PSR-4 equivalent in src/V3/
  *
  * @author    Robert E. Coyle <robertecoyle@hotmail.com>
  * @category  Horde
@@ -73,7 +74,12 @@ class Horde_Form_Renderer
     {
         global $registry;
         if (isset($registry) && is_a($registry, 'Registry')) {
-            /* Registry available, so use a pretty image. */
+            /**
+             * ARCHITECTURE VIOLATION: Using deprecated Horde::img()
+             * @deprecated Use Horde_Themes_Image::tag() instead
+             * @see Horde_Deprecated::img()
+             */
+/* Registry available, so use a pretty image. */
             $this->_requiredMarker = Horde::img('required.png', '*');
         } else {
             /* No registry available, use something plain. */
@@ -126,7 +132,7 @@ class Horde_Form_Renderer
         $action = htmlspecialchars($action);
         $method = htmlspecialchars($method);
         echo "<form action=\"$action\" method=\"$method\"" . (empty($name) ? '' : " name=\"$name\" id=\"$name\"") . (is_null($enctype) ? '' : " enctype=\"$enctype\"") . ">\n";
-        Horde_Util::pformInput();
+        Util::pformInput();
     }
 
     public function beginActive($name, $extra = null)
@@ -191,7 +197,8 @@ class Horde_Form_Renderer
         }
 
         $open_section = $form->getOpenSection();
-        if (is_null($open_section)) {
+        $variables = $form->getVariables(false);
+        if (is_null($open_section) || !isset($variables[$open_section])) {
             $open_section = '__base';
         }
         printf(

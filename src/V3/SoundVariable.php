@@ -1,4 +1,5 @@
 <?php
+
 namespace Horde\Form\V3;
 
 use Horde_Variables;
@@ -9,7 +10,7 @@ use Horde_Themes;
  * SoundVariable type for sound selection fields.
  *
  * @property array $sounds Available sounds for selection
- 
+
  *
  * PSR-4 implementation.
  *

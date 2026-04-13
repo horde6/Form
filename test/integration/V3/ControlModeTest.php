@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /**
@@ -27,7 +28,7 @@ use Horde\Form\V3\Renderer\HtmlControlRenderer;
 /**
  * Control mode integration test.
  *
- * @author    Ralf Lang <lang@b1-systems.de>
+ * @author    Ralf Lang <ralf.lang@ralf-lang.de>
  * @category  Horde
  * @copyright 2026 Horde LLC
  * @license   http://www.horde.org/licenses/lgpl21 LGPL 2.1

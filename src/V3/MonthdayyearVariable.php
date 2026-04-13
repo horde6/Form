@@ -1,4 +1,5 @@
 <?php
+
 namespace Horde\Form\V3;
 
 use Horde_Variables;
@@ -13,7 +14,7 @@ use Horde_Form_Translation;
  * @property bool $picker Do we show the DHTML calendar
  * @property string|null $format_in The format to use when sending the date for storage
  * @property string $format_out The format to use when displaying the date
- 
+
  *
  * PSR-4 implementation.
  *
@@ -252,25 +253,25 @@ class MonthdayyearVariable extends BaseVariable
             'params' => [
                 'start_year' => [
                     'label' => Horde_Form_Translation::t("Start year"),
-                    'type'  => 'int'
+                    'type'  => 'int',
                 ],
                 'end_year'   => [
                     'label' => Horde_Form_Translation::t("End year"),
-                    'type'  => 'int'
+                    'type'  => 'int',
                 ],
                 'picker'     => [
                     'label' => Horde_Form_Translation::t("Show picker?"),
-                    'type'  => 'boolean'
+                    'type'  => 'boolean',
                 ],
                 'format_in'  => [
                     'label' => Horde_Form_Translation::t("Storage format"),
-                    'type'  => 'text'
+                    'type'  => 'text',
                 ],
                 'format_out' => [
                     'label' => Horde_Form_Translation::t("Display format"),
-                    'type'  => 'text'
-                ]
-            ]
+                    'type'  => 'text',
+                ],
+            ],
         ];
     }
 }

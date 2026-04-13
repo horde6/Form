@@ -1,8 +1,9 @@
 <?php
+
 declare(strict_types=1);
 
 /**
- * Copyright 2001-2007 Robert E. Coyle <robertecoyle@hotmail.com>
+ * Copyright 2001-2026 Robert E. Coyle <robertecoyle@hotmail.com>
  * Copyright 2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you

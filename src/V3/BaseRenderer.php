@@ -1,8 +1,9 @@
 <?php
+
 declare(strict_types=1);
 
 /**
- * Copyright 2001-2007 Robert E. Coyle <robertecoyle@hotmail.com>
+ * Copyright 2001-2026 Robert E. Coyle <robertecoyle@hotmail.com>
  * Copyright 2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
@@ -22,6 +23,7 @@ use Horde\Form\V3\Renderer\ControlRenderer;
 use Horde\Form\V3\Renderer\LayoutStrategy;
 use Horde\Form\V3\Renderer\ErrorRenderer;
 use Horde\Form\V3\Renderer\AssetManager;
+use Horde_Variables;
 
 /**
  * Base implementation of the Renderer interface.
@@ -127,19 +129,19 @@ abstract class BaseRenderer implements Renderer
 
         // Apply configuration
         if (isset($config['showHeader'])) {
-            $this->showHeader = (bool)$config['showHeader'];
+            $this->showHeader = (bool) $config['showHeader'];
         }
         if (isset($config['requiredMarker'])) {
-            $this->requiredMarker = (string)$config['requiredMarker'];
+            $this->requiredMarker = (string) $config['requiredMarker'];
         }
         if (isset($config['helpMarker'])) {
-            $this->helpMarker = (string)$config['helpMarker'];
+            $this->helpMarker = (string) $config['helpMarker'];
         }
         if (isset($config['encodeTitle'])) {
-            $this->encodeTitle = (bool)$config['encodeTitle'];
+            $this->encodeTitle = (bool) $config['encodeTitle'];
         }
         if (isset($config['stripedRows'])) {
-            $this->stripedRows = (bool)$config['stripedRows'];
+            $this->stripedRows = (bool) $config['stripedRows'];
         }
     }
 
@@ -343,7 +345,7 @@ abstract class BaseRenderer implements Renderer
 
         // Hidden variables
         $vars = $form->getVars();
-        $varsObject = new \Horde_Variables($vars);
+        $varsObject = new Horde_Variables($vars);
         $hiddenVars = $form->getVariables(flat: true, withHidden: true);
         foreach ($hiddenVars as $var) {
             if ($var->isHidden()) {
@@ -351,7 +353,7 @@ abstract class BaseRenderer implements Renderer
                 $output[] = sprintf(
                     '<input type="hidden" name="%s" value="%s">',
                     htmlspecialchars($var->getVarName()),
-                    htmlspecialchars((string)$value)
+                    htmlspecialchars((string) $value)
                 );
             }
         }
@@ -395,7 +397,7 @@ abstract class BaseRenderer implements Renderer
             if ($value === true) {
                 $attrStr .= ' ' . htmlspecialchars($key);
             } else {
-                $attrStr .= sprintf(' %s="%s"', htmlspecialchars($key), htmlspecialchars((string)$value));
+                $attrStr .= sprintf(' %s="%s"', htmlspecialchars($key), htmlspecialchars((string) $value));
             }
         }
 

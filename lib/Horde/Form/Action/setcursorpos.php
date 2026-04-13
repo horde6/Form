@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright 2006-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2006-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -23,7 +23,7 @@
  * @copyright 2006-2017 Horde LLC
  * @license   http://www.horde.org/licenses/lgpl21 LGPL
  * @package   Form
- 
+
  *
  * @see Horde\Form\V3\SetcursorposAction PSR-4 equivalent in src/V3/SetcursorposAction.php
  */
@@ -36,9 +36,9 @@ class Horde_Form_Action_setcursorpos extends Horde_Form_Action
         $injector->getInstance('Horde_PageOutput')->addScriptFile('form_helpers.js', 'horde');
 
         $pos = implode(',', $this->_params);
-        return 'form_setCursorPosition(document.forms[\'' .
-            htmlspecialchars($form->getName()) . '\'].elements[\'' .
-            htmlspecialchars($varname) . '\'].id, ' . $pos . ');';
+        return 'form_setCursorPosition(document.forms[\''
+            . htmlspecialchars($form->getName()) . '\'].elements[\''
+            . htmlspecialchars($varname) . '\'].id, ' . $pos . ');';
     }
 
 }

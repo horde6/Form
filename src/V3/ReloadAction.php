@@ -1,8 +1,9 @@
 <?php
+
 declare(strict_types=1);
 
 /**
- * Copyright 2003-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2003-2026 Horde LLC (http://www.horde.org/)
  * Copyright 2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
@@ -37,7 +38,7 @@ namespace Horde\Form\V3;
  * @copyright 2026 Horde LLC
  * @license   http://www.horde.org/licenses/lgpl21 LGPL 2.1
  * @package   Form
- 
+
  *
  * PSR-4 implementation.
  *

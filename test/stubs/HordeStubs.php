@@ -141,9 +141,7 @@ if (!class_exists('Horde_Form_Translation')) {
 
 // Horde_Exception stub
 if (!class_exists('Horde_Exception')) {
-    class Horde_Exception extends Exception
-    {
-    }
+    class Horde_Exception extends Exception {}
 }
 
 // PEAR stub for legacy error handling

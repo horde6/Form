@@ -10,7 +10,7 @@
  * @category   Horde
  * @package    Form
  * @subpackage UnitTests
- * @author     Ralf Lang <lang@b1-systems.de>
+ * @author     Ralf Lang <ralf.lang@ralf-lang.de>
  * @license    http://www.horde.org/licenses/lgpl21 LGPL-2.1
  */
 

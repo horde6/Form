@@ -1,4 +1,5 @@
 <?php
+
 namespace Horde\Form\V3;
 
 use Horde_Variables;
@@ -6,7 +7,7 @@ use Horde_Form_Translation;
 
 /**
  * DescriptionVariable type for description display fields.
- 
+
  *
  * PSR-4 implementation.
  *

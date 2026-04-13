@@ -1,8 +1,9 @@
 <?php
+
 declare(strict_types=1);
 
 /**
- * Copyright 2001-2007 Robert E. Coyle <robertecoyle@hotmail.com>
+ * Copyright 2001-2026 Robert E. Coyle <robertecoyle@hotmail.com>
  * Copyright 2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
@@ -80,7 +81,7 @@ class HtmlRenderer extends BaseRenderer
     ) {
         // Extract controlMode from config before parent constructor
         if (isset($config['controlMode'])) {
-            $this->controlMode = (string)$config['controlMode'];
+            $this->controlMode = (string) $config['controlMode'];
         }
 
         // Call parent constructor (this will initialize $this->assetManager)
@@ -218,7 +219,7 @@ class HtmlRenderer extends BaseRenderer
         $output[] = $this->buildTag('input', [
             'type' => 'submit',
             'value' => 'Submit',
-            'class' => 'button'
+            'class' => 'button',
         ]);
         $output[] = '</div>';
 

@@ -17,7 +17,12 @@ use Horde_Form_Type_date;
 use Horde\Date\Formatter\IcuFormatter;
 use Horde\Date\Formatter\DateTimeFormatter;
 use PHPUnit\Framework\TestCase;
+use InvalidArgumentException;
+use stdClass;
 
+/**
+ * @coversNothing
+ */
 class DateTypeFormatterTest extends TestCase
 {
     protected string $oldTimezone;
@@ -109,7 +114,7 @@ class DateTypeFormatterTest extends TestCase
      */
     public function testFormatterModeRequiresTimestamp(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Formatter mode requires an integer timestamp');
 
         $type = new Horde_Form_Type_date();
@@ -152,7 +157,7 @@ class DateTypeFormatterTest extends TestCase
      */
     public function testInitRejectsString(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Formatter must be null or an instance of FormatterInterface');
 
         $type = new Horde_Form_Type_date();
@@ -164,7 +169,7 @@ class DateTypeFormatterTest extends TestCase
      */
     public function testInitRejectsArray(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Formatter must be null or an instance of FormatterInterface');
 
         $type = new Horde_Form_Type_date();
@@ -176,11 +181,11 @@ class DateTypeFormatterTest extends TestCase
      */
     public function testInitRejectsStdClass(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Formatter must be null or an instance of FormatterInterface');
 
         $type = new Horde_Form_Type_date();
-        $type->init('yyyy-MM-dd', new \stdClass());
+        $type->init('yyyy-MM-dd', new stdClass());
     }
 
     // ===== Timestamp Type Guard Tests =====
@@ -216,13 +221,13 @@ class DateTypeFormatterTest extends TestCase
      */
     public function testFormatterModeRejectsStringTimestamp(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Formatter mode requires an integer timestamp, got string');
 
         $type = new Horde_Form_Type_date();
         $type->init('yyyy-MM-dd', new IcuFormatter());
 
-        $timestamp = (string)strtotime('2026-03-18');
+        $timestamp = (string) strtotime('2026-03-18');
         $type->getFormattedTime($timestamp, null, false);
     }
 
@@ -231,7 +236,7 @@ class DateTypeFormatterTest extends TestCase
      */
     public function testFormatterModeRejectsDateString(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Formatter mode requires an integer timestamp, got string');
 
         $type = new Horde_Form_Type_date();
@@ -245,7 +250,7 @@ class DateTypeFormatterTest extends TestCase
      */
     public function testFormatterModeRejectsArray(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Formatter mode requires an integer timestamp, got array');
 
         $type = new Horde_Form_Type_date();
@@ -259,7 +264,7 @@ class DateTypeFormatterTest extends TestCase
      */
     public function testFormatterModeRejectsFloat(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Formatter mode requires an integer timestamp, got double');
 
         $type = new Horde_Form_Type_date();

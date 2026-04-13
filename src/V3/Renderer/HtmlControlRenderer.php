@@ -1,8 +1,9 @@
 <?php
+
 declare(strict_types=1);
 
 /**
- * Copyright 2001-2007 Robert E. Coyle <robertecoyle@hotmail.com>
+ * Copyright 2001-2026 Robert E. Coyle <robertecoyle@hotmail.com>
  * Copyright 2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
@@ -19,6 +20,8 @@ namespace Horde\Form\V3\Renderer;
 
 use Horde\Form\V3\Variable;
 use Horde\Form\Form;
+use DateTimeInterface;
+use Horde_Variables;
 
 /**
  * HTML control renderer for rendering form controls as HTML.
@@ -191,7 +194,7 @@ class HtmlControlRenderer implements ControlRenderer
             if ($value === true) {
                 $attrStr .= ' ' . htmlspecialchars($key);
             } else {
-                $attrStr .= sprintf(' %s="%s"', htmlspecialchars($key), htmlspecialchars((string)$value));
+                $attrStr .= sprintf(' %s="%s"', htmlspecialchars($key), htmlspecialchars((string) $value));
             }
         }
 
@@ -212,7 +215,7 @@ class HtmlControlRenderer implements ControlRenderer
     protected function getValue(Variable $var, Form $form)
     {
         $vars = $form->getVars();
-        return $var->getValue(new \Horde_Variables($vars));
+        return $var->getValue(new Horde_Variables($vars));
     }
 
     // ========================================================================
@@ -280,10 +283,10 @@ class HtmlControlRenderer implements ControlRenderer
 
         // Options
         foreach ($values as $key => $label) {
-            $selected = (string)$key === (string)$value ? 'selected' : '';
+            $selected = (string) $key === (string) $value ? 'selected' : '';
             $options[] = sprintf(
                 '<option value="%s" %s>%s</option>',
-                htmlspecialchars((string)$key),
+                htmlspecialchars((string) $key),
                 $selected,
                 htmlspecialchars($label)
             );
@@ -342,7 +345,7 @@ class HtmlControlRenderer implements ControlRenderer
             $attrs['cols'] = 80;
         }
 
-        return $this->buildTag('textarea', $attrs, htmlspecialchars((string)$value));
+        return $this->buildTag('textarea', $attrs, htmlspecialchars((string) $value));
     }
 
     /**
@@ -440,7 +443,7 @@ class HtmlControlRenderer implements ControlRenderer
      */
     protected function renderDate(Variable $var, Form $form, bool $readonly): string
     {
-        return match($this->controlMode) {
+        return match ($this->controlMode) {
             'legacy' => $this->renderDateLegacy($var, $form, $readonly),
             'fallback' => $this->renderDateFallback($var, $form, $readonly),
             default => $this->renderDateModern($var, $form, $readonly)
@@ -527,7 +530,7 @@ class HtmlControlRenderer implements ControlRenderer
      */
     protected function renderTime(Variable $var, Form $form, bool $readonly): string
     {
-        return match($this->controlMode) {
+        return match ($this->controlMode) {
             'legacy' => $this->renderTimeLegacy($var, $form, $readonly),
             'fallback' => $this->renderTimeFallback($var, $form, $readonly),
             default => $this->renderTimeModern($var, $form, $readonly)
@@ -614,7 +617,7 @@ class HtmlControlRenderer implements ControlRenderer
      */
     protected function renderDatetime(Variable $var, Form $form, bool $readonly): string
     {
-        return match($this->controlMode) {
+        return match ($this->controlMode) {
             'legacy' => $this->renderDatetimeLegacy($var, $form, $readonly),
             'fallback' => $this->renderDatetimeFallback($var, $form, $readonly),
             default => $this->renderDatetimeModern($var, $form, $readonly)
@@ -707,7 +710,7 @@ class HtmlControlRenderer implements ControlRenderer
                 'name' => $var->getVarName(),
                 'id' => $id,
                 'value' => $key,
-                'checked' => (string)$key === (string)$value ? 'checked' : null,
+                'checked' => (string) $key === (string) $value ? 'checked' : null,
                 'disabled' => $var->isDisabled() || $readonly ? 'disabled' : null,
             ];
 
@@ -751,7 +754,7 @@ class HtmlControlRenderer implements ControlRenderer
             $isSelected = in_array($key, $selected, true) ? 'selected' : '';
             $options[] = sprintf(
                 '<option value="%s" %s>%s</option>',
-                htmlspecialchars((string)$key),
+                htmlspecialchars((string) $key),
                 $isSelected,
                 htmlspecialchars($label)
             );
@@ -779,13 +782,13 @@ class HtmlControlRenderer implements ControlRenderer
         }
 
         // Handle DateTime objects
-        if ($value instanceof \DateTimeInterface) {
+        if ($value instanceof DateTimeInterface) {
             return $value->format('Y-m-d');
         }
 
         // Handle timestamps
         if (is_numeric($value)) {
-            return date('Y-m-d', (int)$value);
+            return date('Y-m-d', (int) $value);
         }
 
         // Handle string dates
@@ -797,7 +800,7 @@ class HtmlControlRenderer implements ControlRenderer
             }
         }
 
-        return (string)$value;
+        return (string) $value;
     }
 
     /**
@@ -815,13 +818,13 @@ class HtmlControlRenderer implements ControlRenderer
         }
 
         // Handle DateTime objects
-        if ($value instanceof \DateTimeInterface) {
+        if ($value instanceof DateTimeInterface) {
             return $value->format('H:i');
         }
 
         // Handle timestamps
         if (is_numeric($value)) {
-            return date('H:i', (int)$value);
+            return date('H:i', (int) $value);
         }
 
         // Handle string times
@@ -838,7 +841,7 @@ class HtmlControlRenderer implements ControlRenderer
             }
         }
 
-        return (string)$value;
+        return (string) $value;
     }
 
     /**
@@ -856,13 +859,13 @@ class HtmlControlRenderer implements ControlRenderer
         }
 
         // Handle DateTime objects
-        if ($value instanceof \DateTimeInterface) {
+        if ($value instanceof DateTimeInterface) {
             return $value->format('Y-m-d\TH:i');
         }
 
         // Handle timestamps
         if (is_numeric($value)) {
-            return date('Y-m-d\TH:i', (int)$value);
+            return date('Y-m-d\TH:i', (int) $value);
         }
 
         // Handle string datetimes
@@ -874,7 +877,7 @@ class HtmlControlRenderer implements ControlRenderer
             }
         }
 
-        return (string)$value;
+        return (string) $value;
     }
 
     /**
@@ -1024,7 +1027,7 @@ class HtmlControlRenderer implements ControlRenderer
     protected function renderHeader(Variable $var, Form $form, bool $readonly): string
     {
         $value = $this->getValue($var, $form);
-        return sprintf('<h3 class="form-header">%s</h3>', htmlspecialchars((string)$value));
+        return sprintf('<h3 class="form-header">%s</h3>', htmlspecialchars((string) $value));
     }
 
     /**
@@ -1033,7 +1036,7 @@ class HtmlControlRenderer implements ControlRenderer
     protected function renderDescription(Variable $var, Form $form, bool $readonly): string
     {
         $value = $this->getValue($var, $form);
-        return sprintf('<p class="form-description">%s</p>', htmlspecialchars((string)$value));
+        return sprintf('<p class="form-description">%s</p>', htmlspecialchars((string) $value));
     }
 
     /**
@@ -1224,7 +1227,7 @@ class HtmlControlRenderer implements ControlRenderer
 
         if ($readonly) {
             $email = is_array($value) ? ($value['original'] ?? '') : $value;
-            return htmlspecialchars((string)$email);
+            return htmlspecialchars((string) $email);
         }
 
         $output = [];
@@ -1359,7 +1362,7 @@ class HtmlControlRenderer implements ControlRenderer
         // Add character counter
         if ($maxlength && !$readonly) {
             $counterId = $this->getFieldId($var) . '_counter';
-            $currentLength = strlen((string)$value);
+            $currentLength = strlen((string) $value);
             return $input . sprintf(
                 ' <span id="%s" class="char-counter">%d/%d</span>',
                 htmlspecialchars($counterId),
@@ -1491,7 +1494,7 @@ class HtmlControlRenderer implements ControlRenderer
         foreach ($values as $key => $label) {
             $output[] = sprintf(
                 '<div class="sorter-item" data-value="%s">%s</div>',
-                htmlspecialchars((string)$key),
+                htmlspecialchars((string) $key),
                 htmlspecialchars($label)
             );
         }
@@ -1588,7 +1591,7 @@ class HtmlControlRenderer implements ControlRenderer
             '<input type="text" name="%s" id="%s" value="%s" readonly>',
             htmlspecialchars($var->getVarName()),
             htmlspecialchars($this->getFieldId($var)),
-            htmlspecialchars((string)$value)
+            htmlspecialchars((string) $value)
         );
 
         if (!$readonly) {
@@ -1631,7 +1634,7 @@ class HtmlControlRenderer implements ControlRenderer
         $value = $this->getValue($var, $form);
 
         // Display as preformatted text
-        return sprintf('<pre class="figlet">%s</pre>', htmlspecialchars((string)$value));
+        return sprintf('<pre class="figlet">%s</pre>', htmlspecialchars((string) $value));
     }
 
     /**
@@ -1653,7 +1656,7 @@ class HtmlControlRenderer implements ControlRenderer
             'disabled' => $var->isDisabled() ? 'disabled' : null,
         ];
 
-        return $this->buildTag('textarea', $attrs, htmlspecialchars((string)$value));
+        return $this->buildTag('textarea', $attrs, htmlspecialchars((string) $value));
     }
 
     /**
@@ -1675,7 +1678,7 @@ class HtmlControlRenderer implements ControlRenderer
             'disabled' => $var->isDisabled() ? 'disabled' : null,
         ];
 
-        return $this->buildTag('textarea', $attrs, htmlspecialchars((string)$value));
+        return $this->buildTag('textarea', $attrs, htmlspecialchars((string) $value));
     }
 
     /**
@@ -1733,7 +1736,7 @@ class HtmlControlRenderer implements ControlRenderer
             if ($value === true) {
                 $attrStr .= ' ' . htmlspecialchars($key);
             } else {
-                $attrStr .= sprintf(' %s="%s"', htmlspecialchars($key), htmlspecialchars((string)$value));
+                $attrStr .= sprintf(' %s="%s"', htmlspecialchars($key), htmlspecialchars((string) $value));
             }
         }
         return $attrStr;

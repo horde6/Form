@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright 2001-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2001-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -13,6 +13,7 @@
  */
 
 namespace Horde\Form\V3;
+
 use Horde_Variables;
 use Horde;
 use Horde_Form_Translation;
@@ -32,7 +33,7 @@ class BaseVariable implements Variable
     /**
      * The form instance this variable is assigned to.
      */
-    public \Horde\Form\Form $form;
+    public Horde\Form\Form $form;
 
     /**
      * A short description of this variable's purpose.
@@ -504,7 +505,8 @@ class BaseVariable implements Variable
       *
       * @api
      */
-    public function getInfo($vars, ...$args) {
+    public function getInfo($vars, ...$args)
+    {
         if (count($args) > 0) {
             self::Deprecated('Warning: The second ($info) parameter in getInfo() is deprecated/ignored');
         }
@@ -661,7 +663,8 @@ class BaseVariable implements Variable
      *
      * @todo This method should be removed after V3 transition is complete
      */
-    public static function Deprecated($message, $level = 2) {
+    public static function Deprecated($message, $level = 2)
+    {
         $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, $level + 1);
         if (isset($trace[$level])) {
             $trace = $trace[$level];

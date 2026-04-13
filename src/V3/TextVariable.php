@@ -1,4 +1,5 @@
 <?php
+
 namespace Horde\Form\V3;
 
 use Horde_Variables;
@@ -11,7 +12,7 @@ use Horde_Form_Translation;
  * @property string $regex The regex pattern for validation
  * @property int $size The size of the input field
  * @property int|null $maxlength The maximum number of characters
- 
+
  *
  * PSR-4 implementation.
  *
@@ -48,7 +49,7 @@ class TextVariable extends BaseVariable
         }
 
         if ($this->isRequired() && empty($this->_regex)) {
-            if (strlen(trim((string)$value)) == 0) {
+            if (strlen(trim((string) $value)) == 0) {
                 return $this->invalid('This field is required.');
             }
         } elseif (!empty($this->_regex) && !preg_match($this->_regex, $value)) {
@@ -80,17 +81,17 @@ class TextVariable extends BaseVariable
             'params' => [
                 'regex'     => [
                     'label' => Horde_Form_Translation::t("Regex"),
-                    'type'  => 'text'
+                    'type'  => 'text',
                 ],
                 'size'      => [
                     'label' => Horde_Form_Translation::t("Size"),
-                    'type'  => 'int'
+                    'type'  => 'int',
                 ],
                 'maxlength' => [
                     'label' => Horde_Form_Translation::t("Maximum length"),
-                    'type'  => 'int'
-                ]
-            ]
+                    'type'  => 'int',
+                ],
+            ],
         ];
     }
 }

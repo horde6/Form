@@ -1,4 +1,5 @@
 <?php
+
 namespace Horde\Form\V3;
 
 use Horde_Variables;
@@ -9,7 +10,7 @@ use Horde_Form_Translation;
  * HourminutesecondVariable type for time selection fields.
  *
  * @property bool $show_seconds Include a form input for seconds
- 
+
  *
  * PSR-4 implementation.
  *
@@ -164,9 +165,9 @@ class HourminutesecondVariable extends BaseVariable
             'params' => [
                 'show_seconds' => [
                     'label' => Horde_Form_Translation::t("Show seconds?"),
-                    'type'  => 'boolean'
-                ]
-            ]
+                    'type'  => 'boolean',
+                ],
+            ],
         ];
     }
 }

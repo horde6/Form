@@ -1,4 +1,5 @@
 <?php
+
 namespace Horde\Form\V3;
 
 use Horde_Variables;
@@ -9,7 +10,7 @@ use Horde_Nls;
  * NumberVariable type for locale-aware number input fields.
  *
  * @property int|null $fraction Maximum number of decimal places allowed
- 
+
  *
  * PSR-4 implementation.
  *
@@ -112,9 +113,9 @@ class NumberVariable extends BaseVariable
             'params' => [
                 'fraction'  => [
                     'label' => Horde_Form_Translation::t("Fraction"),
-                    'type'  => 'int'
-                ]
-            ]
+                    'type'  => 'int',
+                ],
+            ],
         ];
     }
 }

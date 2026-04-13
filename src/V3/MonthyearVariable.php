@@ -1,4 +1,5 @@
 <?php
+
 namespace Horde\Form\V3;
 
 use Horde_Variables;
@@ -9,7 +10,7 @@ use Horde_Form_Translation;
  *
  * @property int $start_year The first available year for input
  * @property int $end_year The last available year for input
- 
+
  *
  * PSR-4 implementation.
  *
@@ -80,13 +81,13 @@ class MonthyearVariable extends BaseVariable
             'params' => [
                 'start_year' => [
                     'label' => Horde_Form_Translation::t("Start year"),
-                    'type'  => 'int'
+                    'type'  => 'int',
                 ],
                 'end_year'   => [
                     'label' => Horde_Form_Translation::t("End year"),
-                    'type'  => 'int'
-                ]
-            ]
+                    'type'  => 'int',
+                ],
+            ],
         ];
     }
 }

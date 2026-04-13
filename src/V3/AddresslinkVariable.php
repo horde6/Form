@@ -1,4 +1,5 @@
 <?php
+
 namespace Horde\Form\V3;
 
 use Horde_Variables;
@@ -13,7 +14,7 @@ use Horde_Form_Translation;
  * @property int $rows The number of rows for the textarea
  * @property int $cols The number of columns for the textarea
  * @property array $helper Array of helper options
- 
+
  *
  * PSR-4 implementation.
  *

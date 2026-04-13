@@ -10,7 +10,7 @@
  * @category   Horde
  * @package    Form
  * @subpackage UnitTests
- * @author     Ralf Lang <lang@b1-systems.de>
+ * @author     Ralf Lang <ralf.lang@ralf-lang.de>
  * @license    http://www.horde.org/licenses/lgpl21 LGPL-2.1
  */
 
@@ -23,6 +23,11 @@ use Horde_Variables;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Horde_Exception;
+use Horde_Form_Type_enum;
+use Horde_Form_Type_monthdayyear;
+use Horde_Form_Type_text;
+use stdClass;
 
 /**
  * Tests for the core Horde_Form functionality.
@@ -41,23 +46,26 @@ class FormTest extends TestCase
         // Mock the global $injector for tests that use form tokens
         if (!isset($GLOBALS['injector'])) {
             $mockTokenSource = new class {
-                public function verify($token) {
+                public function verify($token)
+                {
                     return true;
                 }
             };
 
-            $GLOBALS['injector'] = new class($mockTokenSource) {
+            $GLOBALS['injector'] = new class ($mockTokenSource) {
                 private $tokenSource;
 
-                public function __construct($tokenSource) {
+                public function __construct($tokenSource)
+                {
                     $this->tokenSource = $tokenSource;
                 }
 
-                public function getInstance($className) {
+                public function getInstance($className)
+                {
                     if ($className === 'Horde_Token') {
                         return $this->tokenSource;
                     }
-                    return new \stdClass();
+                    return new stdClass();
                 }
             };
         }
@@ -65,7 +73,8 @@ class FormTest extends TestCase
         // Mock the global $session for tests that use form secrets
         if (!isset($GLOBALS['session'])) {
             $GLOBALS['session'] = new class {
-                public function get($app, $key) {
+                public function get($app, $key)
+                {
                     return null;
                 }
             };
@@ -443,12 +452,12 @@ class FormTest extends TestCase
     {
         $type = Horde_Form_Type::create(type: 'text');
 
-        $this->assertInstanceOf(\Horde_Form_Type_text::class, $type);
+        $this->assertInstanceOf(Horde_Form_Type_text::class, $type);
     }
 
     public function testGetTypeWithInvalidTypeThrowsException(): void
     {
-        $this->expectException(\Horde_Exception::class);
+        $this->expectException(Horde_Exception::class);
         $this->expectExceptionMessage('Nonexistent class');
 
         Horde_Form_Type::create(type: 'nonexistent_type');
@@ -461,7 +470,7 @@ class FormTest extends TestCase
             params: [['opt1' => 'Option 1', 'opt2' => 'Option 2']]
         );
 
-        $this->assertInstanceOf(\Horde_Form_Type_enum::class, $type);
+        $this->assertInstanceOf(Horde_Form_Type_enum::class, $type);
         $values = $type->getValues();
         $this->assertArrayHasKey('opt1', $values);
     }
@@ -474,7 +483,7 @@ class FormTest extends TestCase
             params: ['start_year' => 1900, 'end_year' => 2050]
         );
 
-        $this->assertInstanceOf(\Horde_Form_Type_monthdayyear::class, $type);
+        $this->assertInstanceOf(Horde_Form_Type_monthdayyear::class, $type);
     }
 
     // ========================================================================
@@ -497,7 +506,7 @@ class FormTest extends TestCase
     {
         $vars = new Horde_Variables([
             'name' => 'John Doe',
-            'formname' => 'test_form'
+            'formname' => 'test_form',
         ]);
         $form = new Horde_Form($vars, '', 'test_form');
         $form->useToken(false);
@@ -514,7 +523,7 @@ class FormTest extends TestCase
     public function testValidateReturnsFalseForRequiredFieldMissing(): void
     {
         $vars = new Horde_Variables([
-            'formname' => 'test_form'
+            'formname' => 'test_form',
         ]);
         $form = new Horde_Form($vars, '', 'test_form');
 
@@ -604,7 +613,7 @@ class FormTest extends TestCase
     {
         $vars = new Horde_Variables([
             'name' => 'John Doe',
-            'email' => 'john@example.com'
+            'email' => 'john@example.com',
         ]);
         $form = new Horde_Form($vars);
 
@@ -622,7 +631,7 @@ class FormTest extends TestCase
     public function testGetInfoWithNullVarsUsesFormVars(): void
     {
         $vars = new Horde_Variables([
-            'name' => 'John Doe'
+            'name' => 'John Doe',
         ]);
         $form = new Horde_Form($vars);
 

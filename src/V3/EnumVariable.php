@@ -1,4 +1,5 @@
 <?php
+
 namespace Horde\Form\V3;
 
 use Horde_Variables;
@@ -10,7 +11,7 @@ use Horde_Form_Translation;
  *
  * @property array $values A hash map where the key is the internal 'value' to process and the value is the caption presented to the user
  * @property string|bool $prompt A null value text to prompt user selecting a value. Use a default if boolean true, else use the supplied string. No prompt on false.
- 
+
  *
  * PSR-4 implementation.
  *
@@ -47,8 +48,8 @@ class EnumVariable extends BaseVariable
         if ($this->isRequired() && $value == '' && !isset($this->_values[$value])) {
             return $this->invalid('This field is required.');
         }
-        if (count($this->_values) == 0 || isset($this->_values[$value]) ||
-            ($this->_prompt && empty($value))) {
+        if (count($this->_values) == 0 || isset($this->_values[$value])
+            || ($this->_prompt && empty($value))) {
             return true;
         }
         return $this->invalid('Invalid data submitted.');
@@ -81,13 +82,13 @@ class EnumVariable extends BaseVariable
             'params' => [
                 'values' => [
                     'label' => Horde_Form_Translation::t("Values to select from"),
-                    'type'  => 'stringarray'
+                    'type'  => 'stringarray',
                 ],
                 'prompt' => [
                     'label' => Horde_Form_Translation::t("Prompt text"),
-                    'type'  => 'text'
-                ]
-            ]
+                    'type'  => 'text',
+                ],
+            ],
         ];
     }
 }

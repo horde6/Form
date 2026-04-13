@@ -10,7 +10,7 @@
  * @category   Horde
  * @package    Form
  * @subpackage UnitTests
- * @author     Ralf Lang <lang@b1-systems.de>
+ * @author     Ralf Lang <ralf.lang@ralf-lang.de>
  * @license    http://www.horde.org/licenses/lgpl21 LGPL-2.1
  */
 
@@ -22,6 +22,7 @@ use Horde_Form_Variable;
 use Horde_Variables;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 /**
  * Tests for the Horde_Form_Type_text class.
@@ -143,7 +144,7 @@ class TextTypeTest extends TestCase
         $type = new Horde_Form_Type_text();
         $type->init(40, null);
         // Access protected property via reflection for testing
-        $reflection = new \ReflectionClass($type);
+        $reflection = new ReflectionClass($type);
         $regexProp = $reflection->getProperty('_regex');
         $regexProp->setAccessible(true);
         $regexProp->setValue($type, '/^[0-9]+$/');

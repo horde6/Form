@@ -1,4 +1,5 @@
 <?php
+
 namespace Horde\Form\V3;
 
 use Horde_Variables;
@@ -8,7 +9,7 @@ use Horde_Browser_Exception;
 
 /**
  * FileVariable type for file upload fields.
- 
+
  *
  * PSR-4 implementation.
  *
@@ -51,7 +52,11 @@ class FileVariable extends BaseVariable
         $name = $this->getVarName();
         try {
             $GLOBALS['browser']->wasFileUploaded($name);
-            $info['name'] = Horde_Util::dispelMagicQuotes($_FILES[$name]['name']);
+            /**
+             * WARNING: Horde_Util::dispelMagicQuotes() removed in PSR-4 version
+             * Magic quotes are obsolete in PHP 8+. Remove this call.
+             */
+$info['name'] = Horde_Util::dispelMagicQuotes($_FILES[$name]['name']);
             $info['type'] = $_FILES[$name]['type'];
             $info['tmp_name'] = $_FILES[$name]['tmp_name'];
             $info['file'] = $_FILES[$name]['tmp_name'];

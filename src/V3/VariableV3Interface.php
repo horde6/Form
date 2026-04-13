@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright 2001-2026 Horde LLC (http://www.horde.org/)
  *

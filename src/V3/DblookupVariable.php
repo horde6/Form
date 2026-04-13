@@ -1,4 +1,5 @@
 <?php
+
 namespace Horde\Form\V3;
 
 use Horde_Variables;
@@ -10,7 +11,7 @@ use Horde_Db_Exception;
  *
  * @property array $values A hash map where the key is the internal 'value' to process and the value is the caption presented to the user
  * @property string|bool $prompt A null value text to prompt user selecting a value. Use a default if boolean true, else use the supplied string. No prompt on false.
- 
+
  *
  * PSR-4 implementation.
  *
@@ -56,17 +57,17 @@ class DblookupVariable extends EnumVariable
             'params' => [
                 'db' => [
                     'label' => Horde_Form_Translation::t("DSN (see http://pear.php.net/manual/en/package.database.db.intro-dsn.php)"),
-                    'type'  => 'text'
+                    'type'  => 'text',
                 ],
                 'sql' => [
                     'label' => Horde_Form_Translation::t("SQL statement for value lookups"),
-                    'type'  => 'text'
+                    'type'  => 'text',
                 ],
                 'prompt' => [
                     'label' => Horde_Form_Translation::t("Prompt text"),
-                    'type'  => 'text'
-                ]
-            ]
+                    'type'  => 'text',
+                ],
+            ],
         ];
     }
 }

@@ -1,8 +1,9 @@
 <?php
+
 declare(strict_types=1);
 
 /**
- * Copyright 2002-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2002-2026 Horde LLC (http://www.horde.org/)
  * Copyright 2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
@@ -18,6 +19,7 @@ declare(strict_types=1);
 namespace Horde\Form\V3;
 
 use Horde\Form\Form;
+use InvalidArgumentException;
 
 /**
  * Base implementation of the Action interface.
@@ -75,7 +77,7 @@ abstract class BaseAction implements Action
     public function __construct(?array $params = null)
     {
         $this->params = $params ?? [];
-        $this->id = md5((string)mt_rand());
+        $this->id = md5((string) mt_rand());
     }
 
     /**
@@ -171,7 +173,7 @@ abstract class BaseAction implements Action
      * @param string|array $action  Action name or [app, action]
      * @param array<string, mixed>|null $params  Action parameters
      * @return Action  Created action instance
-     * @throws \InvalidArgumentException  If action class not found
+     * @throws InvalidArgumentException  If action class not found
       *
       * @api
      */
@@ -188,7 +190,7 @@ abstract class BaseAction implements Action
         }
 
         if (!class_exists($class)) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 "Action class '$class' not found for action '$actionName'"
             );
         }

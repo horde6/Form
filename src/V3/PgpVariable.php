@@ -1,4 +1,5 @@
 <?php
+
 namespace Horde\Form\V3;
 
 use Horde_Variables;
@@ -15,7 +16,7 @@ use Horde_Form_Translation;
  * @property array $helper Array of helper options
  * @property string $gpg Path to the GnuPG binary
  * @property string $temp A temporary directory
- 
+
  *
  * PSR-4 implementation.
  *
@@ -82,21 +83,21 @@ class PgpVariable extends LongtextVariable
             'params' => [
                 'gpg'      => [
                     'label' => Horde_Form_Translation::t("Path to the GnuPG binary"),
-                    'type'  => 'string'
+                    'type'  => 'string',
                 ],
                 'temp_dir' => [
                     'label' => Horde_Form_Translation::t("A temporary directory"),
-                    'type'  => 'string'
+                    'type'  => 'string',
                 ],
                 'rows'     => [
                     'label' => Horde_Form_Translation::t("Number of rows"),
-                    'type'  => 'int'
+                    'type'  => 'int',
                 ],
                 'cols'     => [
                     'label' => Horde_Form_Translation::t("Number of columns"),
-                    'type'  => 'int'
-                ]
-            ]
+                    'type'  => 'int',
+                ],
+            ],
         ];
     }
 }

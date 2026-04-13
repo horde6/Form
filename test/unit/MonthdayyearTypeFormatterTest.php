@@ -17,7 +17,12 @@ use Horde_Form_Type_monthdayyear;
 use Horde\Date\Formatter\IcuFormatter;
 use Horde\Date\Formatter\DateTimeFormatter;
 use PHPUnit\Framework\TestCase;
+use Horde_Date;
+use InvalidArgumentException;
 
+/**
+ * @coversNothing
+ */
 class MonthdayyearTypeFormatterTest extends TestCase
 {
     protected string $oldTimezone;
@@ -151,7 +156,7 @@ class MonthdayyearTypeFormatterTest extends TestCase
      */
     public function testInitRejectsString(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Formatter must be null or an instance of FormatterInterface');
 
         $type = new Horde_Form_Type_monthdayyear();
@@ -163,7 +168,7 @@ class MonthdayyearTypeFormatterTest extends TestCase
      */
     public function testInitRejectsArray(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Formatter must be null or an instance of FormatterInterface');
 
         $type = new Horde_Form_Type_monthdayyear();
@@ -207,7 +212,7 @@ class MonthdayyearTypeFormatterTest extends TestCase
      */
     public function testFormatDateAcceptsHordeDateInBothModes(): void
     {
-        $date = new \Horde_Date('2026-03-18');
+        $date = new Horde_Date('2026-03-18');
 
         // Strftime mode
         $type1 = new Horde_Form_Type_monthdayyear();

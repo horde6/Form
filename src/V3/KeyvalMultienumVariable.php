@@ -1,4 +1,5 @@
 <?php
+
 namespace Horde\Form\V3;
 
 use Horde_Variables;
@@ -10,7 +11,7 @@ use Horde_Form_Translation;
  * @property array $values A hash map where the key is the internal 'value' to process and the value is the caption presented to the user
  * @property string|bool $prompt A null value text to prompt user selecting a value. Use a default if boolean true, else use the supplied string. No prompt on false.
  * @property int $size The number of rows the multienum should display before scrolling
- 
+
  *
  * PSR-4 implementation.
  *

@@ -10,7 +10,7 @@
  * @category   Horde
  * @package    Form
  * @subpackage UnitTests
- * @author     Ralf Lang <lang@b1-systems.de>
+ * @author     Ralf Lang <ralf.lang@ralf-lang.de>
  * @license    http://www.horde.org/licenses/lgpl21 LGPL-2.1
  */
 
@@ -24,6 +24,7 @@ use Horde_Form_Variable;
 use Horde_Variables;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
+use Horde_Form_Type_file;
 
 /**
  * Tests for the Horde_Form_Variable class.
@@ -281,7 +282,7 @@ class VariableTest extends TestCase
 
     public function testIsUploadReturnsTrueForFileType(): void
     {
-        $type = new \Horde_Form_Type_file();
+        $type = new Horde_Form_Type_file();
         $var = new Horde_Form_Variable('Upload', 'upload', $type, false);
 
         $this->assertTrue($var->isUpload());
@@ -438,7 +439,7 @@ class VariableTest extends TestCase
         $var->setOption('trackchange', true);
         $vars = new Horde_Variables([
             'field' => 'new_value',
-            '__old_field' => 'old_value'
+            '__old_field' => 'old_value',
         ]);
 
         $result = $var->wasChanged($vars);
@@ -453,7 +454,7 @@ class VariableTest extends TestCase
         $var->setOption('trackchange', true);
         $vars = new Horde_Variables([
             'field' => 'same_value',
-            '__old_field' => 'same_value'
+            '__old_field' => 'same_value',
         ]);
 
         $result = $var->wasChanged($vars);

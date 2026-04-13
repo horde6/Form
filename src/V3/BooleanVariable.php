@@ -1,4 +1,5 @@
 <?php
+
 namespace Horde\Form\V3;
 
 use Horde_Variables;
@@ -7,7 +8,7 @@ use Horde_Form_Translation;
 
 /**
  * BooleanVariable type for true or false values.
- 
+
  *
  * PSR-4 implementation.
  *

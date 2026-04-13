@@ -1,4 +1,5 @@
 <?php
+
 namespace Horde\Form\V3;
 
 use Horde_Variables;
@@ -9,7 +10,7 @@ use Horde_Form_Translation;
  *
  * @property array $values Values to select from
  * @property array $prompts Prompt texts for the dropdowns
- 
+
  *
  * PSR-4 implementation.
  *
@@ -58,8 +59,8 @@ class MlenumVariable extends BaseVariable
             return $this->invalid('This field is required.');
         }
 
-        if (!count($this->_values) || isset($this->_values[$value['1']]) ||
-            (!empty($this->_prompts) && empty($value['1']))) {
+        if (!count($this->_values) || isset($this->_values[$value['1']])
+            || (!empty($this->_prompts) && empty($value['1']))) {
             return true;
         }
 
@@ -95,13 +96,13 @@ class MlenumVariable extends BaseVariable
             'params' => [
                 'values' => [
                     'label' => Horde_Form_Translation::t("Values to select from"),
-                    'type'  => 'stringarray'
+                    'type'  => 'stringarray',
                 ],
                 'prompts' => [
                     'label' => Horde_Form_Translation::t("Prompt text"),
-                    'type'  => 'text'
-                ]
-            ]
+                    'type'  => 'text',
+                ],
+            ],
         ];
     }
 }
