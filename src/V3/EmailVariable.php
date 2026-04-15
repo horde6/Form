@@ -1,4 +1,5 @@
 <?php
+
 namespace Horde\Form\V3;
 
 use Horde_Variables;
@@ -14,7 +15,7 @@ use Horde_Form_Translation;
  * @property string $link_name The name to use when linking to the compose page
  * @property string $delimiters A string containing valid delimiters
  * @property int $size The size of the input field
- 
+
  *
  * PSR-4 implementation.
  *
@@ -189,9 +190,9 @@ class EmailVariable extends BaseVariable
                 }
             } elseif ($char == ':') {
                 $in_group = true;
-            } elseif (strpos($this->_delimiters, $char) !== false &&
-                      $prev !== '\\' &&
-                      is_null($in_quote)) {
+            } elseif (strpos($this->_delimiters, $char) !== false
+                      && $prev !== '\\'
+                      && is_null($in_quote)) {
                 $emails[] = substr($string, $pos, $i - $pos);
                 $pos = $i + 1;
             }
@@ -246,8 +247,8 @@ class EmailVariable extends BaseVariable
         [, $maildomain] = explode('@', $email, 2);
 
         // Try to get the real mailserver from MX records.
-        if (function_exists('getmxrr') &&
-            @getmxrr($maildomain, $mxhosts, $mxpriorities)) {
+        if (function_exists('getmxrr')
+            && @getmxrr($maildomain, $mxhosts, $mxpriorities)) {
             // MX record found.
             array_multisort($mxpriorities, $mxhosts);
             $mailhost = $mxhosts[0];
@@ -723,27 +724,27 @@ class EmailVariable extends BaseVariable
             'params' => [
                 'allow_multi' => [
                     'label' => Horde_Form_Translation::t("Allow multiple addresses?"),
-                    'type'  => 'boolean'
+                    'type'  => 'boolean',
                 ],
                 'strip_domain' => [
                     'label' => Horde_Form_Translation::t("Protect address from spammers?"),
-                    'type' => 'boolean'
+                    'type' => 'boolean',
                 ],
                 'link_compose' => [
                     'label' => Horde_Form_Translation::t("Link the email address to the compose page when displaying?"),
-                    'type' => 'boolean'
+                    'type' => 'boolean',
                 ],
                 'link_name' => [
                     'label' => Horde_Form_Translation::t("The name to use when linking to the compose page"),
-                    'type' => 'text'
+                    'type' => 'text',
                 ],
                 'delimiters' => [
                     'label' => Horde_Form_Translation::t("Character to split multiple addresses with"),
-                    'type' => 'text'
+                    'type' => 'text',
                 ],
                 'size' => [
                     'label' => Horde_Form_Translation::t("Size"),
-                    'type'  => 'int'
+                    'type'  => 'int',
                 ],
             ],
         ];

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /**
@@ -127,19 +128,19 @@ abstract class BaseRenderer implements Renderer
 
         // Apply configuration
         if (isset($config['showHeader'])) {
-            $this->showHeader = (bool)$config['showHeader'];
+            $this->showHeader = (bool) $config['showHeader'];
         }
         if (isset($config['requiredMarker'])) {
-            $this->requiredMarker = (string)$config['requiredMarker'];
+            $this->requiredMarker = (string) $config['requiredMarker'];
         }
         if (isset($config['helpMarker'])) {
-            $this->helpMarker = (string)$config['helpMarker'];
+            $this->helpMarker = (string) $config['helpMarker'];
         }
         if (isset($config['encodeTitle'])) {
-            $this->encodeTitle = (bool)$config['encodeTitle'];
+            $this->encodeTitle = (bool) $config['encodeTitle'];
         }
         if (isset($config['stripedRows'])) {
-            $this->stripedRows = (bool)$config['stripedRows'];
+            $this->stripedRows = (bool) $config['stripedRows'];
         }
     }
 
@@ -351,7 +352,7 @@ abstract class BaseRenderer implements Renderer
                 $output[] = sprintf(
                     '<input type="hidden" name="%s" value="%s">',
                     htmlspecialchars($var->getVarName()),
-                    htmlspecialchars((string)$value)
+                    htmlspecialchars((string) $value)
                 );
             }
         }
@@ -395,7 +396,7 @@ abstract class BaseRenderer implements Renderer
             if ($value === true) {
                 $attrStr .= ' ' . htmlspecialchars($key);
             } else {
-                $attrStr .= sprintf(' %s="%s"', htmlspecialchars($key), htmlspecialchars((string)$value));
+                $attrStr .= sprintf(' %s="%s"', htmlspecialchars($key), htmlspecialchars((string) $value));
             }
         }
 

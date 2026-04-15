@@ -1,4 +1,5 @@
 <?php
+
 namespace Horde\Form\V3;
 
 use Horde;
@@ -15,7 +16,7 @@ use PEAR;
  * @property bool $show_upload Show the upload button
  * @property bool $show_keeporig Show the option to upload also original non-modified image
  * @property int|null $max_filesize Limit the file size
- 
+
  *
  * PSR-4 implementation.
  *
@@ -105,7 +106,7 @@ class ImageVariable extends BaseVariable
             if ($this->_uploaded instanceof Horde_Browser_Exception) {
                 $this->_img = [
                     'hash' => $this->getRandomId(),
-                    'error' => $this->_uploaded->getMessage()
+                    'error' => $this->_uploaded->getMessage(),
                 ];
             }
         }
@@ -131,13 +132,13 @@ class ImageVariable extends BaseVariable
         /* The upload generated a PEAR Error. */
         if ($this->_uploaded instanceof Horde_Browser_Exception) {
             /* Not required and no image upload attempted. */
-            if (!$this->isRequired() && empty($field['hash']) &&
-                $this->_uploaded->getCode() == UPLOAD_ERR_NO_FILE) {
+            if (!$this->isRequired() && empty($field['hash'])
+                && $this->_uploaded->getCode() == UPLOAD_ERR_NO_FILE) {
                 return true;
             }
 
-            if (($this->_uploaded->getCode() == UPLOAD_ERR_NO_FILE) &&
-                empty($field['hash'])) {
+            if (($this->_uploaded->getCode() == UPLOAD_ERR_NO_FILE)
+                && empty($field['hash'])) {
                 /* Nothing uploaded and no older upload. */
                 return $this->invalid('This field is required.');
             }
@@ -293,9 +294,9 @@ class ImageVariable extends BaseVariable
                 return;
             }
 
-            if ($this->_uploaded->getCode() == 4 &&
-                !empty($upload['hash']) &&
-                $session->exists('horde', 'form/' . $upload['hash'])) {
+            if ($this->_uploaded->getCode() == 4
+                && !empty($upload['hash'])
+                && $session->exists('horde', 'form/' . $upload['hash'])) {
                 $this->_img['img'] = $session->get('horde', 'form/' . $upload['hash']);
                 $session->remove('horde', 'form/' . $upload['hash']);
                 if (isset($this->_img['error'])) {
@@ -433,17 +434,17 @@ class ImageVariable extends BaseVariable
             'params' => [
                 'show_upload'   => [
                     'label' => Horde_Form_Translation::t("Show upload?"),
-                    'type'  => 'boolean'
+                    'type'  => 'boolean',
                 ],
                 'show_keeporig' => [
                     'label' => Horde_Form_Translation::t("Show option to keep original?"),
-                    'type'  => 'boolean'
+                    'type'  => 'boolean',
                 ],
                 'max_filesize'  => [
                     'label' => Horde_Form_Translation::t("Maximum file size in bytes"),
-                    'type'  => 'int'
-                ]
-            ]
+                    'type'  => 'int',
+                ],
+            ],
         ];
     }
 }

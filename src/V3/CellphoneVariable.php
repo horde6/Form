@@ -1,4 +1,5 @@
 <?php
+
 namespace Horde\Form\V3;
 
 use Horde_Variables;
@@ -8,7 +9,7 @@ use Horde_Form_Translation;
  * CellphoneVariable type for mobile phone number input fields.
  *
  * @property int $size The size of the input field
- 
+
  *
  * PSR-4 implementation.
  *

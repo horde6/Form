@@ -1,4 +1,5 @@
 <?php
+
 namespace Horde\Form\V3;
 
 use Horde_Variables;
@@ -6,7 +7,7 @@ use Horde_Form_Translation;
 
 /**
  * PasswordVariable type for password input fields.
- 
+
  *
  * PSR-4 implementation.
  *
@@ -16,7 +17,7 @@ class PasswordVariable extends BaseVariable
 {
     public function isValid(Horde_Variables $vars, $value): bool
     {
-        if ($this->isRequired() && strlen(trim((string)$value)) == 0) {
+        if ($this->isRequired() && strlen(trim((string) $value)) == 0) {
             return $this->invalid('This field is required.');
         }
 

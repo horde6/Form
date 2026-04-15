@@ -27,6 +27,7 @@ use PHPUnit\Framework\TestCase;
  * @category   Horde
  * @package    Form
  * @subpackage UnitTests
+ * @coversNothing
  */
 class FormIntegrationTest extends TestCase
 {
@@ -95,7 +96,7 @@ class FormIntegrationTest extends TestCase
         $form->setSection('general', 'General');
         $form->addVariable('Name', 'name', 'text', true);
         $form->addVariable('Priority', 'priority', 'enum', true, false, null, [
-            [1 => '1 (highest)', 2 => '2', 3 => '3', 4 => '4', 5 => '5 (lowest)']
+            [1 => '1 (highest)', 2 => '2', 3 => '3', 4 => '4', 5 => '5 (lowest)'],
         ]);
 
         // Section 2: Details
@@ -266,8 +267,8 @@ class FormIntegrationTest extends TestCase
         $vars = new Horde_Variables([
             'states' => [
                 '1' => [11, 12, 13],
-                '2' => [21, 22]
-            ]
+                '2' => [21, 22],
+            ],
         ]);
 
         $form = new Horde_Form($vars, 'Search Form');

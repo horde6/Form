@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /**
@@ -48,7 +49,7 @@ namespace Horde\Form\V3;
  * @copyright 2026 Horde LLC
  * @license   http://www.horde.org/licenses/lgpl21 LGPL 2.1
  * @package   Form
- 
+
  *
  * PSR-4 implementation.
  *
@@ -81,9 +82,9 @@ class SetcursorposAction extends BaseAction
         $formName = $form->getName();
         $pos = implode(',', $this->params);
 
-        return "setCursorPosition_{$this->id}(document.forms['" .
-            htmlspecialchars($formName) . "'].elements['" .
-            htmlspecialchars($varname) . "'].id, {$pos});";
+        return "setCursorPosition_{$this->id}(document.forms['"
+            . htmlspecialchars($formName) . "'].elements['"
+            . htmlspecialchars($varname) . "'].id, {$pos});";
     }
 
     /**
@@ -97,31 +98,31 @@ class SetcursorposAction extends BaseAction
     {
         // Provide inline implementation of cursor positioning
         return <<<JS
-// Set cursor position function for action {$this->id}
-function setCursorPosition_{$this->id}(elementId, start, end) {
-    var element = document.getElementById(elementId);
-    if (!element) {
-        return;
-    }
+            // Set cursor position function for action {$this->id}
+            function setCursorPosition_{$this->id}(elementId, start, end) {
+                var element = document.getElementById(elementId);
+                if (!element) {
+                    return;
+                }
 
-    // Default end to start if not provided
-    if (end === undefined) {
-        end = start;
-    }
+                // Default end to start if not provided
+                if (end === undefined) {
+                    end = start;
+                }
 
-    // For text inputs and textareas
-    if (element.setSelectionRange) {
-        element.focus();
-        element.setSelectionRange(start, end);
-    } else if (element.createTextRange) {
-        // IE fallback
-        var range = element.createTextRange();
-        range.collapse(true);
-        range.moveStart('character', start);
-        range.moveEnd('character', end - start);
-        range.select();
-    }
-}
-JS;
+                // For text inputs and textareas
+                if (element.setSelectionRange) {
+                    element.focus();
+                    element.setSelectionRange(start, end);
+                } else if (element.createTextRange) {
+                    // IE fallback
+                    var range = element.createTextRange();
+                    range.collapse(true);
+                    range.moveStart('character', start);
+                    range.moveEnd('character', end - start);
+                    range.select();
+                }
+            }
+            JS;
     }
 }

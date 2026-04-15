@@ -438,7 +438,7 @@ class VariableTest extends TestCase
         $var->setOption('trackchange', true);
         $vars = new Horde_Variables([
             'field' => 'new_value',
-            '__old_field' => 'old_value'
+            '__old_field' => 'old_value',
         ]);
 
         $result = $var->wasChanged($vars);
@@ -453,7 +453,7 @@ class VariableTest extends TestCase
         $var->setOption('trackchange', true);
         $vars = new Horde_Variables([
             'field' => 'same_value',
-            '__old_field' => 'same_value'
+            '__old_field' => 'same_value',
         ]);
 
         $result = $var->wasChanged($vars);

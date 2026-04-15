@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /**
@@ -189,7 +190,7 @@ class BaseForm implements \Horde\Form\Form
     private function normalizeVars(
         Horde_Variables|ServerRequestInterface|array $vars
     ): array {
-        return match(true) {
+        return match (true) {
             $vars instanceof Horde_Variables => iterator_to_array($vars),
             $vars instanceof ServerRequestInterface => $vars->getParsedBody() ?? [],
             is_array($vars) => $vars,
@@ -614,8 +615,8 @@ class BaseForm implements \Horde\Form\Form
 
         foreach ($this->variables as $section => $sectionVars) {
             foreach ($sectionVars as $index => $existingVar) {
-                if ($existingVar->getVarName() === $varName ||
-                    ($var instanceof Variable && $existingVar === $var)) {
+                if ($existingVar->getVarName() === $varName
+                    || ($var instanceof Variable && $existingVar === $var)) {
                     // Remove variable from section
                     array_splice($this->variables[$section], $index, 1);
                     return true;
@@ -931,8 +932,8 @@ class BaseForm implements \Horde\Form\Form
 
         // Check for form submission indicator
         // TODO: Implement proper submission detection
-        $this->submitted = isset($this->vars['formname']) &&
-                          $this->vars['formname'] === $this->name;
+        $this->submitted = isset($this->vars['formname'])
+                          && $this->vars['formname'] === $this->name;
 
         return $this->submitted;
     }

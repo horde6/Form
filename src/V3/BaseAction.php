@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /**
@@ -75,7 +76,7 @@ abstract class BaseAction implements Action
     public function __construct(?array $params = null)
     {
         $this->params = $params ?? [];
-        $this->id = md5((string)mt_rand());
+        $this->id = md5((string) mt_rand());
     }
 
     /**

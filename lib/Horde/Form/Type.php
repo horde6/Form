@@ -467,7 +467,7 @@ class Horde_Form_Type_text extends Horde_Form_Type
         }
 
         if ($var->isRequired() && empty($this->_regex)) {
-            if (strlen(trim((string)$value)) == 0) {
+            if (strlen(trim((string) $value)) == 0) {
                 return $this->invalid('This field is required.');
             }
         } elseif (!empty($this->_regex) && !preg_match($this->_regex, $value)) {
@@ -650,9 +650,9 @@ class Horde_Form_Type_ipaddress extends Horde_Form_Type_text
             $valid = count($ip) == 4;
             if ($valid) {
                 foreach ($ip as $part) {
-                    if (!is_numeric($part) ||
-                        $part > 255 ||
-                        $part < 0) {
+                    if (!is_numeric($part)
+                        || $part > 255
+                        || $part < 0) {
                         $valid = false;
                         break;
                     }
@@ -896,8 +896,8 @@ class Horde_Form_Type_address extends Horde_Form_Type_longtext
         } elseif (preg_match('/(?s)(.*?)(?-s)\r?\n(.*)\s*,\s*(\w+)\.?\s+(\d+|[a-zA-Z]\d[a-zA-Z]\s?\d[a-zA-Z]\d)/', $address, $addressParts)) {
             /* American/Canadian address style. */
             $info = ['country' => 'us'];
-            if (!empty($addressParts[4]) &&
-                preg_match('|[a-zA-Z]\d[a-zA-Z]\s?\d[a-zA-Z]\d|', $addressParts[4])) {
+            if (!empty($addressParts[4])
+                && preg_match('|[a-zA-Z]\d[a-zA-Z]\s?\d[a-zA-Z]\d|', $addressParts[4])) {
                 $info['country'] = 'ca';
             }
             if (!empty($addressParts[1])) {
@@ -957,17 +957,17 @@ class Horde_Form_Type_address extends Horde_Form_Type_longtext
             'params' => [
                 'rows' => [
                     'label' => Horde_Form_Translation::t("Number of rows"),
-                    'type'  => 'int'
+                    'type'  => 'int',
                 ],
                 'cols' => [
                     'label' => Horde_Form_Translation::t("Number of columns"),
-                    'type'  => 'int'
+                    'type'  => 'int',
                 ],
                 'helper' => [
                     'label' => Horde_Form_Translation::t("Helpers"),
-                    'type'  => 'stringarray'
-                ]
-            ]
+                    'type'  => 'stringarray',
+                ],
+            ],
         ];
     }
 
@@ -1309,13 +1309,13 @@ class Horde_Form_Type_image extends Horde_Form_Type
         /* The upload generated a PEAR Error. */
         if ($this->_uploaded instanceof Horde_Browser_Exception) {
             /* Not required and no image upload attempted. */
-            if (!$var->isRequired() && empty($field['hash']) &&
-                $this->_uploaded->getCode() == UPLOAD_ERR_NO_FILE) {
+            if (!$var->isRequired() && empty($field['hash'])
+                && $this->_uploaded->getCode() == UPLOAD_ERR_NO_FILE) {
                 return true;
             }
 
-            if (($this->_uploaded->getCode() == UPLOAD_ERR_NO_FILE) &&
-                empty($field['hash'])) {
+            if (($this->_uploaded->getCode() == UPLOAD_ERR_NO_FILE)
+                && empty($field['hash'])) {
                 /* Nothing uploaded and no older upload. */
                 return $this->invalid('This field is required.');
             }
@@ -1469,9 +1469,9 @@ class Horde_Form_Type_image extends Horde_Form_Type
                 return;
             }
 
-            if ($this->_uploaded->getCode() == 4 &&
-                !empty($upload['hash']) &&
-                $session->exists('horde', 'form/' . $upload['hash'])) {
+            if ($this->_uploaded->getCode() == 4
+                && !empty($upload['hash'])
+                && $session->exists('horde', 'form/' . $upload['hash'])) {
                 $this->_img['img'] = $session->get('horde', 'form/' . $upload['hash']);
                 $session->remove('horde', 'form/' . $upload['hash']);
                 if (isset($this->_img['error'])) {
@@ -1672,8 +1672,8 @@ class Horde_Form_Type_link extends Horde_Form_Type
             'params' => [
                 'values' => [
                     'label' => Horde_Form_Translation::t("Values"),
-                    'type' => 'array']
-/*                'url' => [
+                    'type' => 'array'],
+                /*                'url' => [
                     'label' => Horde_Form_Translation::t("Link URL"),
                     'type' => 'text'],
                 'text' => [
@@ -1695,7 +1695,7 @@ class Horde_Form_Type_link extends Horde_Form_Type
                     'label' => Horde_Form_Translation::t("Link CSS class"),
                     'type' => 'text'],
 */
-            ]
+            ],
         ];
     }
 
@@ -1871,9 +1871,9 @@ class Horde_Form_Type_email extends Horde_Form_Type
                 }
             } elseif ($char == ':') {
                 $in_group = true;
-            } elseif (strpos($this->_delimiters, $char) !== false &&
-                      $prev !== '\\' &&
-                      is_null($in_quote)) {
+            } elseif (strpos($this->_delimiters, $char) !== false
+                      && $prev !== '\\'
+                      && is_null($in_quote)) {
                 $emails[] = substr($string, $pos, $i - $pos);
                 $pos = $i + 1;
             }
@@ -1915,8 +1915,8 @@ class Horde_Form_Type_email extends Horde_Form_Type
         [, $maildomain] = explode('@', $email, 2);
 
         // Try to get the real mailserver from MX records.
-        if (function_exists('getmxrr') &&
-            @getmxrr($maildomain, $mxhosts, $mxpriorities)) {
+        if (function_exists('getmxrr')
+            && @getmxrr($maildomain, $mxhosts, $mxpriorities)) {
             // MX record found.
             array_multisort($mxpriorities, $mxhosts);
             $mailhost = $mxhosts[0];
@@ -2484,21 +2484,21 @@ class Horde_Form_Type_matrix extends Horde_Form_Type
             'params' => [
                 'cols' => [
                     'label' => Horde_Form_Translation::t("Column titles"),
-                    'type'  => 'stringarray'
+                    'type'  => 'stringarray',
                 ],
                 'rows' => [
                     'label' => Horde_Form_Translation::t("Row titles"),
-                    'type'  => 'stringarray'
+                    'type'  => 'stringarray',
                 ],
                 'matrix' => [
                     'label' => Horde_Form_Translation::t("Values"),
-                    'type'  => 'stringarray'
+                    'type'  => 'stringarray',
                 ],
                 'new_input' => [
                     'label' => Horde_Form_Translation::t("New Input"),
-                    'type'  => 'boolean'
-                ]
-            ]
+                    'type'  => 'boolean',
+                ],
+            ],
         ];
     }
 
@@ -2646,8 +2646,8 @@ class Horde_Form_Type_enum extends Horde_Form_Type
             return $this->invalid('This field is required.');
         }
 
-        if (count($this->_values) == 0 || isset($this->_values[$value]) ||
-            ($this->_prompt && empty($value))) {
+        if (count($this->_values) == 0 || isset($this->_values[$value])
+            || ($this->_prompt && empty($value))) {
             return true;
         }
 
@@ -2733,8 +2733,8 @@ class Horde_Form_Type_mlenum extends Horde_Form_Type
             return $this->invalid('This field is required.');
         }
 
-        if (!count($this->_values) || isset($this->_values[$value['1']]) ||
-            (!empty($this->_prompts) && empty($value['1']))) {
+        if (!count($this->_values) || isset($this->_values[$value['1']])
+            || (!empty($this->_prompts) && empty($value['1']))) {
             return true;
         }
 
@@ -2902,9 +2902,9 @@ class Horde_Form_Type_radio extends Horde_Form_Type_enum
                     'type'  => 'stringarray'],
                 'prompt' => [
                     'label' => Horde_Form_Translation::t("Prompt text"),
-                    'type'  => 'text'
-                ]
-            ]
+                    'type'  => 'text',
+                ],
+            ],
         ];
     }
 
@@ -2961,13 +2961,13 @@ class Horde_Form_Type_set extends Horde_Form_Type
             'params' => [
                 'values' => [
                     'label' => Horde_Form_Translation::t("Values"),
-                    'type'  => 'stringarray'
+                    'type'  => 'stringarray',
                 ],
                 'checkAll' => [
                     'label' => Horde_Form_Translation::t("Check all"),
-                    'type'  => 'boolean'
-                ]
-            ]
+                    'type'  => 'boolean',
+                ],
+            ],
         ];
     }
 
@@ -3060,9 +3060,9 @@ class Horde_Form_Type_date extends Horde_Form_Type
             'params' => [
                 'format' => [
                     'label' => Horde_Form_Translation::t("Format"),
-                    'type'  => 'string'
-                ]
-            ]
+                    'type'  => 'string',
+                ],
+            ],
         ];
     }
 
@@ -3256,8 +3256,8 @@ class Horde_Form_Type_monthyear extends Horde_Form_Type
             return true;
         }
 
-        if (!$vars->get($this->getMonthVar($var)) ||
-            !$vars->get($this->getYearVar($var))) {
+        if (!$vars->get($this->getMonthVar($var))
+            || !$vars->get($this->getYearVar($var))) {
             return $this->invalid('Please enter a month and a year.');
         }
 
@@ -4188,29 +4188,29 @@ class Horde_Form_Type_creditcard extends Horde_Form_Type
         }
 
         // Check for Visa.
-        if ((($l == 16) || ($l == 13)) &&
-            ($ccnum[0] == 4)) {
+        if ((($l == 16) || ($l == 13))
+            && ($ccnum[0] == 4)) {
             return 'visa';
         }
 
         // Check for MasterCard.
-        if (($l == 16) &&
-            ($ccnum[0] == 5) &&
-            ($ccnum[1] >= 1) &&
-            ($ccnum[1] <= 5)) {
+        if (($l == 16)
+            && ($ccnum[0] == 5)
+            && ($ccnum[1] >= 1)
+            && ($ccnum[1] <= 5)) {
             return 'mastercard';
         }
 
         // Check for Amex.
-        if (($l == 15) &&
-            ($ccnum[0] == 3) &&
-            (($ccnum[1] == 4) || ($ccnum[1] == 7))) {
+        if (($l == 15)
+            && ($ccnum[0] == 3)
+            && (($ccnum[1] == 4) || ($ccnum[1] == 7))) {
             return 'amex';
         }
 
         // Check for Discover (Novus).
-        if (strlen($ccnum) == 16 &&
-            substr($ccnum, 0, 4) == '6011') {
+        if (strlen($ccnum) == 16
+            && substr($ccnum, 0, 4) == '6011') {
             return 'discover';
         }
 
@@ -4456,9 +4456,9 @@ class Horde_Form_Type_invalid extends Horde_Form_Type
             'params' => [
                 'message' => [
                     'label' => Horde_Form_Translation::t("Text"),
-                    'type'  => 'text'
-                ]
-            ]
+                    'type'  => 'text',
+                ],
+            ],
         ];
     }
 

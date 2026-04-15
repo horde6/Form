@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /**
@@ -80,7 +81,7 @@ class HtmlRenderer extends BaseRenderer
     ) {
         // Extract controlMode from config before parent constructor
         if (isset($config['controlMode'])) {
-            $this->controlMode = (string)$config['controlMode'];
+            $this->controlMode = (string) $config['controlMode'];
         }
 
         // Call parent constructor (this will initialize $this->assetManager)
@@ -218,7 +219,7 @@ class HtmlRenderer extends BaseRenderer
         $output[] = $this->buildTag('input', [
             'type' => 'submit',
             'value' => 'Submit',
-            'class' => 'button'
+            'class' => 'button',
         ]);
         $output[] = '</div>';
 

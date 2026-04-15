@@ -1,4 +1,5 @@
 <?php
+
 namespace Horde\Form\V3;
 
 use Horde_Variables;
@@ -69,13 +70,13 @@ class TablesetVariable extends BaseVariable
             'params' => [
                 'values' => [
                     'label' => Horde_Form_Translation::t("Values"),
-                    'type'  => 'stringlist'
+                    'type'  => 'stringlist',
                 ],
                 'header' => [
                     'label' => Horde_Form_Translation::t("Headers"),
-                    'type'  => 'stringlist'
-                ]
-            ]
+                    'type'  => 'stringlist',
+                ],
+            ],
         ];
     }
 }

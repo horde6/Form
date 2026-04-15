@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /**
@@ -46,6 +47,4 @@ namespace Horde\Form\V3;
  * @license   http://www.horde.org/licenses/lgpl21 LGPL 2.1
  * @package   Form
  */
-interface Action extends ActionMigrationInterface, ActionV3Interface
-{
-}
+interface Action extends ActionMigrationInterface, ActionV3Interface {}

@@ -316,7 +316,7 @@ class ActionConditionalEnableTest extends TestCase
         $params = [
             'target' => 'source_field',
             'enabled' => true,
-            'values' => [1, 2, 3]
+            'values' => [1, 2, 3],
         ];
 
         $action = new Horde_Form_Action_ConditionalEnable($params);
@@ -331,7 +331,7 @@ class ActionConditionalEnableTest extends TestCase
         $params = [
             'target' => 'source_field',
             'enabled' => true,
-            'values' => [1, 2]
+            'values' => [1, 2],
         ];
 
         $action = new Horde_Form_Action_ConditionalEnable($params);
@@ -351,7 +351,7 @@ class ActionConditionalEnableTest extends TestCase
         $params = [
             'target' => 'source_field',
             'enabled' => 'false',
-            'values' => [1, 2]
+            'values' => [1, 2],
         ];
 
         $action = new Horde_Form_Action_ConditionalEnable($params);
@@ -368,7 +368,7 @@ class ActionConditionalEnableTest extends TestCase
         $params = [
             'target' => 'source_field',
             'enabled' => true,
-            'values' => ['opt1', 'opt2', 'opt3']
+            'values' => ['opt1', 'opt2', 'opt3'],
         ];
 
         $action = new Horde_Form_Action_ConditionalEnable($params);
@@ -387,7 +387,7 @@ class ActionConditionalEnableTest extends TestCase
         $params = [
             'target' => 'source_field',
             'enabled' => true,
-            'values' => 'single_value'
+            'values' => 'single_value',
         ];
 
         $action = new Horde_Form_Action_ConditionalEnable($params);
@@ -427,8 +427,8 @@ class ActionConditionalSetValueTest extends TestCase
             'map' => [
                 'opt1' => 'value1',
                 'opt2' => 'value2',
-                'opt3' => 'value3'
-            ]
+                'opt3' => 'value3',
+            ],
         ];
 
         $action = new Horde_Form_Action_ConditionalSetValue($params);
@@ -445,8 +445,8 @@ class ActionConditionalSetValueTest extends TestCase
             'target' => 'target_field',
             'map' => [
                 'opt1' => 'value1',
-                'opt2' => 'value2'
-            ]
+                'opt2' => 'value2',
+            ],
         ];
 
         $action = new Horde_Form_Action_ConditionalSetValue($params);
@@ -466,8 +466,8 @@ class ActionConditionalSetValueTest extends TestCase
         $params = [
             'target' => 'target_field',
             'map' => [
-                'opt1' => 'value1'
-            ]
+                'opt1' => 'value1',
+            ],
         ];
 
         $action = new Horde_Form_Action_ConditionalSetValue($params);
@@ -482,7 +482,7 @@ class ActionConditionalSetValueTest extends TestCase
     {
         $params = [
             'target' => 'target_field',
-            'map' => ['opt1' => 'value1']
+            'map' => ['opt1' => 'value1'],
         ];
 
         $action = new Horde_Form_Action_ConditionalSetValue($params);

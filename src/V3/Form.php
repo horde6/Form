@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright 2001-2026 Horde LLC (http://www.horde.org/)
  *
@@ -25,6 +26,4 @@ namespace Horde\Form\V3;
  * @category Horde
  * @package  Form
  */
-interface Form extends FormMigrationInterface, FormV3Interface
-{
-}
+interface Form extends FormMigrationInterface, FormV3Interface {}

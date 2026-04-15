@@ -1,4 +1,5 @@
 <?php
+
 namespace Horde\Form\V3;
 
 use Horde_Variables;
@@ -8,7 +9,7 @@ use Horde_Browser_Exception;
 
 /**
  * FileVariable type for file upload fields.
- 
+
  *
  * PSR-4 implementation.
  *

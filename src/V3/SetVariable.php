@@ -1,4 +1,5 @@
 <?php
+
 namespace Horde\Form\V3;
 
 use Horde_Variables;
@@ -9,7 +10,7 @@ use Horde_Form_Translation;
  *
  * @property array $values Values available for selection
  * @property bool $checkAll Show "check all" option
- 
+
  *
  * PSR-4 implementation.
  *
@@ -67,13 +68,13 @@ class SetVariable extends BaseVariable
             'params' => [
                 'values' => [
                     'label' => Horde_Form_Translation::t("Values"),
-                    'type'  => 'stringarray'
+                    'type'  => 'stringarray',
                 ],
                 'checkAll' => [
                     'label' => Horde_Form_Translation::t("Check all"),
-                    'type'  => 'boolean'
-                ]
-            ]
+                    'type'  => 'boolean',
+                ],
+            ],
         ];
     }
 }

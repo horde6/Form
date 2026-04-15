@@ -16,6 +16,7 @@
  */
 
 namespace Horde\Form\Test\Unit;
+
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -95,7 +96,7 @@ class BasicFormTest extends TestCase
         $this->assertArrayHasKey('testField1', $result);
         $this->assertArrayHasKey('testField2', $result);
         $this->assertEquals('value1', $result['testField1']);
-        $this->assertEquals('value2', $result['testField2']);   
+        $this->assertEquals('value2', $result['testField2']);
     }
 
     public function testGetInfoWithMultiEnum()
@@ -116,12 +117,13 @@ class BasicFormTest extends TestCase
     public function testGetInfoWithMultiFieldArrayPartsMultiEnum()
     {
         $vars = new Horde_Variables(
-        [
-            'states' => [
-                '1' => [11, 12, 13, 14],
-                '2' => [21],
+            [
+                'states' => [
+                    '1' => [11, 12, 13, 14],
+                    '2' => [21],
+                ],
             ]
-        ]);
+        );
         $info = [];
         $list1 = [
             11 => 'Option A1',
@@ -142,11 +144,23 @@ class BasicFormTest extends TestCase
 
         $form = new Horde_Form($vars, name: 'testFormWithMultiFieldMultiEnum');
         $form->addVariable(
-                'type1', "states[1]", 'multienum', false, false, null,
-                array ($list1, 4));
+            'type1',
+            "states[1]",
+            'multienum',
+            false,
+            false,
+            null,
+            [$list1, 4]
+        );
         $form->addVariable(
-                'type2', "states[2]", 'multienum', false, false, null,
-                array ($list2, 4));
+            'type2',
+            "states[2]",
+            'multienum',
+            false,
+            false,
+            null,
+            [$list2, 4]
+        );
         $result = $form->getInfo(null, $info);
         $this->assertIsArray($result);
         $this->assertCount(2, $result['states']);

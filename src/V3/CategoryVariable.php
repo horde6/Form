@@ -1,4 +1,5 @@
 <?php
+
 namespace Horde\Form\V3;
 
 use Horde_Variables;
@@ -6,7 +7,7 @@ use Horde_Form_Translation;
 
 /**
  * CategoryVariable type for category selection with option to create new categories.
- 
+
  *
  * PSR-4 implementation.
  *
@@ -21,12 +22,12 @@ class CategoryVariable extends BaseVariable
         if ($info == '*new*') {
             $info = [
                 'new' => true,
-                'value' => $vars->get('new_category')
+                'value' => $vars->get('new_category'),
             ];
         } else {
             $info = [
                 'new' => false,
-                'value' => $info
+                'value' => $info,
             ];
         }
 

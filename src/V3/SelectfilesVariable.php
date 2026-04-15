@@ -1,4 +1,5 @@
 <?php
+
 namespace Horde\Form\V3;
 
 use Horde_Variables;
@@ -11,7 +12,7 @@ use Horde_Form_Translation;
  * @property string $link_text The text to use in the link
  * @property string $link_style The style to use for the link
  * @property bool $icon Create the link with an icon instead of text
- 
+
  *
  * PSR-4 implementation.
  *
@@ -98,21 +99,21 @@ class SelectfilesVariable extends BaseVariable
             'params' => [
                 'selectid' => [
                     'label' => Horde_Form_Translation::t("Id"),
-                    'type' => 'text'
+                    'type' => 'text',
                 ],
                 'link_text' => [
                     'label' => Horde_Form_Translation::t("Link text"),
-                    'type' => 'text'
+                    'type' => 'text',
                 ],
                 'link_style' => [
                     'label' => Horde_Form_Translation::t("Link style"),
-                    'type' => 'text'
+                    'type' => 'text',
                 ],
                 'icon' => [
                     'label' => Horde_Form_Translation::t("Show icon?"),
-                    'type' => 'boolean'
-                ]
-            ]
+                    'type' => 'boolean',
+                ],
+            ],
         ];
     }
 }

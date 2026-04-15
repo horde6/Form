@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /**
@@ -59,7 +60,7 @@ namespace Horde\Form\V3;
  * @copyright 2026 Horde LLC
  * @license   http://www.horde.org/licenses/lgpl21 LGPL 2.1
  * @package   Form
- 
+
  *
  * PSR-4 implementation.
  *
@@ -155,13 +156,13 @@ class UpdatefieldAction extends BaseAction
         $argsStr = implode(' + ', $args);
 
         return <<<JS
-// Update field function for action {$this->id}
-function updateField_{$this->id}() {
-    var target = document.getElementById('{$target}');
-    if (target) {
-        target.value = ({$argsStr}).replace(/(^ +| +$)/, '').replace(/ +/g, ' ');
-    }
-}
-JS;
+            // Update field function for action {$this->id}
+            function updateField_{$this->id}() {
+                var target = document.getElementById('{$target}');
+                if (target) {
+                    target.value = ({$argsStr}).replace(/(^ +| +$)/, '').replace(/ +/g, ' ');
+                }
+            }
+            JS;
     }
 }

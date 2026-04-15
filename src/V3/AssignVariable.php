@@ -1,4 +1,5 @@
 <?php
+
 namespace Horde\Form\V3;
 
 use Horde_Variables;
@@ -13,7 +14,7 @@ use Horde_Form_Translation;
  * @property string $rightHeader Right column header
  * @property int $size Number of visible rows
  * @property string $width Width in CSS units
- 
+
  *
  * PSR-4 implementation.
  *
@@ -163,29 +164,29 @@ class AssignVariable extends BaseVariable
             'params' => [
                 'leftValues' => [
                     'label' => Horde_Form_Translation::t("Left values"),
-                    'type'  => 'stringarray'
+                    'type'  => 'stringarray',
                 ],
                 'rightValues' => [
                     'label' => Horde_Form_Translation::t("Right values"),
-                    'type'  => 'stringarray'
+                    'type'  => 'stringarray',
                 ],
                 'leftHeader' => [
                     'label' => Horde_Form_Translation::t("Left header"),
-                    'type'  => 'text'
+                    'type'  => 'text',
                 ],
                 'rightHeader' => [
                     'label' => Horde_Form_Translation::t("Right header"),
-                    'type'  => 'text'
+                    'type'  => 'text',
                 ],
                 'size' => [
                     'label' => Horde_Form_Translation::t("Size"),
-                    'type'  => 'int'
+                    'type'  => 'int',
                 ],
                 'width' => [
                     'label' => Horde_Form_Translation::t("Width in CSS units"),
-                    'type'  => 'text'
-                ]
-            ]
+                    'type'  => 'text',
+                ],
+            ],
         ];
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace Horde\Form\V3;
 
 use Horde_Variables;
@@ -9,7 +10,7 @@ use Horde_Form_Translation;
  *
  * @property string $text The CAPTCHA text
  * @property string $font The font to use
- 
+
  *
  * PSR-4 implementation.
  *
@@ -29,13 +30,13 @@ class CaptchaVariable extends FigletVariable
             'params' => [
                 'text' => [
                     'label' => Horde_Form_Translation::t("Text"),
-                    'type'  => 'text'
+                    'type'  => 'text',
                 ],
                 'font' => [
                     'label' => Horde_Form_Translation::t("Font"),
-                    'type'  => 'text'
-                ]
-            ]
+                    'type'  => 'text',
+                ],
+            ],
         ];
     }
 }

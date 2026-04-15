@@ -24,7 +24,7 @@
  * @copyright 2002-2017 Horde LLC
  * @license   http://www.horde.org/licenses/lgpl21 LGPL
  * @package   Form
- 
+
  *
  * @see Horde\Form\V3\SumfieldsAction PSR-4 equivalent in src/V3/SumfieldsAction.php
  */

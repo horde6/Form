@@ -1,4 +1,5 @@
 <?php
+
 namespace Horde\Form\V3;
 
 use Horde_Variables;
@@ -11,7 +12,7 @@ use Horde_Form_Translation;
  * @property array $values Values available for sorting
  * @property int $size Size of the select list
  * @property string $header Header text for the select list
- 
+
  *
  * PSR-4 implementation.
  *
@@ -114,17 +115,17 @@ class SorterVariable extends BaseVariable
             'params' => [
                 'values' => [
                     'label' => Horde_Form_Translation::t("Values"),
-                    'type'  => 'stringarray'
+                    'type'  => 'stringarray',
                 ],
                 'size'   => [
                     'label' => Horde_Form_Translation::t("Size"),
-                    'type'  => 'int'
+                    'type'  => 'int',
                 ],
                 'header' => [
                     'label' => Horde_Form_Translation::t("Header"),
-                    'type'  => 'text'
-                ]
-            ]
+                    'type'  => 'text',
+                ],
+            ],
         ];
     }
 }

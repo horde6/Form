@@ -1,4 +1,5 @@
 <?php
+
 namespace Horde\Form\V3;
 
 use Horde_Variables;
@@ -14,7 +15,7 @@ use Horde_Form_Translation;
  * @property int $cols The number of columns for the textarea
  * @property array $helper Array of helper options
  * @property string $temp A temporary directory
- 
+
  *
  * PSR-4 implementation.
  *
@@ -71,17 +72,17 @@ class SmimeVariable extends LongtextVariable
             'params' => [
                 'temp_dir' => [
                     'label' => Horde_Form_Translation::t("A temporary directory"),
-                    'type'  => 'string'
+                    'type'  => 'string',
                 ],
                 'rows'     => [
                     'label' => Horde_Form_Translation::t("Number of rows"),
-                    'type'  => 'int'
+                    'type'  => 'int',
                 ],
                 'cols'     => [
                     'label' => Horde_Form_Translation::t("Number of columns"),
-                    'type'  => 'int'
-                ]
-            ]
+                    'type'  => 'int',
+                ],
+            ],
         ];
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace Horde\Form\V3;
 
 use Horde_Variables;
@@ -6,7 +7,7 @@ use Horde_Form_Translation;
 
 /**
  * CreditcardVariable type for credit card number input fields.
- 
+
  *
  * PSR-4 implementation.
  *
@@ -65,35 +66,35 @@ class CreditcardVariable extends BaseVariable
 
         // Check for Visa
         if (
-            ($l === 13 || $l === 16) &&
-            $ccnum[0] === '4'
+            ($l === 13 || $l === 16)
+            && $ccnum[0] === '4'
         ) {
             return 'visa';
         }
 
         // Check for MasterCard (51–55)
         if (
-            $l === 16 &&
-            $ccnum[0] === '5' &&
-            $ccnum[1] >= '1' &&
-            $ccnum[1] <= '5'
+            $l === 16
+            && $ccnum[0] === '5'
+            && $ccnum[1] >= '1'
+            && $ccnum[1] <= '5'
         ) {
             return 'mastercard';
         }
 
         // Check for Amex (34, 37)
         if (
-            $l === 15 &&
-            $ccnum[0] === '3' &&
-            ($ccnum[1] === '4' || $ccnum[1] === '7')
+            $l === 15
+            && $ccnum[0] === '3'
+            && ($ccnum[1] === '4' || $ccnum[1] === '7')
         ) {
             return 'amex';
         }
 
         // Check for Discover (6011)
         if (
-            $l === 16 &&
-            substr($ccnum, 0, 4) === '6011'
+            $l === 16
+            && substr($ccnum, 0, 4) === '6011'
         ) {
             return 'discover';
         }

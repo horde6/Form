@@ -1,4 +1,5 @@
 <?php
+
 namespace Horde\Form\V3;
 
 use Horde_Variables;
@@ -8,7 +9,7 @@ use Horde_Form_Translation;
  * InvalidVariable type for fields that should always be invalid with a custom message.
  *
  * @property string $message The error message to display
- 
+
  *
  * PSR-4 implementation.
  *
@@ -46,9 +47,9 @@ class InvalidVariable extends BaseVariable
             'params' => [
                 'message' => [
                     'label' => Horde_Form_Translation::t("Text"),
-                    'type'  => 'text'
-                ]
-            ]
+                    'type'  => 'text',
+                ],
+            ],
         ];
     }
 }

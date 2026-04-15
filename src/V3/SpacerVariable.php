@@ -1,4 +1,5 @@
 <?php
+
 namespace Horde\Form\V3;
 
 use Horde_Variables;
@@ -6,7 +7,7 @@ use Horde_Form_Translation;
 
 /**
  * SpacerVariable type for visual spacing in forms.
- 
+
  *
  * PSR-4 implementation.
  *
@@ -27,7 +28,7 @@ class SpacerVariable extends BaseVariable
     public function about(): array
     {
         return [
-            'name' => Horde_Form_Translation::t("Spacer")
+            'name' => Horde_Form_Translation::t("Spacer"),
         ];
     }
 }

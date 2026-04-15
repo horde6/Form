@@ -1,4 +1,5 @@
 <?php
+
 namespace Horde\Form\V3;
 
 use Horde_Variables;
@@ -8,7 +9,7 @@ use Horde_Form_Translation;
  * PhoneVariable type for phone number input fields.
  *
  * @property int $size The size of the input field
- 
+
  *
  * PSR-4 implementation.
  *
@@ -38,7 +39,7 @@ class PhoneVariable extends BaseVariable
 
     public function isValid(Horde_Variables $vars, $value): bool
     {
-        if (!strlen(trim((string)$value))) {
+        if (!strlen(trim((string) $value))) {
             if ($this->isRequired()) {
                 return $this->invalid('This field is required.');
             }
@@ -66,7 +67,7 @@ class PhoneVariable extends BaseVariable
             'params' => [
                 'size' => [
                     'label' => Horde_Form_Translation::t("Size"),
-                    'type'  => 'int'
+                    'type'  => 'int',
                 ],
             ],
         ];

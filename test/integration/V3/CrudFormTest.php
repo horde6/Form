@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /**
@@ -490,7 +491,7 @@ class CrudFormTest extends TestCase
             expanded: true
         );
         $form->addVariable('Status', 'status', 'enum', true, false, null, [
-            'values' => ['active' => 'Active', 'inactive' => 'Inactive']
+            'values' => ['active' => 'Active', 'inactive' => 'Inactive'],
         ]);
         $form->addVariable('Notifications', 'notifications', 'boolean', false);
 

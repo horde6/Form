@@ -1,4 +1,5 @@
 <?php
+
 namespace Horde\Form\V3;
 
 use Horde_Variables;
@@ -10,7 +11,7 @@ use Horde_Form_Translation;
  * @property string $regex The regex pattern for validation
  * @property int $size The size of the input field
  * @property int|null $maxlength The maximum number of characters
- 
+
  *
  * PSR-4 implementation.
  *
@@ -20,7 +21,7 @@ class Ip6addressVariable extends TextVariable
 {
     public function isValid(Horde_Variables $vars, $value): bool
     {
-        if (strlen(trim((string)$value)) > 0) {
+        if (strlen(trim((string) $value)) > 0) {
             $valid = @inet_pton($value);
             if ($valid === false) {
                 return $this->invalid('Please enter a valid IP address.');

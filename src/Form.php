@@ -1,5 +1,7 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Horde\Form;
 
 use Horde\Form\V3\Variable;
