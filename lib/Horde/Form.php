@@ -29,8 +29,12 @@ use Horde\Util\ArrayUtils;
  * @license   http://www.horde.org/licenses/lgpl21 LGPL
  * @package   Form
  */
+
+Horde_Form::$legacy = class_exists(Horde_Form_Type::class);
+
 class Horde_Form
 {
+    public static bool $legacy = false;
     protected static $init_params_cache = [];
 
     protected $_name = '';
@@ -160,67 +164,6 @@ class Horde_Form
         return $renderer;
     }
 
-    /**
-     * Initialize a Horde_Form_Type object from a type id (internal use only)
-     *
-     * This method is private as of 3.0.0-beta4 to encapsulate parameter normalization logic.
-     * External code should use Horde_Form_Type::create() instead for instantiating types.
-     *
-     * For legacy code not yet migrated to src/V3, use Horde_Form_Type::create($type, $params)
-     * which provides the same functionality with a stable public API.
-     *
-     * @param string $type Type identifier
-     * @param array $params Type initialization parameters
-     *
-     * @return Horde_Form_Type
-     * @throws Horde_Exception
-     *
-     * @since 3.0.0-beta4 Changed to private visibility
-     */
-    private static function getType($type, $params = [])
-    {
-        if (strpos($type, ':') !== false) {
-            [$app, $type] = explode(':', $type);
-            $type_class = $app . '_Form_Type_' . $type;
-        } else {
-            $type_class = 'Horde_Form_Type_' . $type;
-        }
-        if (!class_exists($type_class)) {
-            throw new Horde_Exception(sprintf('Nonexistant class "%s" for field type "%s"', $type_class, $type));
-        }
-        $type_ob = new $type_class();
-        if (!$params) {
-            $params = [];
-        }
-
-        // retrieve list of parameters
-        $keys = self::$init_params_cache[$type_class] ?? null;
-        if (is_null($keys)) {
-            $keys = array_keys($type_ob->about()['params'] ?? []);
-            self::$init_params_cache[$type_class] = $keys;
-        }
-
-        // convert named parameters to positional
-        $i = 0;
-        $ni = 0;
-        foreach ($keys as $key) {
-            if (array_key_exists($key, $params)) {
-                // make sure prior index(es) exist
-                while ($ni < $i) {
-                    if (!array_key_exists($ni, $params)) {
-                        $params[$ni] = null;
-                    }
-                    ++$ni;
-                }
-                $params[$ni++] = $params[$key];
-                unset($params[$key]);
-            }
-            ++$i;
-        }
-
-        $type_ob->init(...$params);
-        return $type_ob;
-    }
 
     /**
      * Create a new Horde_Form_Variable instance without attaching it to the form.
@@ -253,10 +196,73 @@ class Horde_Form
         $readonly = false,
         $description = null,
     ) {
+        $arr = explode(':', $type, 2);
+        if (count($arr) == 2) {
+            $app = $arr[0];
+            $name = $arr[1];
+        } else {
+            $app = 'Horde';
+            $name = $arr[0];
+        }
+
+        $class = $app . '\\Form\\V3\\' . ucfirst($name) . 'Variable';
+        $modern = class_exists($class);
+        if ($modern) {
+            $var = new $class(
+                $humanName,
+                $varName,
+                $required,
+                $readonly,
+                $description
+            );
+        } elseif (self::$legacy) {
+            $class = $app . '_Form_Type_' . $name;
+            if (!class_exists($class)) {
+                throw new Horde_Exception(sprintf('Nonexistent class "%s" for field type "%s"', $class, $name));
+            }
+            $var = new $class();
+        } else {
+            throw new Horde_Exception(sprintf('Nonexistent class "%s" for field type "%s"', $class, $name));
+        }
+
+        // retrieve list of parameters
+        $keys = self::$init_params_cache[$class] ?? null;
+        if (is_null($keys)) {
+            $keys = array_keys($var->about()['params'] ?? []);
+            self::$init_params_cache[$class] = $keys;
+        }
+
+        if (!$params) {
+            $params = [];
+        }
+
+        // convert named parameters to positional
+        $i = 0;
+        $ni = 0;
+        foreach ($keys as $key) {
+            if (array_key_exists($key, $params)) {
+                // make sure prior index(es) exist
+                while ($ni < $i) {
+                    if (!array_key_exists($ni, $params)) {
+                        $params[$ni] = null;
+                    }
+                    ++$ni;
+                }
+                $params[$ni++] = $params[$key];
+                unset($params[$key]);
+            }
+            ++$i;
+        }
+
+        $var->init(...$params);
+        if ($modern) {
+            return $var;
+        }
+
         return new Horde_Form_Variable(
             $humanName,
             $varName,
-            self::getType($type, $params),
+            $var,
             $required,
             $readonly,
             $description
@@ -459,8 +465,8 @@ class Horde_Form
     {
         foreach (array_keys($this->_variables) as $section) {
             foreach (array_keys($this->_variables[$section]) as $i) {
-                if ((is_a($var, 'Horde_Form_Variable') && $this->_variables[$section][$i] === $var)
-                    || ($this->_variables[$section][$i]->getVarName() == $var)) {
+                if ((is_object($var) && $this->_variables[$section][$i] === $var)
+                    || ($this->_variables[$section][$i]->getVarName() === $var)) {
                     // Slice out the variable to be removed.
                     $this->_variables[$section] = array_merge(
                         array_slice($this->_variables[$section], 0, $i),
@@ -848,31 +854,19 @@ class Horde_Form
 
     public function getError($var)
     {
-        if (is_a($var, 'Horde_Form_Variable')) {
-            $name = $var->getVarName();
-        } else {
-            $name = $var;
-        }
+        $name = is_string($var) ? $var : $var->getVarName();
         return $this->_errors[$name] ?? null;
     }
 
     public function setError($var, $message)
     {
-        if (is_a($var, 'Horde_Form_Variable')) {
-            $name = $var->getVarName();
-        } else {
-            $name = $var;
-        }
+        $name = is_string($var) ? $var : $var->getVarName();
         $this->_errors[$name] = $message;
     }
 
     public function clearError($var)
     {
-        if (is_a($var, 'Horde_Form_Variable')) {
-            $name = $var->getVarName();
-        } else {
-            $name = $var;
-        }
+        $name = is_string($var) ? $var : $var->getVarName();
         unset($this->_errors[$name]);
     }
 

@@ -17,6 +17,7 @@ namespace Horde\Form\V3;
 use Horde_Variables;
 use Horde;
 use Horde_Form_Translation;
+use Horde\Form\Form;
 
 /**
  * This class represents a single form variable that may be rendered as one or
@@ -33,7 +34,7 @@ class BaseVariable implements Variable
     /**
      * The form instance this variable is assigned to.
      */
-    public \Horde\Form\Form $form;
+    public Form|\Horde_Form $form;
 
     /**
      * A short description of this variable's purpose.
@@ -94,7 +95,7 @@ class BaseVariable implements Variable
     /**
      * A {@link Action} instance.
      */
-    public ?Action $_action = null;
+    public Action|\Horde_Form_Action|null $_action = null;
 
     /**
      * Whether this variable is disabled.
