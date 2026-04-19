@@ -45,7 +45,7 @@
             "lib/"
         ],
         "psr-4": {
-            "Horde\\Form\\V3\\": "src/"
+            "Horde\\Form\\": "src/"
         }
     },
     "autoload-dev": {
