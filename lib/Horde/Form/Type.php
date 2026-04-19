@@ -1177,19 +1177,21 @@ class Horde_Form_Type_file extends Horde_Form_Type
 
     public function getInfo($vars, $var, $info)
     {
-        $info = [];
         $name = $var->getVarName();
         try {
             $GLOBALS['browser']->wasFileUploaded($name);
-            $info['name'] = Horde_Util::dispelMagicQuotes($_FILES[$name]['name']);
-            $info['type'] = $_FILES[$name]['type'];
-            $info['tmp_name'] = $_FILES[$name]['tmp_name'];
-            $info['file'] = $_FILES[$name]['tmp_name'];
-            $info['error'] = $_FILES[$name]['error'];
-            $info['size'] = $_FILES[$name]['size'];
+            return [
+                'name' => Horde_Util::dispelMagicQuotes($_FILES[$name]['name']),
+                'type' => $_FILES[$name]['type'],
+                'tmp_name' => $_FILES[$name]['tmp_name'],
+                'file' => $_FILES[$name]['tmp_name'],
+                'error' => $_FILES[$name]['error'],
+                'size' => $_FILES[$name]['size'],
+            ];
         } catch (Horde_Browser_Exception $e) {
         }
-        return $info;
+
+        return null;
     }
 
     /**
