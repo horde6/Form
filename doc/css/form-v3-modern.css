@@ -1,0 +1,267 @@
+/* ==========================================================================
+   Horde Form V3 — Reference CSS: Modern
+   --------------------------------------------------------------------------
+   A refreshed look that breaks with the traditional Horde form layout.
+   Clean, left-aligned labels above controls, generous spacing, no tables
+   visually (though the HTML is still table-based for compatibility).
+
+   This is a starting point for new themes.
+
+   Lessons applied from the Material theme exercise (2026-04):
+   - All text-like input types need identical treatment, not just type=text
+   - select and textarea need explicit background/display/padding to match
+   - Labels must override inline style="width: 15%" from TableLayout
+   - Base button rule needs explicit text color (not just variant classes)
+   - Required marker is subtle until error state (MD3 convention)
+   - Optional fields labeled with text "(optional)", no symbols
+   - Help text has no marker prefix — description speaks for itself
+   - Focus ring via box-shadow, not border change
+   - Use CSS custom properties for themeable colors
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Custom properties — override these in your theme
+   -------------------------------------------------------------------------- */
+:root {
+    --form-primary: #1976d2;
+    --form-primary-variant: #1565c0;
+    --form-error: #d32f2f;
+    --form-error-bg: #fef2f2;
+    --form-text: #222;
+    --form-text-secondary: #666;
+    --form-border: #ccc;
+    --form-bg-subtle: rgba(0, 0, 0, 0.02);
+    --form-radius: 4px;
+    --form-on-primary: #fff;
+}
+
+/* --------------------------------------------------------------------------
+   Form table — suppress table appearance
+   -------------------------------------------------------------------------- */
+.horde-form .form-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.horde-form .form-table tr {
+    display: flex;
+    flex-direction: column;
+    padding: 0.5em 0;
+}
+.horde-form .form-table td {
+    display: block;
+    width: 100%;
+    padding: 0;
+}
+
+/* --------------------------------------------------------------------------
+   Labels: left-aligned above control
+   -------------------------------------------------------------------------- */
+.horde-form td.label {
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.9em;
+    color: var(--form-text);
+    padding-bottom: 0.3em;
+    width: auto !important; /* override inline style="width: 15%" from TableLayout */
+}
+
+/* Required marker — only the asterisk span, subtle until error state */
+.horde-form span.required {
+    color: var(--form-text-secondary);
+    font-weight: normal;
+    margin-left: 0.15em;
+}
+.horde-form tr:has(td.control.error) span.required {
+    color: var(--form-error);
+}
+
+/* Optional marker */
+.horde-form .optional {
+    color: var(--form-text-secondary);
+    font-weight: normal;
+    font-size: 0.85em;
+}
+
+/* --------------------------------------------------------------------------
+   Control cell
+   -------------------------------------------------------------------------- */
+.horde-form td.control {
+    padding-bottom: 0.5em;
+}
+
+/* All text-like inputs — consistent sizing and appearance */
+.horde-form td.control input[type="text"],
+.horde-form td.control input[type="email"],
+.horde-form td.control input[type="number"],
+.horde-form td.control input[type="password"],
+.horde-form td.control input[type="url"],
+.horde-form td.control input[type="tel"],
+.horde-form td.control select,
+.horde-form td.control textarea {
+    width: 100%;
+    max-width: 40em;
+    padding: 0.5em 0.75em;
+    border: 1px solid var(--form-border);
+    border-radius: var(--form-radius);
+    font-size: 0.95em;
+    font: inherit;
+    box-sizing: border-box;
+    display: block;
+    background: none;
+}
+
+/* Focus ring — primary color glow, not a border change */
+.horde-form td.control input:focus,
+.horde-form td.control select:focus,
+.horde-form td.control textarea:focus {
+    border-color: var(--form-primary);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.15);
+}
+
+/* --------------------------------------------------------------------------
+   Field description / help text — no marker prefix, just text
+   -------------------------------------------------------------------------- */
+.horde-form .help-text {
+    color: var(--form-text-secondary);
+    font-size: 0.8em;
+    display: block;
+    margin-top: 0.2em;
+}
+
+/* --------------------------------------------------------------------------
+   Validation errors
+   -------------------------------------------------------------------------- */
+.horde-form .field-error {
+    color: var(--form-error);
+    font-size: 0.85em;
+    display: block;
+    margin-top: 0.2em;
+}
+.horde-form td.control.error input,
+.horde-form td.control.error select,
+.horde-form td.control.error textarea {
+    border-color: var(--form-error);
+}
+
+/* Error summary */
+.horde-form .form-errors {
+    color: var(--form-error);
+    margin: 0.75em 0;
+    padding: 0.75em 1em;
+    border: 1px solid var(--form-error);
+    border-radius: var(--form-radius);
+    background: var(--form-error-bg);
+    font-size: 0.9em;
+}
+
+/* --------------------------------------------------------------------------
+   Form header
+   -------------------------------------------------------------------------- */
+.horde-form .form-header {
+    margin-bottom: 1em;
+    padding-bottom: 0.5em;
+    border-bottom: 2px solid var(--form-border);
+}
+.horde-form .form-header h2 {
+    margin: 0;
+    font-size: 1.25em;
+    font-weight: 600;
+    color: var(--form-text);
+}
+
+/* --------------------------------------------------------------------------
+   Section headers
+   -------------------------------------------------------------------------- */
+.horde-form .section-header td {
+    font-weight: 600;
+    font-size: 1em;
+    padding: 0.75em 0 0.3em;
+    border-bottom: 1px solid var(--form-border);
+    color: var(--form-text-secondary);
+}
+
+/* --------------------------------------------------------------------------
+   Buttons — explicit text color on every button, not just variants
+   -------------------------------------------------------------------------- */
+.horde-form .form-buttons {
+    padding: 1em 0;
+    margin-top: 0.5em;
+}
+.horde-form .form-buttons-inner {
+    display: flex;
+    gap: 0.5em;
+}
+.horde-form .form-buttons-inner input[type="submit"],
+.horde-form .form-buttons-inner input[type="button"] {
+    padding: 0.5em 1.5em;
+    border: 1px solid var(--form-border);
+    border-radius: var(--form-radius);
+    cursor: pointer;
+    font-size: 0.9em;
+    color: var(--form-on-primary);
+    background: var(--form-primary);
+}
+.horde-form .form-buttons-inner input[type="submit"]:hover,
+.horde-form .form-buttons-inner input[type="button"]:hover {
+    background: var(--form-primary-variant);
+}
+.horde-form .form-buttons-inner input.horde-default {
+    background: var(--form-primary);
+    color: var(--form-on-primary);
+    border-color: var(--form-primary-variant);
+}
+.horde-form .form-buttons-inner input.horde-default:hover {
+    background: var(--form-primary-variant);
+}
+.horde-form .form-buttons-inner input.horde-delete {
+    background: var(--form-error);
+    color: #fff;
+    border-color: #c62828;
+}
+.horde-form .form-buttons-inner input.horde-delete:hover {
+    background: #c62828;
+}
+.horde-form .form-buttons-inner input.horde-cancel {
+    background: #f5f5f5;
+    color: var(--form-text);
+    border-color: var(--form-border);
+}
+
+/* --------------------------------------------------------------------------
+   Striped rows
+   -------------------------------------------------------------------------- */
+.horde-form .odd {
+    background-color: var(--form-bg-subtle);
+}
+
+/* --------------------------------------------------------------------------
+   Checkbox / boolean controls
+   --------------------------------------------------------------------------
+   renderSet() wraps each checkbox+label in <div class="checkbox">.
+   Legacy themes often style .checkbox as a small box (e.g. 14×14px) because
+   the old markup put that class on <input> elements.  Override that here so
+   the wrapper div is not crushed. */
+.horde-form div.checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.4em;
+    width: auto !important;
+    height: auto !important;
+    border: none;
+    background: transparent;
+    padding: 0.15em 0;
+    overflow: visible;
+}
+.horde-form div.checkbox label {
+    font-weight: normal;
+    cursor: pointer;
+}
+.horde-form td.control input[type="checkbox"] {
+    width: auto;
+    height: auto;
+    min-width: 1em;
+    flex-shrink: 0;
+    margin: 0;
+    cursor: pointer;
+}
