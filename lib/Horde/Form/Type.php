@@ -3028,7 +3028,7 @@ class Horde_Form_Type_date extends Horde_Form_Type
     /**
      * Resolve locale for formatting
      *
-     * Fallback chain: params → setlocale(LC_CTYPE, 0) → 'en_US'
+     * Fallback chain: params → setlocale(LC_CTYPE, '0') → 'en_US'
      *
      * @return string  Locale identifier
      */
@@ -3040,7 +3040,7 @@ class Horde_Form_Type_date extends Horde_Form_Type
         }
 
         // 2. Try system locale (LC_CTYPE is used for character classification/formatting)
-        $systemLocale = setlocale(LC_CTYPE, 0);
+        $systemLocale = setlocale(LC_CTYPE, '0');
         if ($systemLocale && $systemLocale !== 'C' && $systemLocale !== 'POSIX') {
             // Normalize: 'de_DE.UTF-8' → 'de_DE'
             $systemLocale = preg_replace('/\\..*$/', '', $systemLocale);
@@ -3445,7 +3445,7 @@ class Horde_Form_Type_monthdayyear extends Horde_Form_Type
     /**
      * Resolve locale for formatting
      *
-     * Fallback chain: params → setlocale(LC_CTYPE, 0) → 'en_US'
+     * Fallback chain: params → setlocale(LC_CTYPE, '0') → 'en_US'
      *
      * @return string  Locale identifier
      */
@@ -3457,7 +3457,7 @@ class Horde_Form_Type_monthdayyear extends Horde_Form_Type
         }
 
         // 2. Try system locale (LC_CTYPE is used for character classification/formatting)
-        $systemLocale = setlocale(LC_CTYPE, 0);
+        $systemLocale = setlocale(LC_CTYPE, '0');
         if ($systemLocale && $systemLocale !== 'C' && $systemLocale !== 'POSIX') {
             // Normalize: 'de_DE.UTF-8' → 'de_DE'
             $systemLocale = preg_replace('/\\..*$/', '', $systemLocale);
