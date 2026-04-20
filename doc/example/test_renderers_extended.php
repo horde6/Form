@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /**
@@ -10,8 +11,8 @@ declare(strict_types=1);
  * - invalid, html, image, monthyear, set, octal
  */
 
-require_once __DIR__ . '/vendor/autoload.php';
-require_once __DIR__ . '/test/stubs/HordeStubs.php';
+require_once __DIR__ . '/../../vendor/autoload.php';
+require_once __DIR__ . '/../../test/stubs/HordeStubs.php';
 
 use Horde\Form\V3\BaseForm;
 use Horde\Form\V3\HtmlRenderer;
@@ -73,8 +74,8 @@ $form->addVariable('Amenities', 'features', 'set', false, false, null, [
         'wifi' => 'WiFi',
         'parking' => 'Parking',
         'pool' => 'Swimming Pool',
-        'gym' => 'Fitness Center'
-    ]
+        'gym' => 'Fitness Center',
+    ],
 ]);
 
 // Octal (file permissions)

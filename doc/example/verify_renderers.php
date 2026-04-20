@@ -1,19 +1,20 @@
 <?php
+
 declare(strict_types=1);
 
 /**
  * Verify all variable type renderers exist.
  */
 
-require_once __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/../../vendor/autoload.php';
 
 echo "Verifying ALL Variable Type Renderers...\n\n";
 
 // Load the renderer file
-$rendererFile = file_get_contents(__DIR__ . '/src/V3/Renderer/HtmlControlRenderer.php');
+$rendererFile = file_get_contents(__DIR__ . '/../../src/V3/Renderer/HtmlControlRenderer.php');
 
 // Get all variable types
-$variableFiles = glob(__DIR__ . '/src/V3/*Variable.php');
+$variableFiles = glob(__DIR__ . '/../../src/V3/*Variable.php');
 $variables = [];
 
 foreach ($variableFiles as $file) {

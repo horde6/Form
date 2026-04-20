@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /**
@@ -7,8 +8,8 @@ declare(strict_types=1);
  * Tests all 57 variable types (excluding 'base' which is abstract).
  */
 
-require_once __DIR__ . '/vendor/autoload.php';
-require_once __DIR__ . '/test/stubs/HordeStubs.php';
+require_once __DIR__ . '/../../vendor/autoload.php';
+require_once __DIR__ . '/../../test/stubs/HordeStubs.php';
 
 use Horde\Form\V3\BaseForm;
 use Horde\Form\V3\HtmlRenderer;
@@ -109,7 +110,7 @@ foreach ($types as $type) {
     try {
         $form->addVariable($label, $varName, $typeName, false, false, null, $params);
         $typesTested[] = $typeName;
-    } catch (\Exception $e) {
+    } catch (Exception $e) {
         echo "⚠ Warning: Could not add $typeName: " . $e->getMessage() . "\n";
     }
 }
@@ -162,7 +163,7 @@ try {
     echo "\nTotal: " . count($typesTested) . " variable types with renderers\n";
     echo "Coverage: 100% (57/57 types, excluding abstract 'base')\n";
 
-} catch (\Exception $e) {
+} catch (Exception $e) {
     echo "✗ Render failed: " . $e->getMessage() . "\n";
     echo "Stack trace:\n" . $e->getTraceAsString() . "\n";
     exit(1);
