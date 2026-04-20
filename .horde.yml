@@ -8,10 +8,28 @@ type: library
 homepage: https://www.horde.org/libraries/Horde_Form
 authors:
   -
+    name: Dmitry Petrov
+    user: dpetrov
+    email: ''
+    active: true
+    role: lead
+  -
+    name: Torben Dannhauber
+    user: tdannhauer
+    email: torben@dannhauer.de
+    active: true
+    role: releasemanager
+  -
+    name: Ralf Lang
+    user: rlang
+    email: ralf.lang@ralf-lang.de
+    active: true
+    role: contributor
+  -
     name: Jan Schneider
     user: jan
     email: jan@horde.org
-    active: true
+    active: false
     role: lead
   -
     name: Chuck Hagenbuch
