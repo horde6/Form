@@ -1,9 +1,14 @@
 # Horde_Form: lib/ vs src/V3 Developer Guide
 
+> **Superseded**: This document was written 2026-03-05 when BaseForm,
+> Actions, and Renderer were not yet implemented.  All three now exist.
+> See **[UPGRADING.md](UPGRADING.md)** for the current migration guide.
+> This file is kept for historical reference only.
+
 **Version**: 3.0.0-beta3+
 **Date**: 2026-03-05
 **Audience**: Horde application developers
-**Status**: V3 is incomplete (BaseForm, Actions, Renderer not yet implemented)
+**Status**: OUTDATED — BaseForm, Actions, and Renderer are now implemented
 
 ---
 
