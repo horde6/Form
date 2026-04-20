@@ -145,4 +145,38 @@ interface Renderer
       * @api
      */
     public function renderHidden(Form $form): string;
+
+    /**
+     * Render the form in display-only (inactive) mode.
+     *
+     * Produces a read-only representation: title, sections, and values
+     * as plain text. No form tag, no buttons, no hidden fields, no
+     * errors, no CSRF token.
+     *
+     * @param Form $form  The form to render
+     * @return string  Display-only rendered output
+      *
+      * @api
+     */
+    public function renderInactive(Form $form): string;
+
+    /**
+     * Render a form with mixed active/inactive sections.
+     *
+     * Enabled groups render as editable controls (like render()).
+     * Disabled groups render as display-only values with hidden
+     * inputs to preserve their data across form submission.
+     *
+     * Used for wizard-style forms where completed steps are shown
+     * read-only and the current step is editable — all within a
+     * single <form> tag.
+     *
+     * @param Form $form    The form to render (must be a BaseForm)
+     * @param string $action  Form action URL
+     * @param string $method  HTTP method (get/post)
+     * @return string  Complete rendered output
+      *
+      * @api
+     */
+    public function renderMixed(Form $form, string $action = '', string $method = 'post'): string;
 }

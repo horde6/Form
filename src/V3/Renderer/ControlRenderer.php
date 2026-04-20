@@ -63,6 +63,27 @@ interface ControlRenderer
     public function renderHelp(Variable $var): string;
 
     /**
+     * Render a variable's value as display-only text (no form control).
+     *
+     * Used by renderInactive() to show form values as plain text.
+     * Enum types show the label, booleans show Yes/No, etc.
+     *
+     * @param Variable $var  The variable to display
+     * @param Form $form  The parent form
+     * @return string  Display-only HTML
+     */
+    public function renderDisplay(Variable $var, Form $form): string;
+
+    /**
+     * Render a display-only label (no required/optional marker, no for= attribute).
+     *
+     * @param Variable $var  The variable
+     * @param Form $form  The parent form
+     * @return string  Display label HTML
+     */
+    public function renderDisplayLabel(Variable $var, Form $form): string;
+
+    /**
      * Generate a unique field ID for a variable.
      *
      * @param Variable $var  The variable

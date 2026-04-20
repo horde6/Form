@@ -122,13 +122,27 @@ abstract class BaseAction implements Action
     /**
      * Print JavaScript for this action.
      *
-     * Default implementation does nothing. Subclasses override if needed.
+     * Legacy method — kept for ActionMigrationInterface compatibility.
+     * V3 code should use getHelperScript() instead.
       *
       * @api
      */
     public function printJavaScript(): void
     {
         // Default: no output
+    }
+
+    /**
+     * Return helper JavaScript functions needed by this action.
+     *
+     * Default returns empty string. Subclasses override to provide
+     * helper function definitions that getActionScript() output depends on.
+      *
+      * @api
+     */
+    public function getHelperScript(): string
+    {
+        return '';
     }
 
     /**

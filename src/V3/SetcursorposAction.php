@@ -88,13 +88,13 @@ class SetcursorposAction extends BaseAction
     }
 
     /**
-     * Print JavaScript code for this action.
+     * Return helper JavaScript for this action.
      *
-     * @return string  JavaScript code
+     * Defines the setCursorPosition_{id}() function called by getActionScript().
       *
       * @api
      */
-    public function printJavaScript(): string
+    public function getHelperScript(): string
     {
         // Provide inline implementation of cursor positioning
         return <<<JS

@@ -235,6 +235,18 @@ class BaseVariable implements Variable
     }
 
     /**
+     * Returns the attached action, or null.
+     *
+     * @return Action|null
+      *
+      * @api
+     */
+    public function getAction(): ?Action
+    {
+        return $this->_action;
+    }
+
+    /**
      * Makes this a hidden variable.
       *
       * @api
@@ -646,6 +658,73 @@ class BaseVariable implements Variable
         }
 
         return $return;
+    }
+
+    /**
+     * Resolve this variable's value from a plain array.
+     *
+     * V3-native alternative to getValue(Horde_Variables). Does the same
+     * lookup/default-fallback but works directly with arrays and does NOT
+     * trigger attached actions (actions are a submission-time concern,
+     * not a rendering concern).
+     *
+     * Supports bracket-notation variable names (e.g., 'billing[street]')
+     * by traversing nested arrays.
+     *
+     * @param array<string, mixed> $vars  Form variables as plain array
+     * @param int|null $index  Array element index (for array variables)
+     * @return mixed  The resolved value
+     */
+    public function resolveValue(array $vars, ?int $index = null): mixed
+    {
+        if ($this->_arrayVal) {
+            $name = str_replace('[]', '', $this->varName);
+        } else {
+            $name = $this->varName;
+        }
+
+        [$value, $wasset] = $this->resolveNestedKey($vars, $name);
+        if (!$wasset) {
+            $value = $this->getDefault();
+        }
+
+        if ($this->_arrayVal && $index !== null) {
+            if (!$wasset && !is_array($value)) {
+                return $value;
+            }
+            return $value[$index] ?? null;
+        }
+
+        return $value;
+    }
+
+    /**
+     * Resolve a possibly bracket-notated key from a nested array.
+     *
+     * Handles both simple keys ('name') and bracket notation
+     * ('billing[street]') by traversing the array hierarchy.
+     *
+     * @param array $vars  Form variables
+     * @param string $name  Variable name, possibly with brackets
+     * @return array{mixed, bool}  [value, wasSet]
+     */
+    private function resolveNestedKey(array $vars, string $name): array
+    {
+        // Fast path: no brackets, simple key lookup
+        if (!str_contains($name, '[')) {
+            return [$vars[$name] ?? null, array_key_exists($name, $vars)];
+        }
+
+        // Parse bracket notation: 'billing[street]' → ['billing', 'street']
+        $keys = explode('[', str_replace(']', '', $name));
+        $current = $vars;
+        foreach ($keys as $key) {
+            if (!is_array($current) || !array_key_exists($key, $current)) {
+                return [null, false];
+            }
+            $current = $current[$key];
+        }
+        return [$current, true];
     }
 
     // Former Type-related methods

@@ -35,6 +35,13 @@ class HourminutesecondVariable extends BaseVariable
 
     public function isValid(Horde_Variables|array $vars, $time): bool
     {
+        if (!is_array($time)) {
+            if ($this->isRequired()) {
+                return $this->invalid('Please enter a valid time.');
+            }
+            return true;
+        }
+
         if (!$this->_show_seconds && count($time) && !isset($time['second'])) {
             $time['second'] = 0;
         }

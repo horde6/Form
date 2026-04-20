@@ -71,4 +71,16 @@ interface VariableV3Interface
      * @return array  Type metadata including name and parameters
      */
     public function about(): array;
+
+    /**
+     * Resolve this variable's value from a plain array.
+     *
+     * V3-native alternative to getValue(Horde_Variables). Works directly
+     * with arrays and does NOT trigger attached actions.
+     *
+     * @param array<string, mixed> $vars  Form variables as plain array
+     * @param int|null $index  Array element index (for array variables)
+     * @return mixed  The resolved value
+     */
+    public function resolveValue(array $vars, ?int $index = null): mixed;
 }

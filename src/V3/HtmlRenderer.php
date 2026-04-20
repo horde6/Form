@@ -141,6 +141,23 @@ class HtmlRenderer extends BaseRenderer
     }
 
     /**
+     * Render the complete form.
+     *
+     * When mode is 'inactive', delegates to renderInactive() for
+     * display-only output.
+      *
+      * @api
+     */
+    public function render(\Horde\Form\Form $form, string $action = '', string $method = 'post'): string
+    {
+        if ($this->mode === 'inactive') {
+            return $this->renderInactive($form);
+        }
+
+        return parent::render($form, $action, $method);
+    }
+
+    /**
      * Render form opening tag.
       *
       * @api
@@ -206,21 +223,50 @@ class HtmlRenderer extends BaseRenderer
 
     /**
      * Render form buttons.
+     *
+     * Reads button configuration from the form. Each button is either
+     * a string label or an array with 'value' and optional 'class'.
       *
       * @api
      */
     public function renderButtons(\Horde\Form\Form $form): string
     {
-        // Get buttons via reflection (BaseForm doesn't expose submit/reset yet)
-        // For now, render a default submit button
-        $output = [];
+        $buttons = $form->getButtons();
+        if (empty($buttons)) {
+            $buttons = ['Submit'];
+        }
 
+        $output = [];
         $output[] = '<div class="form-buttons-inner">';
-        $output[] = $this->buildTag('input', [
-            'type' => 'submit',
-            'value' => 'Submit',
-            'class' => 'button',
-        ]);
+
+        foreach ($buttons as $button) {
+            if (is_array($button)) {
+                $attrs = [
+                    'type' => 'submit',
+                    'name' => 'submitbutton',
+                    'class' => $button['class'] ?? 'horde-default',
+                    'value' => $button['value'] ?? 'Submit',
+                ];
+            } else {
+                $attrs = [
+                    'type' => 'submit',
+                    'name' => 'submitbutton',
+                    'class' => 'horde-default',
+                    'value' => (string) $button,
+                ];
+            }
+            $output[] = $this->buildTag('input', $attrs);
+        }
+
+        $reset = $form->getReset();
+        if ($reset !== false) {
+            $output[] = $this->buildTag('input', [
+                'type' => 'reset',
+                'class' => 'horde-cancel',
+                'value' => $reset,
+            ]);
+        }
+
         $output[] = '</div>';
 
         return implode("\n", $output);

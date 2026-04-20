@@ -102,7 +102,7 @@ class ConditionalsetvalueAction extends BaseAction
       *
       * @api
      */
-    public function setValues(Horde_Variables $vars, $sourceVal, bool $arrayVal = false): void
+    public function setValues($vars, $sourceVal, ?int $index = null, bool $arrayVal = false): void
     {
         $map = $this->params['map'] ?? [];
         $target = $this->params['target'] ?? '';
@@ -129,13 +129,14 @@ class ConditionalsetvalueAction extends BaseAction
     }
 
     /**
-     * Print JavaScript code for this action.
+     * Return helper JavaScript for this action.
      *
-     * @return string  JavaScript code
+     * Defines the mapValue_{id}() function and _map_{id} lookup table
+     * called by getActionScript().
       *
       * @api
      */
-    public function printJavaScript(): string
+    public function getHelperScript(): string
     {
         $map = $this->params['map'] ?? [];
 

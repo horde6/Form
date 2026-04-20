@@ -64,6 +64,13 @@ class MonthdayyearVariable extends BaseVariable
 
     public function isValid(Horde_Variables|array $vars, $date): bool
     {
+        if (!is_array($date)) {
+            if ($this->isRequired() && empty($date)) {
+                return $this->invalid('This field is required.');
+            }
+            return true;
+        }
+
         $empty = $this->emptyDateArray($date);
         if ($empty == 1 && $this->isRequired()) {
             return $this->invalid('This field is required.');

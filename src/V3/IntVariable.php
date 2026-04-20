@@ -42,6 +42,16 @@ class IntVariable extends BaseVariable
     }
 
     /**
+     * Extract typed integer value from form variables.
+      *
+      * @api
+     */
+    protected function getInfoV3($vars): int
+    {
+        return (int) $this->getValue($vars);
+    }
+
+    /**
      * Return info about field type.
       *
       * @api

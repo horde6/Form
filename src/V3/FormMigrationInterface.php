@@ -116,7 +116,8 @@ interface FormMigrationInterface
         string $section,
         string $desc = '',
         string $image = '',
-        bool $expanded = true
+        bool $expanded = true,
+        string $prefix = '',
     ): void;
 
     /**
@@ -265,6 +266,23 @@ interface FormMigrationInterface
      * @param array|string $submit  Submit button configuration
      */
     public function appendButtons(array|string $submit): void;
+
+    /**
+     * Gets submit button configurations.
+     *
+     * Each element is either a string label or an associative array
+     * with keys like 'value', 'class' for styled buttons.
+     *
+     * @return array<string|array>  Button configurations
+     */
+    public function getButtons(): array;
+
+    /**
+     * Gets reset button label.
+     *
+     * @return string|false  Reset button label or false if none
+     */
+    public function getReset(): string|false;
 
     /**
      * Validates the form.

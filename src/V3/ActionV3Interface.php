@@ -36,4 +36,18 @@ interface ActionV3Interface
      * @return string  Unique action identifier
      */
     public function id(): string;
+
+    /**
+     * Return helper JavaScript functions needed by this action.
+     *
+     * Helper functions must be defined before getActionScript() output
+     * executes. The renderer emits them in a script block before
+     * the event bindings.
+     *
+     * Replaces the legacy printJavaScript() method which used echo/output
+     * buffering. V3 actions return the script as a string.
+     *
+     * @return string  JavaScript code, or empty string if none needed
+     */
+    public function getHelperScript(): string;
 }

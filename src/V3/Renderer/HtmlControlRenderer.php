@@ -21,7 +21,6 @@ namespace Horde\Form\V3\Renderer;
 use Horde\Form\V3\Variable;
 use Horde\Form\Form;
 use DateTimeInterface;
-use Horde_Variables;
 
 /**
  * HTML control renderer for rendering form controls as HTML.
@@ -51,9 +50,9 @@ class HtmlControlRenderer implements ControlRenderer
     protected string $requiredMarker = '*';
 
     /**
-     * Help text marker.
+     * Help text marker (prepended to description text).
      */
-    protected string $helpMarker = '?';
+    protected string $helpMarker = '';
 
     /**
      * Field ID cache.
@@ -88,7 +87,7 @@ class HtmlControlRenderer implements ControlRenderer
      */
     public function __construct(
         string $requiredMarker = '*',
-        string $helpMarker = '?',
+        string $helpMarker = '',
         string $controlMode = 'modern',
         ?AssetManager $assetManager = null
     ) {
@@ -123,9 +122,10 @@ class HtmlControlRenderer implements ControlRenderer
     {
         $label = htmlspecialchars($var->getHumanName());
 
-        // Add required marker
         if ($var->required) {
             $label .= ' <span class="required">' . $this->requiredMarker . '</span>';
+        } else {
+            $label .= ' <span class="optional">(' . _("optional") . ')</span>';
         }
 
         $fieldId = $this->getFieldId($var);
@@ -147,10 +147,11 @@ class HtmlControlRenderer implements ControlRenderer
         }
 
         $description = htmlspecialchars($var->getDescription());
+        $prefix = $this->helpMarker !== '' ? $this->helpMarker . ' ' : '';
 
         return sprintf(
-            '<span class="help-text">%s %s</span>',
-            $this->helpMarker,
+            '<span class="help-text">%s%s</span>',
+            $prefix,
             $description
         );
     }
@@ -162,9 +163,9 @@ class HtmlControlRenderer implements ControlRenderer
     {
         $varName = $var->getVarName();
 
-        if ($new || !isset($this->fieldIds[$varName])) {
+        if (!isset($this->fieldIds[$varName])) {
             $this->fieldIds[$varName] = 0;
-        } else {
+        } elseif ($new) {
             $this->fieldIds[$varName]++;
         }
 
@@ -214,8 +215,7 @@ class HtmlControlRenderer implements ControlRenderer
      */
     protected function getValue(Variable $var, Form $form)
     {
-        $vars = $form->getVars();
-        return $var->getValue(new Horde_Variables($vars));
+        return $var->resolveValue($form->getVars());
     }
 
     // ========================================================================
@@ -956,28 +956,45 @@ class HtmlControlRenderer implements ControlRenderer
     }
 
     /**
-     * Render link/URL input.
+     * Render link(s) as clickable hyperlinks.
+     *
+     * LinkVariable stores link definitions in $var->values (array of hashes).
+     * Each hash may have keys: url, text, target, onclick, title, accesskey, class.
+     * This is a display-only type — it doesn't read from form vars.
      */
     protected function renderLink(Variable $var, Form $form, bool $readonly): string
     {
-        $value = $this->getValue($var, $form);
-
-        $attrs = [
-            'type' => 'url',  // HTML5 URL input type
-            'name' => $var->getVarName(),
-            'id' => $this->getFieldId($var),
-            'value' => $value,
-            'required' => $var->required ? 'required' : null,
-            'readonly' => $readonly ? 'readonly' : null,
-            'disabled' => $var->isDisabled() ? 'disabled' : null,
-        ];
-
-        // Add size attribute if available
-        if (method_exists($var, 'getSize')) {
-            $attrs['size'] = $var->getSize();
+        $links = $var->values ?? [];
+        if (empty($links)) {
+            return '';
         }
 
-        return $this->buildTag('input', $attrs);
+        // Normalize single link hash to array of links
+        if (isset($links['url'])) {
+            $links = [$links];
+        }
+
+        $output = [];
+        foreach ($links as $link) {
+            $url = $link['url'] ?? '';
+            $text = $link['text'] ?? $url;
+            if (empty($url)) {
+                continue;
+            }
+
+            $attrs = [
+                'href' => $url,
+                'target' => !empty($link['target']) ? $link['target'] : null,
+                'title' => !empty($link['title']) ? $link['title'] : null,
+                'accesskey' => !empty($link['accesskey']) ? $link['accesskey'] : null,
+                'class' => !empty($link['class']) ? $link['class'] : null,
+                'onclick' => !empty($link['onclick']) ? $link['onclick'] : null,
+            ];
+
+            $output[] = $this->buildTag('a', $attrs, htmlspecialchars($text));
+        }
+
+        return implode(' ', $output);
     }
 
     /**
@@ -1128,7 +1145,7 @@ class HtmlControlRenderer implements ControlRenderer
         $output = [];
         foreach ($values as $key => $label) {
             $id = $this->getFieldId($var, true);
-            $isChecked = in_array($key, $selected, true);
+            $isChecked = in_array($key, $selected);
 
             $attrs = [
                 'type' => 'checkbox',
@@ -1688,6 +1705,392 @@ class HtmlControlRenderer implements ControlRenderer
     {
         // Similar to multienum
         return $this->renderMultienum($var, $form, $readonly);
+    }
+
+    // ========================================================================
+    // Display-only rendering (for renderInactive)
+    // ========================================================================
+
+    /**
+     * Render a variable's value as display-only text (no form control).
+     *
+     * Uses dynamic dispatch to display + ucfirst($typeName) methods,
+     * falling back to displayDefault().
+     */
+    public function renderDisplay(Variable $var, Form $form): string
+    {
+        $typeName = $var->getTypeName();
+
+        $method = 'display' . ucfirst($typeName);
+        if (method_exists($this, $method)) {
+            return $this->$method($var, $form);
+        }
+
+        return $this->displayDefault($var, $form);
+    }
+
+    /**
+     * Render a display-only label (no required/optional marker, no for= attribute).
+     */
+    public function renderDisplayLabel(Variable $var, Form $form): string
+    {
+        return '<strong>' . htmlspecialchars($var->getHumanName()) . '</strong>';
+    }
+
+    /**
+     * Default display: HTML-escaped value with newlines as <br>.
+     */
+    protected function displayDefault(Variable $var, Form $form): string
+    {
+        $value = $this->getValue($var, $form);
+
+        return nl2br(htmlspecialchars((string) $value));
+    }
+
+    /**
+     * Display enum: show the label text, not the key.
+     */
+    protected function displayEnum(Variable $var, Form $form): string
+    {
+        $value = $this->getValue($var, $form);
+        $values = method_exists($var, 'getValues') ? $var->getValues() : [];
+
+        if ($value !== null && $value !== '' && isset($values[$value])) {
+            return htmlspecialchars($values[$value]);
+        }
+
+        return '';
+    }
+
+    /**
+     * Display radio: show the label text for the selected option.
+     */
+    protected function displayRadio(Variable $var, Form $form): string
+    {
+        return $this->displayEnum($var, $form);
+    }
+
+    /**
+     * Display multienum: comma-separated labels.
+     */
+    protected function displayMultienum(Variable $var, Form $form): string
+    {
+        $value = $this->getValue($var, $form);
+        $values = method_exists($var, 'getValues') ? $var->getValues() : [];
+        $selected = is_array($value) ? $value : [];
+
+        $labels = [];
+        foreach ($selected as $key) {
+            if (isset($values[$key])) {
+                $labels[] = $values[$key];
+            }
+        }
+
+        return htmlspecialchars(implode(', ', $labels));
+    }
+
+    /**
+     * Display keyvalmultienum: comma-separated labels.
+     */
+    protected function displayKeyvalmultienum(Variable $var, Form $form): string
+    {
+        return $this->displayMultienum($var, $form);
+    }
+
+    /**
+     * Display set: comma-separated labels for checked items.
+     */
+    protected function displaySet(Variable $var, Form $form): string
+    {
+        $value = $this->getValue($var, $form);
+        $values = method_exists($var, 'getValues') ? $var->getValues() : [];
+        $selected = is_array($value) ? $value : [];
+
+        $labels = [];
+        foreach ($selected as $key) {
+            if (isset($values[$key])) {
+                $labels[] = $values[$key];
+            }
+        }
+
+        return htmlspecialchars(implode(', ', $labels));
+    }
+
+    /**
+     * Display boolean: Yes or No.
+     */
+    protected function displayBoolean(Variable $var, Form $form): string
+    {
+        $value = $this->getValue($var, $form);
+
+        return $value ? _("Yes") : _("No");
+    }
+
+    /**
+     * Display password: masked.
+     */
+    protected function displayPassword(Variable $var, Form $form): string
+    {
+        return '********';
+    }
+
+    /**
+     * Display passwordconfirm: masked.
+     */
+    protected function displayPasswordconfirm(Variable $var, Form $form): string
+    {
+        return '********';
+    }
+
+    /**
+     * Display email: plain text.
+     */
+    protected function displayEmail(Variable $var, Form $form): string
+    {
+        $value = $this->getValue($var, $form);
+
+        return htmlspecialchars((string) $value);
+    }
+
+    /**
+     * Display emailconfirm: plain text of confirmed email.
+     */
+    protected function displayEmailconfirm(Variable $var, Form $form): string
+    {
+        $value = $this->getValue($var, $form);
+        $email = is_array($value) ? ($value['original'] ?? '') : $value;
+
+        return htmlspecialchars((string) $email);
+    }
+
+    /**
+     * Display date: formatted date string.
+     */
+    protected function displayDate(Variable $var, Form $form): string
+    {
+        $value = $this->getValue($var, $form);
+
+        return htmlspecialchars($this->formatDateValue($value));
+    }
+
+    /**
+     * Display monthdayyear: same as date.
+     */
+    protected function displayMonthdayyear(Variable $var, Form $form): string
+    {
+        return $this->displayDate($var, $form);
+    }
+
+    /**
+     * Display time: formatted time string.
+     */
+    protected function displayTime(Variable $var, Form $form): string
+    {
+        $value = $this->getValue($var, $form);
+
+        return htmlspecialchars($this->formatTimeValue($value));
+    }
+
+    /**
+     * Display hourminutesecond: formatted time string.
+     */
+    protected function displayHourminutesecond(Variable $var, Form $form): string
+    {
+        return $this->displayTime($var, $form);
+    }
+
+    /**
+     * Display datetime: formatted datetime string.
+     */
+    protected function displayDatetime(Variable $var, Form $form): string
+    {
+        $value = $this->getValue($var, $form);
+
+        return htmlspecialchars($this->formatDatetimeValue($value));
+    }
+
+    /**
+     * Display monthyear: formatted month input value.
+     */
+    protected function displayMonthyear(Variable $var, Form $form): string
+    {
+        $value = $this->getValue($var, $form);
+
+        return htmlspecialchars((string) $value);
+    }
+
+    /**
+     * Display html: raw HTML (user responsible for sanitization).
+     */
+    protected function displayHtml(Variable $var, Form $form): string
+    {
+        $value = $this->getValue($var, $form);
+
+        return (string) $value;
+    }
+
+    /**
+     * Display link: rendered hyperlinks.
+     */
+    protected function displayLink(Variable $var, Form $form): string
+    {
+        return $this->renderLink($var, $form, true);
+    }
+
+    /**
+     * Display image: <img> tag if value exists.
+     */
+    protected function displayImage(Variable $var, Form $form): string
+    {
+        $value = $this->getValue($var, $form);
+        if ($value) {
+            return sprintf(
+                '<img src="%s" alt="Uploaded image" class="form-image">',
+                htmlspecialchars((string) $value),
+            );
+        }
+
+        return '';
+    }
+
+    /**
+     * Display colorpicker: color swatch with hex value.
+     */
+    protected function displayColorpicker(Variable $var, Form $form): string
+    {
+        $value = $this->getValue($var, $form);
+        $color = (string) $value;
+        if ($color === '') {
+            return '';
+        }
+
+        return sprintf(
+            '<span style="background-color:%s;display:inline-block;width:1em;height:1em;vertical-align:middle;border:1px solid #000;"></span> %s',
+            htmlspecialchars($color),
+            htmlspecialchars($color),
+        );
+    }
+
+    /**
+     * Display invalid: error message.
+     */
+    protected function displayInvalid(Variable $var, Form $form): string
+    {
+        return '<span class="form-error">' . htmlspecialchars(_("Invalid field")) . '</span>';
+    }
+
+    /**
+     * Display file: filename text.
+     */
+    protected function displayFile(Variable $var, Form $form): string
+    {
+        $value = $this->getValue($var, $form);
+        if (is_array($value) && !empty($value['name'])) {
+            return htmlspecialchars($value['name']);
+        }
+
+        return htmlspecialchars((string) $value);
+    }
+
+    /**
+     * Display selectfiles: filename list.
+     */
+    protected function displaySelectfiles(Variable $var, Form $form): string
+    {
+        return $this->displayFile($var, $form);
+    }
+
+    /**
+     * Display sound: audio player if value exists.
+     */
+    protected function displaySound(Variable $var, Form $form): string
+    {
+        $value = $this->getValue($var, $form);
+        if ($value) {
+            return sprintf(
+                '<audio controls><source src="%s"></audio>',
+                htmlspecialchars((string) $value),
+            );
+        }
+
+        return '';
+    }
+
+    /**
+     * Display header: heading text.
+     */
+    protected function displayHeader(Variable $var, Form $form): string
+    {
+        return $this->renderHeader($var, $form, true);
+    }
+
+    /**
+     * Display description: paragraph text.
+     */
+    protected function displayDescription(Variable $var, Form $form): string
+    {
+        return $this->renderDescription($var, $form, true);
+    }
+
+    /**
+     * Display spacer: visual separator.
+     */
+    protected function displaySpacer(Variable $var, Form $form): string
+    {
+        return '<hr class="form-spacer">';
+    }
+
+    /**
+     * Display octal: octal-formatted value.
+     */
+    protected function displayOctal(Variable $var, Form $form): string
+    {
+        $value = $this->getValue($var, $form);
+        if ($value !== null && $value !== '') {
+            return sprintf('0%o', octdec((string) $value));
+        }
+
+        return '';
+    }
+
+    /**
+     * Display figlet: not shown in inactive mode (CAPTCHA-like).
+     */
+    protected function displayFiglet(Variable $var, Form $form): string
+    {
+        return '';
+    }
+
+    /**
+     * Display captcha: not shown in inactive mode.
+     */
+    protected function displayCaptcha(Variable $var, Form $form): string
+    {
+        return '';
+    }
+
+    /**
+     * Display country: delegates to enum display.
+     */
+    protected function displayCountry(Variable $var, Form $form): string
+    {
+        return $this->displayEnum($var, $form);
+    }
+
+    /**
+     * Display mlenum: delegates to enum display.
+     */
+    protected function displayMlenum(Variable $var, Form $form): string
+    {
+        return $this->displayEnum($var, $form);
+    }
+
+    /**
+     * Display category: delegates to enum display.
+     */
+    protected function displayCategory(Variable $var, Form $form): string
+    {
+        return $this->displayEnum($var, $form);
     }
 
     /**

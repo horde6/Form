@@ -87,4 +87,25 @@ interface Form
      * @return mixed  The form's variable data
      */
     public function getVars();
+
+    /**
+     * Get submit button configurations.
+     *
+     * @return array<string|array>  Button labels or config arrays
+     */
+    public function getButtons(): array;
+
+    /**
+     * Get reset button label.
+     *
+     * @return string|false  Reset label or false if none
+     */
+    public function getReset(): string|false;
+
+    /**
+     * Get form encoding type.
+     *
+     * @return string|null  Encoding type or null
+     */
+    public function getEnctype(): ?string;
 }

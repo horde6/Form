@@ -102,19 +102,19 @@ class UpdatefieldAction extends BaseAction
       *
       * @api
      */
-    public function setValues(Horde_Variables $vars, $sourceVal, ?int $index = null, bool $arrayVal = false): void
+    public function setValues($vars, $sourceVal, ?int $index = null, bool $arrayVal = false): void
     {
         // This action is JavaScript-only, no server-side logic needed
     }
 
     /**
-     * Print JavaScript code for this action.
+     * Return helper JavaScript for this action.
      *
-     * @return string  JavaScript code
+     * Defines the updateField_{id}() function called by getActionScript().
       *
       * @api
      */
-    public function printJavaScript(): string
+    public function getHelperScript(): string
     {
         $format = $this->params['format'] ?? '';
         $fields = $this->params['fields'] ?? [];

@@ -71,6 +71,26 @@ class EnumVariable extends BaseVariable
     }
 
     /**
+     * Extract typed value matching the enum's key type.
+      *
+      * @api
+     */
+    protected function getInfoV3($vars)
+    {
+        $value = $this->getValue($vars);
+
+        // Look up the actual key in the values array to preserve its type.
+        // Browser always sends strings, but the enum keys may be int.
+        foreach ($this->_values as $key => $label) {
+            if ((string) $key === (string) $value) {
+                return $key;
+            }
+        }
+
+        return $value;
+    }
+
+    /**
      * Return info about field type.
       *
       * @api

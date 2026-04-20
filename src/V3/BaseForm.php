@@ -21,6 +21,8 @@ namespace Horde\Form\V3;
 
 use Horde_Variables;
 use Horde_String;
+use Horde\Token\Token;
+use Horde\Token\Exception\TokenException;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
@@ -55,6 +57,8 @@ use Psr\Http\Message\ServerRequestInterface;
  */
 class BaseForm implements \Horde\Form\Form
 {
+    use VariableFactoryTrait;
+
     /**
      * Form name identifier.
      */
@@ -103,23 +107,19 @@ class BaseForm implements \Horde\Form\Form
     protected ?bool $submitted = null;
 
     /**
-     * Form sections configuration.
+     * Form field groups (sections and plain groups).
      *
-     * @var array<string, array{desc: string, expanded: bool, image: string}>
+     * Keyed by group name. Each entry is a FieldGroup (structural)
+     * or Section (structural + visual metadata).
+     *
+     * @var array<string, FieldGroup>
      */
-    public array $sections = [];
+    private array $groups = [];
 
     /**
-     * Currently active section name.
+     * Currently active group name for addVariable() calls.
      */
-    protected string|int|null $currentSection = null;
-
-    /**
-     * Form variables organized by section.
-     *
-     * @var array<string, array<Variable>>
-     */
-    protected array $variables = [];
+    private ?string $currentGroup = null;
 
     /**
      * Hidden form variables.
@@ -132,6 +132,11 @@ class BaseForm implements \Horde\Form\Form
      * Whether to use form tokens for CSRF protection.
      */
     protected bool $useFormToken = true;
+
+    /**
+     * CSRF token service (null = CSRF protection disabled).
+     */
+    private ?Token $tokenService = null;
 
     /**
      * Whether form was autofilled.
@@ -149,18 +154,27 @@ class BaseForm implements \Horde\Form\Form
     public bool $help = false;
 
     /**
+     * Registered form-level validators.
+     *
+     * @var array<FormValidator>
+     */
+    private array $validators = [];
+
+    /**
      * Create a new form.
      *
      * @param Horde_Variables|ServerRequestInterface|array $vars  Form data
      * @param string $title  Form display title
      * @param string|null $name  Form name (auto-generated from class if null)
+     * @param Token|null $token  CSRF token service (null = no CSRF protection)
       *
       * @api
      */
     public function __construct(
         Horde_Variables|ServerRequestInterface|array $vars,
         string $title = '',
-        ?string $name = null
+        ?string $name = null,
+        ?Token $token = null
     ) {
         // Generate form name from class name if not provided
         if (empty($name)) {
@@ -172,6 +186,7 @@ class BaseForm implements \Horde\Form\Form
         $this->vars = $this->normalizeVars($vars);
         $this->title = $title;
         $this->name = $name;
+        $this->tokenService = $token;
     }
 
     /**
@@ -190,10 +205,17 @@ class BaseForm implements \Horde\Form\Form
     private function normalizeVars(
         Horde_Variables|ServerRequestInterface|array $vars
     ): array {
-        return match (true) {
-            $vars instanceof Horde_Variables => iterator_to_array($vars),
-            $vars instanceof ServerRequestInterface => $vars->getParsedBody() ?? [],
-            is_array($vars) => $vars,
+        if ($vars instanceof Horde_Variables) {
+            return iterator_to_array($vars);
+        }
+        if (is_array($vars)) {
+            return $vars;
+        }
+        // PSR-7: read from the source matching the HTTP method.
+        // POST/PUT/PATCH carry data in the body; GET/DELETE/HEAD in query.
+        return match ($vars->getMethod()) {
+            'POST', 'PUT', 'PATCH' => $vars->getParsedBody() ?? [],
+            default => $vars->getQueryParams(),
         };
     }
 
@@ -321,14 +343,59 @@ class BaseForm implements \Horde\Form\Form
     }
 
     /**
+     * Set the CSRF token service.
+     *
+     * @param Token|null $token  Token service (null = disable CSRF)
+      *
+      * @api
+     */
+    public function setTokenService(?Token $token): void
+    {
+        $this->tokenService = $token;
+    }
+
+    /**
+     * Generate a CSRF token for this form.
+     *
+     * Returns null if token protection is disabled or no token
+     * service is configured.
+     *
+     * @return string|null  Token string or null
+      *
+      * @api
+     */
+    public function generateToken(): ?string
+    {
+        if (!$this->useFormToken || $this->tokenService === null) {
+            return null;
+        }
+        return (string) $this->tokenService->generate($this->name);
+    }
+
+    /**
+     * Get the hidden field name for the CSRF token.
+     *
+     * @return string  Field name (e.g., "myform_formToken")
+      *
+      * @api
+     */
+    public function getTokenFieldName(): string
+    {
+        return $this->name . '_formToken';
+    }
+
+    /**
      * Set current form section.
      *
-     * Sections allow organizing form fields into collapsible groups.
+     * Sections are FieldGroups with visual metadata (title, description,
+     * image, expanded state). Variables added after this call are placed
+     * in this section until a new section is set.
      *
      * @param string|int $section  Section identifier
      * @param string $desc  Section description
      * @param string $image  Section icon/image URL
      * @param bool $expanded  Whether section starts expanded
+     * @param string $prefix  Name prefix for variables ('' = no prefix)
       *
       * @api
      */
@@ -336,18 +403,104 @@ class BaseForm implements \Horde\Form\Form
         string|int $section = '',
         string $desc = '',
         string $image = '',
-        bool $expanded = true
+        bool $expanded = true,
+        string $prefix = '',
     ): void {
-        $this->currentSection = $section;
+        $name = (string) $section;
+        $this->currentGroup = $name;
 
         // Auto-open first section if none open yet
-        if (count($this->sections) === 0 && !$this->getOpenSection()) {
+        if (count($this->groups) === 0 && !$this->getOpenSection()) {
             $this->setOpenSection($section);
         }
 
-        $this->sections[$section]['desc'] = $desc;
-        $this->sections[$section]['expanded'] = $expanded;
-        $this->sections[$section]['image'] = $image;
+        // Create or update the Section object
+        if (isset($this->groups[$name]) && $this->groups[$name] instanceof Section) {
+            $existing = $this->groups[$name];
+            $existing->setDescription($desc);
+            $existing->setImage($image);
+            $existing->setExpanded($expanded);
+        } else {
+            $this->groups[$name] = new Section(
+                name: $name,
+                title: $name,
+                description: $desc,
+                image: $image,
+                expanded: $expanded,
+                prefix: $prefix,
+            );
+        }
+    }
+
+    /**
+     * Register a field group (or section) and set it as the current group.
+     *
+     * Variables added after this call go into the registered group.
+     * If the group has a prefix, variables are automatically name-scoped.
+     *
+     * @param FieldGroup $group  The group to register
+     * @return static  Fluent interface
+      *
+      * @api
+     */
+    public function addGroup(FieldGroup $group): static
+    {
+        $name = $group->getName();
+        $this->groups[$name] = $group;
+        $this->currentGroup = $name;
+        return $this;
+    }
+
+    /**
+     * Get a registered group by name.
+     *
+     * @param string $name  Group name
+     * @return FieldGroup|null  The group, or null if not found
+      *
+      * @api
+     */
+    public function getGroup(string $name): ?FieldGroup
+    {
+        return $this->groups[$name] ?? null;
+    }
+
+    /**
+     * Activate a single group and disable all others.
+     *
+     * Used in wizard forms to mark one step as editable while all
+     * other steps become read-only (displayed with preserved values).
+     *
+     * @param string $name  Name of the group to activate
+      *
+      * @api
+     */
+    public function setActiveGroup(string $name): void
+    {
+        foreach ($this->groups as $groupName => $group) {
+            $group->setEnabled($groupName === $name);
+        }
+    }
+
+    /**
+     * Enable one group and disable all groups that appear before it.
+     *
+     * Groups after the named group are left unchanged. Useful for
+     * wizard patterns where completed steps should become read-only
+     * and the current step should be editable.
+     *
+     * @param string $name  Name of the group to enable (all prior groups disabled)
+      *
+      * @api
+     */
+    public function setGroupsEnabledUpTo(string $name): void
+    {
+        foreach ($this->groups as $groupName => $group) {
+            if ($groupName === $name) {
+                $group->setEnabled(true);
+                break;
+            }
+            $group->setEnabled(false);
+        }
     }
 
     /**
@@ -357,7 +510,8 @@ class BaseForm implements \Horde\Form\Form
      */
     public function getSectionDesc(string|int $section): string
     {
-        return $this->sections[$section]['desc'] ?? '';
+        $group = $this->groups[(string) $section] ?? null;
+        return $group instanceof Section ? $group->getDescription() : '';
     }
 
     /**
@@ -367,7 +521,8 @@ class BaseForm implements \Horde\Form\Form
      */
     public function getSectionImage(string|int $section): string
     {
-        return $this->sections[$section]['image'] ?? '';
+        $group = $this->groups[(string) $section] ?? null;
+        return $group instanceof Section ? $group->getImage() : '';
     }
 
     /**
@@ -405,7 +560,8 @@ class BaseForm implements \Horde\Form\Form
      */
     public function getSectionExpandedState(string|int $section, bool $boolean = false): bool|string
     {
-        $expanded = $this->sections[$section]['expanded'] ?? true;
+        $group = $this->groups[(string) $section] ?? null;
+        $expanded = $group instanceof Section ? $group->isExpanded() : true;
 
         if ($boolean) {
             return $expanded;
@@ -478,10 +634,25 @@ class BaseForm implements \Horde\Form\Form
         ?string $description = null,
         array $params = []
     ): Variable {
+        // Ensure group exists
+        if ($this->currentGroup === null) {
+            $this->currentGroup = '__base';
+        }
+        if (!isset($this->groups[$this->currentGroup])) {
+            $this->groups[$this->currentGroup] = new FieldGroup($this->currentGroup);
+        }
+
+        $group = $this->groups[$this->currentGroup];
+
+        // Apply group prefix to variable name
+        $scopedName = $group->getPrefix() !== ''
+            ? $group->getPrefix() . '[' . $varName . ']'
+            : $varName;
+
         // Create variable using factory method
         $var = $this->createVariable(
             humanName: $humanName,
-            varName: $varName,
+            varName: $scopedName,
             type: $type,
             required: $required,
             readonly: $readonly,
@@ -495,11 +666,9 @@ class BaseForm implements \Horde\Form\Form
         // Auto-fill single-value enums
         if ($var->getTypeName() === 'enum') {
             $values = $var->getValues();
-            if (count($values) === 1 && !array_key_exists($varName, $this->vars)) {
+            if (count($values) === 1 && !array_key_exists($scopedName, $this->vars)) {
                 $keys = array_keys($values);
-                $this->setVar($varName, $keys[0]);
-                // Mark as autofilled (property doesn't exist in V3 yet, but planned)
-                // $var->_autofilled = true;
+                $this->setVar($scopedName, $keys[0]);
             }
         }
 
@@ -508,95 +677,8 @@ class BaseForm implements \Horde\Form\Form
             $this->enctype = 'multipart/form-data';
         }
 
-        // Ensure section is set
-        if ($this->currentSection === null) {
-            $this->currentSection = '__base';
-        }
-
-        // Insert variable at appropriate position
-        if ($before === null) {
-            // Append to end
-            $this->variables[$this->currentSection][] = $var;
-        } else {
-            // Find position of $before variable
-            $position = null;
-            if (isset($this->variables[$this->currentSection])) {
-                foreach ($this->variables[$this->currentSection] as $index => $existingVar) {
-                    if ($existingVar->getVarName() === $before) {
-                        $position = $index;
-                        break;
-                    }
-                }
-            }
-
-            if ($position === null) {
-                // $before not found, append to end
-                $this->variables[$this->currentSection][] = $var;
-            } else {
-                // Insert at position
-                $this->variables[$this->currentSection] = array_merge(
-                    array_slice($this->variables[$this->currentSection], 0, $position),
-                    [$var],
-                    array_slice($this->variables[$this->currentSection], $position)
-                );
-            }
-        }
-
-        return $var;
-    }
-
-    /**
-     * Factory method: Create Variable instance from type string.
-     *
-     * Maps type strings like 'text', 'email', 'enum' to Variable classes.
-     * Supports app-specific types via 'app:typename' format (e.g., 'whups:priority').
-     *
-     * @param string $humanName  Human-readable field label
-     * @param string $varName  Internal variable name
-     * @param string $type  Variable type string
-     * @param bool $required  Whether field is required
-     * @param bool $readonly  Whether field is read-only
-     * @param string|null $description  Field description
-     * @param array $params  Type-specific parameters
-     * @return Variable  Created variable instance
-      *
-      * @internal
-     */
-    private function createVariable(
-        string $humanName,
-        string $varName,
-        string $type,
-        bool $required,
-        bool $readonly = false,
-        ?string $description = null,
-        array $params = []
-    ): Variable {
-        // Handle app:typename format (e.g., 'whups:priority')
-        if (str_contains($type, ':')) {
-            [$app, $type] = explode(':', $type, 2);
-            $class = ucfirst($app) . '\\Form\\V3\\' . ucfirst($type) . 'Variable';
-        } else {
-            // Standard Horde types
-            $class = 'Horde\\Form\\V3\\' . ucfirst($type) . 'Variable';
-        }
-
-        // Fallback to InvalidVariable if class doesn't exist
-        if (!class_exists($class)) {
-            error_log("Warning: Form type class '$class' not found, using InvalidVariable");
-            $class = 'Horde\\Form\\V3\\InvalidVariable';
-        }
-
-        // Create variable instance
-        $var = new $class(
-            humanName: $humanName,
-            varName: $varName,
-            required: $required,
-            readonly: $readonly,
-            description: $description
-        );
-
-        // Initialize with type-specific parameters
-        $var->init(...$params);
+        // Insert variable into the current group
+        $group->insertVariable($var, $before);
 
         return $var;
     }
@@ -611,16 +693,9 @@ class BaseForm implements \Horde\Form\Form
      */
     public function removeVariable(Variable|string $var): bool
     {
-        $varName = $var instanceof Variable ? $var->getVarName() : $var;
-
-        foreach ($this->variables as $section => $sectionVars) {
-            foreach ($sectionVars as $index => $existingVar) {
-                if ($existingVar->getVarName() === $varName
-                    || ($var instanceof Variable && $existingVar === $var)) {
-                    // Remove variable from section
-                    array_splice($this->variables[$section], $index, 1);
-                    return true;
-                }
+        foreach ($this->groups as $group) {
+            if ($group->removeVariable($var)) {
+                return true;
             }
         }
 
@@ -673,16 +748,20 @@ class BaseForm implements \Horde\Form\Form
      *
      * @param bool $flat  If true, return flat array; if false, return by section
      * @param bool $withHidden  If true, include hidden variables
+     * @param bool|null $enabledOnly  null = all groups, true = enabled only, false = disabled only
      * @return array<Variable>|array<string, array<Variable>>
       *
       * @api
      */
-    public function getVariables(bool $flat = true, bool $withHidden = false): array
+    public function getVariables(bool $flat = true, bool $withHidden = false, ?bool $enabledOnly = null): array
     {
         if ($flat) {
             $vars = [];
-            foreach ($this->variables as $section => $sectionVars) {
-                foreach ($sectionVars as $var) {
+            foreach ($this->groups as $name => $group) {
+                if ($enabledOnly !== null && $group->isEnabled() !== $enabledOnly) {
+                    continue;
+                }
+                foreach ($group->getVariables() as $var) {
                     $vars[] = $var;
                 }
             }
@@ -694,7 +773,15 @@ class BaseForm implements \Horde\Form\Form
             return $vars;
         }
 
-        return $this->variables;
+        // Structured by group name → variable array (same shape as before)
+        $result = [];
+        foreach ($this->groups as $name => $group) {
+            if ($enabledOnly !== null && $group->isEnabled() !== $enabledOnly) {
+                continue;
+            }
+            $result[$name] = $group->getVariables();
+        }
+        return $result;
     }
 
     /**
@@ -739,6 +826,64 @@ class BaseForm implements \Horde\Form\Form
     }
 
     /**
+     * Get submit button labels.
+     *
+     * Each element is either a string label or an associative array
+     * with keys like 'value', 'class' for styled buttons.
+     *
+     * @return array<string|array>  Button configurations
+      *
+      * @api
+     */
+    public function getButtons(): array
+    {
+        return $this->submit;
+    }
+
+    /**
+     * Get reset button label.
+     *
+     * @return string|false  Reset button label or false if no reset button
+      *
+      * @api
+     */
+    public function getReset(): string|false
+    {
+        return $this->reset;
+    }
+
+    /**
+     * Get the label of the submit button that was clicked.
+     *
+     * Reads the 'submitbutton' value from the form's submitted data.
+     * Returns empty string if no button was identified.
+      *
+      * @api
+     */
+    public function getClickedButton(): string
+    {
+        return (string) ($this->vars['submitbutton'] ?? '');
+    }
+
+    /**
+     * Register a form-level validator.
+     *
+     * Form validators run after field-level validation and can perform
+     * cross-field checks. Multiple validators are executed in registration
+     * order.
+     *
+     * @param FormValidator $validator  Validator instance
+     * @return static  Fluent interface
+      *
+      * @api
+     */
+    public function addValidator(FormValidator $validator): static
+    {
+        $this->validators[] = $validator;
+        return $this;
+    }
+
+    /**
      * Validate form.
      *
      * Validates all variables against current form data. Collects errors.
@@ -765,26 +910,69 @@ class BaseForm implements \Horde\Form\Form
         // Wrap array in Horde_Variables for BaseVariable compatibility
         $varsObject = new Horde_Variables($varsToValidate);
 
-        // TODO: Form token validation (requires Horde_Token integration)
-        // if ($this->useFormToken) { ... }
+        // CSRF token validation
+        if ($this->useFormToken && $this->tokenService !== null) {
+            $tokenField = $this->name . '_formToken';
+            $submittedToken = $varsToValidate[$tokenField] ?? '';
+            if ($submittedToken === '') {
+                $this->errors['_formToken'] = _("Missing form token — possible cross-site request.");
+            } else {
+                try {
+                    $this->tokenService->validateUnique($submittedToken, $this->name);
+                } catch (TokenException $e) {
+                    $this->errors['_formToken'] = _("This form has already been processed.");
+                }
+            }
+        }
 
-        // Validate all variables
-        foreach ($this->getVariables(flat: true, withHidden: false) as $var) {
-            $message = '';
-            if (!$var->validate($varsObject, $message)) {
+        // Validate all variables in enabled groups
+        foreach ($this->getVariables(flat: true, withHidden: false, enabledOnly: true) as $var) {
+            if (!$var->validate($varsObject)) {
                 $this->errors[$var->getVarName()] = $var->getMessage();
             }
         }
 
         // Validate hidden variables
         foreach ($this->hiddenVariables as $var) {
-            $message = '';
-            if (!$var->validate($varsObject, $message)) {
+            if (!$var->validate($varsObject)) {
                 $this->errors[$var->getVarName()] = $var->getMessage();
             }
         }
 
+        // Run group-level validators (only enabled groups)
+        foreach ($this->groups as $group) {
+            if (!$group->isEnabled()) {
+                continue;
+            }
+            $group->validate($varsToValidate, $this->errors);
+        }
+
+        // Run registered form-level validators
+        foreach ($this->validators as $validator) {
+            $validator->validate($varsToValidate, $this->errors);
+        }
+
+        // Run subclass override point
+        $this->validateForm($varsToValidate, $this->errors);
+
         return count($this->errors) === 0;
+    }
+
+    /**
+     * Form-level validation override point.
+     *
+     * Subclasses can override this to add cross-field validation
+     * without needing a separate FormValidator class. Called after
+     * field-level validation and registered FormValidator instances.
+     *
+     * @param array<string, mixed> $vars    Form data
+     * @param array<string, string> &$errors  Error map, passed by reference
+      *
+      * @api
+     */
+    protected function validateForm(array $vars, array &$errors): void
+    {
+        // No-op default. Subclasses override.
     }
 
     /**
@@ -914,7 +1102,105 @@ class BaseForm implements \Horde\Form\Form
             }
         }
 
-        return $info;
+        return $this->nestBracketKeys($info);
+    }
+
+    /**
+     * Convert flat bracket-notation keys to nested arrays.
+     *
+     * Mirrors PHP's bracket-notation decoding for GET/POST data.
+     * Keys without brackets pass through unchanged.
+     *
+     * Example: ['billing[street]' => '123 Main', 'name' => 'Alice']
+     * becomes: ['billing' => ['street' => '123 Main'], 'name' => 'Alice']
+     *
+     * @param array<string, mixed> $info  Flat key-value pairs
+     * @return array<string, mixed>  Nested array structure
+     *
+     * @internal
+     */
+    private function nestBracketKeys(array $info): array
+    {
+        $result = [];
+        foreach ($info as $key => $value) {
+            if (!str_contains((string) $key, '[')) {
+                $result[$key] = $value;
+                continue;
+            }
+
+            // Parse 'billing[street]' → ['billing', 'street']
+            $keys = explode('[', str_replace(']', '', (string) $key));
+            $current = &$result;
+            foreach (array_slice($keys, 0, -1) as $k) {
+                if (!isset($current[$k]) || !is_array($current[$k])) {
+                    $current[$k] = [];
+                }
+                $current = &$current[$k];
+            }
+            $current[end($keys)] = $value;
+            unset($current);
+        }
+
+        return $result;
+    }
+
+    /**
+     * Generate hidden inputs to preserve this form's values across steps.
+     *
+     * Used in multi-step wizards: after Step 1 validates, its values
+     * must survive as hidden fields when Step 2 renders.
+     *
+     * @return string  HTML hidden input elements
+      *
+      * @api
+     */
+    public function preserve(): string
+    {
+        $output = [];
+
+        // Generate a fresh CSRF token for the preserved form
+        $token = $this->generateToken();
+        if ($token !== null) {
+            $this->preserveValue($output, $this->getTokenFieldName(), $token);
+        }
+
+        foreach ($this->getVariables(flat: true, withHidden: false) as $var) {
+            $varName = $var->getVarName();
+            $value = $var->resolveValue($this->vars);
+            $this->preserveValue($output, $varName, $value);
+        }
+
+        foreach ($this->hiddenVariables as $var) {
+            $varName = $var->getVarName();
+            $value = $var->resolveValue($this->vars);
+            $this->preserveValue($output, $varName, $value);
+        }
+
+        return implode("\n", $output);
+    }
+
+    /**
+     * Recursively emit hidden input(s) for a value.
+     *
+     * @param array &$output  Output buffer
+     * @param string $name    Field name
+     * @param mixed $value    Field value (scalar or array)
+      *
+      * @internal
+     */
+    private function preserveValue(array &$output, string $name, mixed $value): void
+    {
+        if (is_array($value)) {
+            foreach ($value as $k => $v) {
+                $this->preserveValue($output, $name . '[' . $k . ']', $v);
+            }
+        } else {
+            $output[] = sprintf(
+                '<input type="hidden" name="%s" value="%s">',
+                htmlspecialchars($name),
+                htmlspecialchars((string) ($value ?? ''))
+            );
+        }
     }
 
     /**

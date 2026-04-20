@@ -23,7 +23,6 @@ use Horde\Form\V3\Renderer\ControlRenderer;
 use Horde\Form\V3\Renderer\LayoutStrategy;
 use Horde\Form\V3\Renderer\ErrorRenderer;
 use Horde\Form\V3\Renderer\AssetManager;
-use Horde_Variables;
 
 /**
  * Base implementation of the Renderer interface.
@@ -79,9 +78,9 @@ abstract class BaseRenderer implements Renderer
     protected string $requiredMarker = '*';
 
     /**
-     * Help text marker.
+     * Help text marker (prepended to description text).
      */
-    protected string $helpMarker = '?';
+    protected string $helpMarker = '';
 
     /**
      * Encode form title with htmlspecialchars()?
@@ -231,6 +230,9 @@ abstract class BaseRenderer implements Renderer
         // Closing form tag
         $output[] = $this->renderClose();
 
+        // Action scripts (CSP-friendly addEventListener bindings)
+        $output[] = $this->collectActionScripts($form);
+
         // Assets (JS/CSS)
         $output[] = $this->assetManager->render();
 
@@ -300,8 +302,18 @@ abstract class BaseRenderer implements Renderer
      */
     public function renderSection(string|int $sectionName, array $variables, Form $form): string
     {
-        $title = is_string($sectionName) && $sectionName !== '__base' ? $sectionName : '';
-        $description = $title ? $form->getSectionDesc($sectionName) : '';
+        // If the form exposes group objects, use Section metadata directly
+        $title = '';
+        $description = '';
+        $group = method_exists($form, 'getGroup') ? $form->getGroup((string) $sectionName) : null;
+
+        if ($group instanceof \Horde\Form\V3\Section) {
+            $title = $group->getTitle();
+            $description = $group->getDescription();
+        } else {
+            $title = is_string($sectionName) && $sectionName !== '__base' ? $sectionName : '';
+            $description = $title ? $form->getSectionDesc($sectionName) : '';
+        }
 
         $content = $this->renderVariables($variables, $form);
 
@@ -343,13 +355,24 @@ abstract class BaseRenderer implements Renderer
             htmlspecialchars($form->getName())
         );
 
+        // CSRF token
+        if ($form instanceof BaseForm) {
+            $token = $form->generateToken();
+            if ($token !== null) {
+                $output[] = sprintf(
+                    '<input type="hidden" name="%s" value="%s">',
+                    htmlspecialchars($form->getTokenFieldName()),
+                    htmlspecialchars($token)
+                );
+            }
+        }
+
         // Hidden variables
         $vars = $form->getVars();
-        $varsObject = new Horde_Variables($vars);
         $hiddenVars = $form->getVariables(flat: true, withHidden: true);
         foreach ($hiddenVars as $var) {
             if ($var->isHidden()) {
-                $value = $var->getValue($varsObject);
+                $value = $var->resolveValue($vars);
                 $output[] = sprintf(
                     '<input type="hidden" name="%s" value="%s">',
                     htmlspecialchars($var->getVarName()),
@@ -359,6 +382,269 @@ abstract class BaseRenderer implements Renderer
         }
 
         return implode("\n", $output);
+    }
+
+    /**
+     * Render the form in display-only (inactive) mode.
+     *
+     * Produces a read-only representation: title, sections, and values
+     * as plain text. No form tag, no buttons, no hidden fields, no
+     * errors, no CSRF token.
+      *
+      * @api
+     */
+    public function renderInactive(Form $form): string
+    {
+        $this->formName = $form->getName();
+        $this->currentRow = 0;
+
+        $output = [];
+
+        if ($this->showHeader) {
+            $output[] = $this->renderHeader($form);
+        }
+
+        $variables = $form->getVariables(flat: false);
+
+        if (empty($variables)) {
+            $fields = $this->renderDisplayVariables($form->getVariables(flat: true), $form);
+            $output[] = $this->layoutStrategy->wrapForm(
+                header: '',
+                fields: $fields,
+                buttons: '',
+                meta: ['formName' => $form->getName()],
+            );
+        } else {
+            $sections = [];
+            foreach ($variables as $sectionName => $sectionVars) {
+                $sections[] = $this->renderDisplaySection($sectionName, $sectionVars, $form);
+            }
+
+            $output[] = $this->layoutStrategy->wrapForm(
+                header: '',
+                fields: implode("\n", $sections),
+                buttons: '',
+                meta: ['formName' => $form->getName()],
+            );
+        }
+
+        return implode("\n", array_filter($output));
+    }
+
+    /**
+     * Render a form with mixed active/inactive sections.
+     *
+     * Enabled groups are rendered as editable controls (like render()).
+     * Disabled groups are rendered as display-only values with hidden
+     * inputs to preserve their data across form submission.
+     *
+     * Used for wizard-style forms where completed steps are shown
+     * read-only while the current step is editable — all within a
+     * single <form> tag.
+     *
+     * Falls back to render() if no groups have mixed enabled state
+     * (all enabled) or renderInactive() (all disabled).
+      *
+      * @api
+     */
+    public function renderMixed(Form $form, string $action = '', string $method = 'post'): string
+    {
+        $this->formName = $form->getName();
+        $this->currentRow = 0;
+
+        $output = [];
+
+        // Opening form tag
+        $output[] = $this->renderOpen($form, $action, $method);
+
+        // Form header
+        if ($this->showHeader) {
+            $output[] = $this->renderHeader($form);
+        }
+
+        // Validation errors
+        $output[] = $this->renderErrors($form);
+
+        // Hidden fields (formname, CSRF, explicitly hidden variables)
+        $output[] = $this->renderHidden($form);
+
+        // Get all groups (structured by name)
+        $allVariables = $form->getVariables(flat: false);
+
+        if (empty($allVariables)) {
+            // No groups at all — render as flat editable form
+            $fields = $this->renderVariables($form->getVariables(flat: true), $form);
+            $output[] = $this->layoutStrategy->wrapForm(
+                header: '',
+                fields: $fields,
+                buttons: $this->renderButtons($form),
+                meta: ['formName' => $form->getName()],
+            );
+        } else {
+            $sections = [];
+            $vars = $form->getVars();
+
+            foreach ($allVariables as $sectionName => $sectionVars) {
+                $group = method_exists($form, 'getGroup')
+                    ? $form->getGroup((string) $sectionName)
+                    : null;
+
+                if ($group !== null && !$group->isEnabled()) {
+                    // Disabled group: display mode + hidden inputs for preservation
+                    $sections[] = $this->renderDisplaySection($sectionName, $sectionVars, $form);
+                    $sections[] = $this->renderPreserveVariables($sectionVars, $vars);
+                } else {
+                    // Enabled group (or no group object): editable controls
+                    $sections[] = $this->renderSection($sectionName, $sectionVars, $form);
+                }
+            }
+
+            $output[] = $this->layoutStrategy->wrapForm(
+                header: '',
+                fields: implode("\n", $sections),
+                buttons: $this->renderButtons($form),
+                meta: ['formName' => $form->getName()],
+            );
+        }
+
+        // Closing form tag
+        $output[] = $this->renderClose();
+
+        // Action scripts
+        $output[] = $this->collectActionScripts($form);
+
+        // Assets
+        $output[] = $this->assetManager->render();
+
+        return implode("\n", array_filter($output));
+    }
+
+    /**
+     * Emit hidden inputs to preserve variable values across form submission.
+     *
+     * Used by renderMixed() for disabled groups whose values must survive
+     * the POST but are shown in display mode (not as form controls).
+     *
+     * @param array<Variable> $variables  Variables to preserve
+     * @param array<string, mixed> $vars  Current form data
+     * @return string  HTML hidden input elements
+      *
+      * @internal
+     */
+    protected function renderPreserveVariables(array $variables, array $vars): string
+    {
+        $output = [];
+        foreach ($variables as $var) {
+            $varName = $var->getVarName();
+            $value = $var->resolveValue($vars);
+            $this->renderPreserveValue($output, $varName, $value);
+        }
+        return implode("\n", $output);
+    }
+
+    /**
+     * Recursively emit hidden input(s) for a value.
+     *
+     * @param array<string> &$output  Output buffer
+     * @param string $name  Field name
+     * @param mixed $value  Field value (scalar or array)
+      *
+      * @internal
+     */
+    private function renderPreserveValue(array &$output, string $name, mixed $value): void
+    {
+        if (is_array($value)) {
+            foreach ($value as $k => $v) {
+                $this->renderPreserveValue($output, $name . '[' . $k . ']', $v);
+            }
+        } else {
+            $output[] = sprintf(
+                '<input type="hidden" name="%s" value="%s">',
+                htmlspecialchars($name),
+                htmlspecialchars((string) ($value ?? '')),
+            );
+        }
+    }
+
+    /**
+     * Render multiple variables in display mode.
+     *
+     * @param array<Variable> $variables
+      *
+      * @internal
+     */
+    protected function renderDisplayVariables(array $variables, Form $form): string
+    {
+        $output = [];
+        foreach ($variables as $var) {
+            $rendered = $this->renderDisplayVariable($var, $form);
+            if ($rendered !== '') {
+                $output[] = $rendered;
+            }
+        }
+
+        return implode("\n", $output);
+    }
+
+    /**
+     * Render a single variable in display mode.
+      *
+      * @internal
+     */
+    protected function renderDisplayVariable(Variable $variable, Form $form): string
+    {
+        if ($variable->isHidden()) {
+            return '';
+        }
+
+        $label = $this->controlRenderer->renderDisplayLabel($variable, $form);
+        $display = $this->controlRenderer->renderDisplay($variable, $form);
+
+        // Skip empty display values (e.g. figlet/captcha in inactive mode).
+        if ($display === '') {
+            return '';
+        }
+
+        $meta = [
+            'varName' => $variable->getVarName(),
+            'required' => false,
+            'readonly' => true,
+            'disabled' => false,
+            'rowClass' => $this->getRowClass(),
+        ];
+
+        $this->currentRow++;
+
+        return $this->layoutStrategy->wrapField($label, $display, '', '', $meta);
+    }
+
+    /**
+     * Render a section in display mode.
+      *
+      * @internal
+     */
+    protected function renderDisplaySection(string|int $sectionName, array $variables, Form $form): string
+    {
+        $title = '';
+        $description = '';
+        $group = method_exists($form, 'getGroup') ? $form->getGroup((string) $sectionName) : null;
+
+        if ($group instanceof \Horde\Form\V3\Section) {
+            $title = $group->getTitle();
+            $description = $group->getDescription();
+        } else {
+            $title = is_string($sectionName) && $sectionName !== '__base' ? $sectionName : '';
+            $description = $title ? $form->getSectionDesc($sectionName) : '';
+        }
+
+        $content = $this->renderDisplayVariables($variables, $form);
+
+        $meta = [
+            'sectionName' => $sectionName,
+            'isBase' => $sectionName === '__base',
+        ];
+
+        return $this->layoutStrategy->wrapSection($title, $description, $content, $meta);
     }
 
     /**
@@ -487,5 +773,85 @@ abstract class BaseRenderer implements Renderer
     public function getAssetManager(): AssetManager
     {
         return $this->assetManager;
+    }
+
+    /**
+     * Collect action scripts from all variables and emit as a single script block.
+     *
+     * Uses CSP-friendly addEventListener bindings instead of inline handlers.
+     * Helper functions (from getHelperScript()) are emitted first, then
+     * event bindings.
+      *
+      * @internal
+     */
+    protected function collectActionScripts(Form $form): string
+    {
+        $helpers = [];
+        $bindings = [];
+
+        foreach ($form->getVariables(flat: true, withHidden: false) as $var) {
+            if (!$var->hasAction()) {
+                continue;
+            }
+            $action = $var->getAction();
+            if ($action === null) {
+                continue;
+            }
+            $varName = $var->getVarName();
+
+            // Collect helper functions (V3 interface)
+            if ($action instanceof ActionV3Interface) {
+                $js = $action->getHelperScript();
+                if ($js !== '') {
+                    $helpers[] = $js;
+                }
+            }
+
+            // Collect trigger bindings
+            $triggers = $action->getTrigger();
+            if (empty($triggers)) {
+                continue;
+            }
+
+            $script = $action->getActionScript($form, $this, $varName);
+            if ($script === '') {
+                continue;
+            }
+
+            $formName = $form->getName();
+            foreach ($triggers as $trigger) {
+                if ($trigger === 'onload') {
+                    $bindings[] = sprintf(
+                        "document.addEventListener('DOMContentLoaded', function() { %s });",
+                        $script,
+                    );
+                } else {
+                    $event = ltrim($trigger, 'on');
+                    $bindings[] = sprintf(
+                        "document.forms['%s'].elements['%s'].addEventListener('%s', function() { %s });",
+                        $formName,
+                        $varName,
+                        $event,
+                        $script,
+                    );
+                }
+            }
+        }
+
+        if (empty($helpers) && empty($bindings)) {
+            return '';
+        }
+
+        $parts = [];
+        $parts[] = '<script>';
+        if ($helpers) {
+            $parts[] = implode("\n", $helpers);
+        }
+        if ($bindings) {
+            $parts[] = implode("\n", $bindings);
+        }
+        $parts[] = '</script>';
+
+        return implode("\n", $parts);
     }
 }
