@@ -51,7 +51,7 @@ class Horde_Form
     protected $_submitted = null;
     public $_sections = [];
     protected $_open_section = null;
-    protected $_currentSection = [];
+    protected $_currentSection = null;
     protected $_variables = [];
     protected $_hiddenVariables = [];
     protected $_useFormToken = true;
@@ -275,7 +275,7 @@ class Horde_Form
 
     public function setSection($section = '', $desc = '', $image = '', $expanded = true)
     {
-        $this->_currentSection = $section;
+        $this->_currentSection = $section === '' ? null : (string) $section;
         if (!count($this->_sections) && !$this->getOpenSection()) {
             $this->setOpenSection($section);
         }
@@ -424,26 +424,26 @@ class Horde_Form
                   || $typeName == 'image') {
             $this->_enctype = 'multipart/form-data';
         }
-        if (empty($this->_currentSection) && $this->_currentSection !== 0) {
-            $this->_currentSection = '__base';
+
+        $section = $this->_currentSection ?? '__base';
+        if (!isset($this->_variables[$section])) {
+            $this->_variables[$section] = [];
         }
 
+        $vars = &$this->_variables[$section];
+
         if (is_null($before)) {
-            $this->_variables[$this->_currentSection][] = $var;
+            $vars[] = $var;
         } else {
+            $count = count($vars);
             $num = 0;
-            while (isset($this->_variables[$this->_currentSection][$num])
-                   && $this->_variables[$this->_currentSection][$num]->getVarName() != $before) {
-                $num++;
+            while ($num < $count && $vars[$num]->getVarName() !== $before) {
+                ++$num;
             }
-            if (!isset($this->_variables[$this->_currentSection][$num])) {
-                $this->_variables[$this->_currentSection][] = $var;
+            if ($num < $count) {
+                array_splice($vars, $num, 0, [$var]);
             } else {
-                $this->_variables[$this->_currentSection] = array_merge(
-                    array_slice($this->_variables[$this->_currentSection], 0, $num),
-                    [$var],
-                    array_slice($this->_variables[$this->_currentSection], $num)
-                );
+                $vars[] = $var;
             }
         }
 
