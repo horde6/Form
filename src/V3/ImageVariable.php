@@ -55,9 +55,9 @@ class ImageVariable extends BaseVariable
     /**
      * Hash containing the previously uploaded image info.
      *
-     * @var array
+     * @var array|null
      */
-    public ?array $_img;
+    public ?array $_img = null;
 
     /**
      * A random id that identifies the image information in the session data.
