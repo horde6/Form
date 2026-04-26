@@ -1411,38 +1411,36 @@ class Horde_Form_Type_image extends Horde_Form_Type
 
         /* Don't bother with this function if already called and set
          * up vars. */
-        if (!empty($this->_img)) {
-            return true;
+        if (!is_null($this->_img)) {
+            return;
         }
 
         /* Check if file has been uploaded. */
         $varname = $var->getVarName();
-
         try {
-            $GLOBALS['browser']->wasFileUploaded($varname . '[new]');
+            $new = $varname . '[new]';
+
+            $GLOBALS['browser']->wasFileUploaded($new);
             $this->_uploaded = true;
 
             /* A file has been uploaded on this submit. Save to temp dir for
              * preview work. */
-            $this->_img['img']['type'] = $this->getUploadedFileType($varname . '[new]');
+            $this->_img['img']['type'] = self::getUploadedFileType($new);
 
             /* Get the other parts of the upload. */
-            ArrayUtils::getArrayParts($varname . '[new]', $base, $keys);
+            $keys = ArrayUtils::getFieldParts($new);
 
             /* Get the temporary file name. */
-            $keys_path = array_merge([$base, 'tmp_name'], $keys);
-            $this->_img['img']['file'] = ArrayUtils::getElement($_FILES, $keys_path);
+            $file = ArrayUtils::getElement($_FILES, $keys, 'tmp_name');
 
             /* Get the actual file name. */
-            $keys_path = array_merge([$base, 'name'], $keys);
-            $this->_img['img']['name'] = ArrayUtils::getElement($_FILES, $keys_path);
+            $this->_img['img']['name'] = ArrayUtils::getElement($_FILES, $keys, 'name');
 
             /* Get the file size. */
-            $keys_path = array_merge([$base, 'size'], $keys);
-            $this->_img['img']['size'] = ArrayUtils::getElement($_FILES, $keys_path);
+            $this->_img['img']['size'] = ArrayUtils::getElement($_FILES, $keys, 'size');
 
             /* Get any existing values for the image upload field. */
-            $upload = $vars->get($var->getVarName());
+            $upload = $vars->get($varname);
             if (!empty($upload['hash'])) {
                 $upload['img'] = $session->get('horde', 'form/' . $upload['hash']);
                 $session->remove('horde', 'form/' . $upload['hash']);
@@ -1456,16 +1454,16 @@ class Horde_Form_Type_image extends Horde_Form_Type
             }
 
             /* Move the browser created temp file to the new temp file. */
-            move_uploaded_file($this->_img['img']['file'], $tmp_file);
+            move_uploaded_file($file, $tmp_file);
             $this->_img['img']['file'] = basename($tmp_file);
         } catch (Horde_Browser_Exception $e) {
             $this->_uploaded = $e;
 
             /* File has not been uploaded. */
-            $upload = $vars->get($var->getVarName());
+            $upload = $vars->get($varname);
 
             /* File is explicitly removed */
-            if ($vars->get('remove_' . $var->getVarName())) {
+            if ($vars->get('remove_' . $varname)) {
                 $this->_img = null;
                 $session->remove('horde', 'form/' . $upload['hash']);
                 return;
@@ -1481,50 +1479,32 @@ class Horde_Form_Type_image extends Horde_Form_Type
                 }
             }
         }
+
         if (isset($this->_img['img'])) {
             $session->set('horde', 'form/' . $this->getRandomId(), $this->_img['img']);
         }
     }
 
-    public function getUploadedFileType($field)
+    //TODO: Redesign, see _getUpload
+    public static function getUploadedFileType($field)
     {
-        /* Get any index on the field name. */
-        $index = ArrayUtils::getArrayParts($field, $base, $keys);
+        $keys = ArrayUtils::getFieldParts($field);
 
-        if ($index) {
-            /* Index present, fetch the mime type var to check. */
-            $keys_path = array_merge([$base, 'type'], $keys);
-            $type = ArrayUtils::getElement($_FILES, $keys_path);
-            $keys_path = array_merge([$base, 'tmp_name'], $keys);
-            $tmp_name = ArrayUtils::getElement($_FILES, $keys_path);
-        } else {
-            /* No index, simple set up of vars to check. */
-            $type = $_FILES[$field]['type'];
-            $tmp_name = $_FILES[$field]['tmp_name'];
-        }
+        $type = ArrayUtils::getElement($_FILES, $keys, 'type');
+        if (empty($type) || $type == 'application/octet-stream') {
+            $tmp_name = ArrayUtils::getElement($_FILES, $keys, 'tmp_name');
 
-        if (empty($type) || ($type == 'application/octet-stream')) {
-            /* Type wasn't set on upload, try analising the upload. */
+            /* Type wasn't set on upload, try analysing the upload. */
             if (!($type = Horde_Mime_Magic::analyzeFile($tmp_name, $GLOBALS['conf']['mime']['magic_db'] ?? null))) {
-                if ($index) {
-                    /* Get the name value. */
-                    $keys_path = array_merge([$base, 'name'], $keys);
-                    $name = ArrayUtils::getElement($_FILES, $keys_path);
+                /* Get the name value. */
+                $name = ArrayUtils::getElement($_FILES, $keys, 'name');
 
-                    /* Work out the type from the file name. */
-                    $type = Horde_Mime_Magic::filenameToMime($name);
-
-                    /* Set the type. */
-                    $keys_path = array_merge([$base, 'type'], $keys);
-                    ArrayUtils::setElement($_FILES, $keys_path, $type);
-                } else {
-                    /* Work out the type from the file name. */
-                    $type = Horde_Mime_Magic::filenameToMime($_FILES[$field]['name']);
-
-                    /* Set the type. */
-                    $_FILES[$field]['type'] = Horde_Mime_Magic::filenameToMime($_FILES[$field]['name']);
-                }
+                /* Work out the type from the file name. */
+                $type = Horde_Mime_Magic::filenameToMime($name);
             }
+
+            /* Set the type. */
+            ArrayUtils::setElement($_FILES, $keys, $type, 'type');
         }
 
         return $type;
