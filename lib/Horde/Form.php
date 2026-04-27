@@ -454,9 +454,9 @@ class Horde_Form
      * Removes a variable from the form.
      *
      * As only variables can be passed by reference, you need to call this
-     * method this way if want to pass a variable name:
+     * method this way if you want to pass a variable name:
      * <code>
-     * $form->removeVariable($var = 'varname');
+     * $form->removeVariable('varname');
      * </code>
      *
      * @param Horde_Form_Variable|string $var  Either the variable's name or
@@ -467,16 +467,10 @@ class Horde_Form
      */
     public function removeVariable($var)
     {
-        foreach (array_keys($this->_variables) as $section) {
-            foreach (array_keys($this->_variables[$section]) as $i) {
-                if ((is_object($var) && $this->_variables[$section][$i] === $var)
-                    || ($this->_variables[$section][$i]->getVarName() === $var)) {
-                    // Slice out the variable to be removed.
-                    $this->_variables[$section] = array_merge(
-                        array_slice($this->_variables[$section], 0, $i),
-                        array_slice($this->_variables[$section], $i + 1)
-                    );
-
+        foreach ($this->_variables as $section => $sectionVars) {
+            foreach ($sectionVars as $i => $variable) {
+                if (is_object($var) && $variable === $var || $variable->getVarName() === $var) {
+                    array_splice($this->_variables[$section], $i, 1);
                     return true;
                 }
             }
