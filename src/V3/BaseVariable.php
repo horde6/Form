@@ -743,7 +743,7 @@ class BaseVariable implements Variable
      *
      * @todo This method should be removed after V3 transition is complete
      */
-    public static function Deprecated($message, $level = 2)
+    public static function Deprecated($message, $level = 1)
     {
         $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, $level + 1);
         if (isset($trace[$level])) {

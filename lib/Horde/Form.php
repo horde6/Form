@@ -51,7 +51,7 @@ class Horde_Form
     protected $_submitted = null;
     public $_sections = [];
     protected $_open_section = null;
-    protected $_currentSection = [];
+    protected $_currentSection = null;
     protected $_variables = [];
     protected $_hiddenVariables = [];
     protected $_useFormToken = true;
@@ -275,7 +275,7 @@ class Horde_Form
 
     public function setSection($section = '', $desc = '', $image = '', $expanded = true)
     {
-        $this->_currentSection = $section;
+        $this->_currentSection = $section === '' ? null : (string) $section;
         if (!count($this->_sections) && !$this->getOpenSection()) {
             $this->setOpenSection($section);
         }
@@ -424,26 +424,26 @@ class Horde_Form
                   || $typeName == 'image') {
             $this->_enctype = 'multipart/form-data';
         }
-        if (empty($this->_currentSection) && $this->_currentSection !== 0) {
-            $this->_currentSection = '__base';
+
+        $section = $this->_currentSection ?? '__base';
+        if (!isset($this->_variables[$section])) {
+            $this->_variables[$section] = [];
         }
 
+        $vars = &$this->_variables[$section];
+
         if (is_null($before)) {
-            $this->_variables[$this->_currentSection][] = $var;
+            $vars[] = $var;
         } else {
+            $count = count($vars);
             $num = 0;
-            while (isset($this->_variables[$this->_currentSection][$num])
-                   && $this->_variables[$this->_currentSection][$num]->getVarName() != $before) {
-                $num++;
+            while ($num < $count && $vars[$num]->getVarName() !== $before) {
+                ++$num;
             }
-            if (!isset($this->_variables[$this->_currentSection][$num])) {
-                $this->_variables[$this->_currentSection][] = $var;
+            if ($num < $count) {
+                array_splice($vars, $num, 0, [$var]);
             } else {
-                $this->_variables[$this->_currentSection] = array_merge(
-                    array_slice($this->_variables[$this->_currentSection], 0, $num),
-                    [$var],
-                    array_slice($this->_variables[$this->_currentSection], $num)
-                );
+                $vars[] = $var;
             }
         }
 
@@ -454,9 +454,9 @@ class Horde_Form
      * Removes a variable from the form.
      *
      * As only variables can be passed by reference, you need to call this
-     * method this way if want to pass a variable name:
+     * method this way if you want to pass a variable name:
      * <code>
-     * $form->removeVariable($var = 'varname');
+     * $form->removeVariable('varname');
      * </code>
      *
      * @param Horde_Form_Variable|string $var  Either the variable's name or
@@ -467,16 +467,10 @@ class Horde_Form
      */
     public function removeVariable($var)
     {
-        foreach (array_keys($this->_variables) as $section) {
-            foreach (array_keys($this->_variables[$section]) as $i) {
-                if ((is_object($var) && $this->_variables[$section][$i] === $var)
-                    || ($this->_variables[$section][$i]->getVarName() === $var)) {
-                    // Slice out the variable to be removed.
-                    $this->_variables[$section] = array_merge(
-                        array_slice($this->_variables[$section], 0, $i),
-                        array_slice($this->_variables[$section], $i + 1)
-                    );
-
+        foreach ($this->_variables as $section => $sectionVars) {
+            foreach ($sectionVars as $i => $variable) {
+                if (is_object($var) && $variable === $var || $variable->getVarName() === $var) {
+                    array_splice($this->_variables[$section], $i, 1);
                     return true;
                 }
             }
@@ -919,25 +913,22 @@ class Horde_Form
                 // pretend they were.
                 continue;
             }
+
+            $value = $var->getInfo($vars, null);
+            $varName = $var->getVarName();
+
             // An ArrayVal is a value with a varName ending with []
             if ($var->isArrayVal()) {
-                $values = $var->getInfo($vars, null);
-                if (is_array($values)) {
-                    $varName = str_replace('[]', '', $var->getVarName());
-                    foreach ($values as $i => $val) {
+                if (is_array($value)) {
+                    $varName = str_replace('[]', '', $varName);
+                    foreach ($value as $i => $val) {
                         $info[$i][$varName] = $val;
                     }
                 }
             } else {
                 // A field name like example[key1][key2][key3]
-                $varName = $var->getVarName();
-                if (ArrayUtils::getArrayParts($varName, $base, $keys)) {
-                    $res = $var->getInfo($vars, null);
-                    $path = array_merge([$base], $keys);
-                    ArrayUtils::setElement($info, $path, $res);
-                } else {
-                    $info[$varName] = $var->getInfo($vars, null);
-                }
+                $keys = ArrayUtils::getFieldParts($varName);
+                ArrayUtils::setElement($info, $keys, $value);
             }
         }
         return $info;
