@@ -415,7 +415,7 @@ class Horde_Form
 
         $typeName = $var->getTypeName(); // same as lower-cased $type
         if ($typeName == 'enum'
-            && !strlen($var->type->getPrompt())
+            && !strlen($var->getPrompt())
             && count($var->getValues()) == 1) {
             $vals = array_keys($var->getValues());
             $this->_vars->add($var->varName, $vals[0]);
@@ -914,7 +914,7 @@ class Horde_Form
                 continue;
             }
 
-            $value = $var->getInfo($vars, null);
+            $value = $var->getInfo($vars);
             $varName = $var->getVarName();
 
             // An ArrayVal is a value with a varName ending with []
