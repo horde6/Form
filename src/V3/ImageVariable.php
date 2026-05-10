@@ -226,30 +226,52 @@ class ImageVariable extends BaseVariable
      * Gets the upload and sets up the upload data array. Either
      * fetches an upload done with this submit or retrieves stored
      * upload info.
-     * @param Horde_Variables $vars     The form state to check this field for
+     *
+     * @param Horde_Variables $vars The form state to check this field for
      *
      */
     private function _getUpload($vars)
     {
-        global $session;
-
-        /* Don't bother with this function if already called and set
-         * up vars. */
+        /* Don't bother with this function if already called and set up vars. */
         if (!is_null($this->_img)) {
             return;
         }
 
-        /* Check if file has been uploaded. */
+        global $session;
+
         $varname = $this->getVarName();
+        $upload = $vars->get($varname);
+        $hashName = $upload['hash'] ?? null;
+        if ($hashName !== null) {
+            $hashName = 'form/' . $hashName;
+        }
+
+        /* Check if file has been uploaded. */
         try {
             $new = $varname . '[new]';
 
             $GLOBALS['browser']->wasFileUploaded($new);
             $this->_uploaded = true;
+        } catch (Horde_Browser_Exception $e) {
+            $this->_uploaded = $e;
+        }
 
-            /* A file has been uploaded on this submit. Save to temp dir for
-             * preview work. */
-            $this->_img['img']['type'] = $this->getUploadedFileType($new);
+        if ($this->_uploaded === true) {
+            /* A file has been uploaded on this submit. Save to temp dir for preview to work. */
+
+            /* Get any existing values for the image upload field. */
+            if ($hashName !== null) {
+                $img = $session->get('horde', $hashName);
+                $session->remove('horde', $hashName);
+                $tmp_file = $img['file'] ?? null;
+                if ($tmp_file === null) {
+                    $tmp_file = Horde::getTempFile('Horde', false);
+                } else {
+                    $tmp_file = Horde::getTempDir() . '/' . basename($tmp_file);
+                }
+            } else {
+                $tmp_file = Horde::getTempFile('Horde', false);
+            }
 
             /* Get the other parts of the upload. */
             $keys = ArrayUtils::getFieldParts($new);
@@ -257,81 +279,58 @@ class ImageVariable extends BaseVariable
             /* Get the temporary file name. */
             $file = ArrayUtils::getElement($_FILES, $keys, 'tmp_name');
 
-            /* Get the actual file name. */
-            $this->_img['img']['name'] = ArrayUtils::getElement($_FILES, $keys, 'name');
-
-            /* Get the file size. */
-            $this->_img['img']['size'] = ArrayUtils::getElement($_FILES, $keys, 'size');
-
-            /* Get any existing values for the image upload field. */
-            $upload = $vars->get($varname);
-            if (!empty($upload['hash'])) {
-                $upload['img'] = $session->get('horde', 'form/' . $upload['hash']);
-                $session->remove('horde', 'form/' . $upload['hash']);
-                if (!empty($upload['img']['file'])) {
-                    $tmp_file = Horde::getTempDir() . '/' . basename($upload['img']['file']);
-                } else {
-                    $tmp_file = Horde::getTempFile('Horde', false);
-                }
-            } else {
-                $tmp_file = Horde::getTempFile('Horde', false);
-            }
-
             /* Move the browser created temp file to the new temp file. */
             move_uploaded_file($file, $tmp_file);
-            $this->_img['img']['file'] = basename($tmp_file);
-        } catch (Horde_Browser_Exception $e) {
-            $this->_uploaded = $e;
 
+            /* Get the name value. */
+            $name = ArrayUtils::getElement($_FILES, $keys, 'name');
+
+            /* Get the file type. */
+            $type = ArrayUtils::getElement($_FILES, $keys, 'type');
+            if ($type === null || $type === '' || $type === 'application/octet-stream') {
+                /* Type wasn't set on upload, try analysing the upload. */
+                $type = Horde_Mime_Magic::analyzeFile($tmp_file, $GLOBALS['conf']['mime']['magic_db'] ?? null);
+                if ($type === false) {
+                    /* Work out the type from the file name. */
+                    $type = Horde_Mime_Magic::filenameToMime($name);
+                }
+
+                /* Set the type. */
+                ArrayUtils::setElement($_FILES, $keys, $type, 'type');
+            }
+
+            $img = [
+                'type' => $type,
+                'name' => $name,
+                'size' => ArrayUtils::getElement($_FILES, $keys, 'size'),
+                'file' => basename($tmp_file),
+            ];
+        } else {
             /* File has not been uploaded. */
-            $upload = $vars->get($varname);
 
-            /* File is explicitly removed */
             if ($vars->get('remove_' . $varname)) {
-                $this->_img = null;
-                $session->remove('horde', 'form/' . $upload['hash']);
+                /* File is explicitly removed */
+                if ($hashName !== null) {
+                    $session->remove('horde', $hashName);
+                }
                 return;
             }
 
-            if ($this->_uploaded->getCode() == 4
-                && !empty($upload['hash'])
-                && $session->exists('horde', 'form/' . $upload['hash'])) {
-                $this->_img['img'] = $session->get('horde', 'form/' . $upload['hash']);
-                $session->remove('horde', 'form/' . $upload['hash']);
-                if (isset($this->_img['error'])) {
-                    $this->_uploaded = PEAR::raiseError($this->_img['error']);
+            if ($this->_uploaded->getCode() == 4 && $hashName !== null && $session->exists('horde', $hashName)) {
+                $img = $session->get('horde', $hashName);
+                $session->remove('horde', $hashName);
+                if (isset($img['error'])) {
+                    $this->_uploaded = PEAR::raiseError($img['error']);
                 }
+            } else {
+                $img = null;
             }
         }
 
-        if (isset($this->_img['img'])) {
-            $session->set('horde', 'form/' . $this->getRandomId(), $this->_img['img']);
+        if ($img !== null) {
+            $this->_img['img'] = $img;
+            $session->set('horde', 'form/' . $this->getRandomId(), $img);
         }
-    }
-
-    //TODO: Redesign, see _getUpload
-    public static function getUploadedFileType($field)
-    {
-        $keys = ArrayUtils::getFieldParts($field);
-
-        $type = ArrayUtils::getElement($_FILES, $keys, 'type');
-        if (empty($type) || $type == 'application/octet-stream') {
-            $tmp_name = ArrayUtils::getElement($_FILES, $keys, 'tmp_name');
-
-            /* Type wasn't set on upload, try analysing the upload. */
-            if (!($type = Horde_Mime_Magic::analyzeFile($tmp_name, $GLOBALS['conf']['mime']['magic_db'] ?? null))) {
-                /* Get the name value. */
-                $name = ArrayUtils::getElement($_FILES, $keys, 'name');
-
-                /* Work out the type from the file name. */
-                $type = Horde_Mime_Magic::filenameToMime($name);
-            }
-
-            /* Set the type. */
-            ArrayUtils::setElement($_FILES, $keys, $type, 'type');
-        }
-
-        return $type;
     }
 
     /**
