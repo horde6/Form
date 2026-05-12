@@ -434,49 +434,42 @@ class Horde_Form_Renderer
 <?php
     }
 
+/**
+     * Renders the submit and reset buttons for a form.
+     *
+     * @param string|array $submit One or more submit buttons. Each button can
+     *                             be a string (used as the button label) or an
+     *                             array of HTML attributes.
+     * @param string|false $reset  The reset button label, or false if no reset
+     *                             button should be rendered.
+     */
     public function _renderSubmit($submit, $reset)
     {
-        $buildAttribute = function (&$value, $attribute) {
-            $value = sprintf('%s="%s"', $attribute, $value);
-        };
+        $html = '';
+        foreach ((array) $submit as $index => $button) {
+            $attributes = array_merge(
+                [
+                    'class' => $index === 0 ? 'horde-default' : 'horde-button',
+                    'name'  => 'submitbutton',
+                    'type'  => 'submit',
+                ],
+                is_array($button) ? $button : ['value' => $button]
+            );
 
-        if (!is_array($submit)) {
-            $submit = [$submit];
-        }
-
-        $first = true;
-        foreach ($submit as &$submitbutton) {
-            $default = [
-                'class' => $first ? 'horde-default' : 'horde-button',
-                'name' => 'submitbutton',
-                'type' => 'submit',
-            ];
-            if (is_array($submitbutton)) {
-                $submitbutton = array_merge(
-                    $default,
-                    $submitbutton
-                );
-            } else {
-                $submitbutton = array_merge(
-                    $default,
-                    ['value' => $submitbutton]
-                );
+            $attrString = '';
+            foreach ($attributes as $attribute => $value) {
+                $attrString .= ' ' . $attribute . '="' . htmlspecialchars((string) $value) . '"';
             }
-            array_walk($submitbutton, $buildAttribute);
-            $submitbutton = implode(' ', $submitbutton);
-            $first = false;
+
+            $html .= '<input' . $attrString . ' />';
         }
 
-        ?><div class="horde-form-buttons">
-<?php foreach ($submit as $button): ?>
-    <input <?php echo $button ?> />
-<?php endforeach ?>
-<?php if (!empty($reset)): ?>
-    <input name="resetbutton" type="reset" value="<?php echo $reset ?>" />
-<?php endif; ?>
-</div>
-<?php
+        if ($reset !== false) {
+            $html .= '<input name="resetbutton" type="reset" value="' . htmlspecialchars((string) $reset) . '" />';
+        }
 
+        $html = '<div class="horde-form-buttons">' . $html . '</div>';
+        echo $html;
     }
 
     // Implementation specifics -- input variables.
