@@ -358,6 +358,26 @@ class Horde_Form_Variable
     }
 
     /**
+     * Returns the prompt string for enum types.
+     *
+     * @return string|null  The prompt string or null.
+     */
+    public function getPrompt()
+    {
+        return $this->type->getPrompt();
+    }
+
+    /**
+     * Returns the prompt strings for multi-level enum types.
+     *
+     * @return array|null  The prompt strings or null.
+     */
+    public function getPrompts()
+    {
+        return $this->type->getPrompts();
+    }
+
+    /**
      * Returns whether this variable has a long description.
      *
      * @return boolean  True if this variable has a long description.
