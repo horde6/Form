@@ -36,7 +36,7 @@ class DateVariable extends BaseVariable
         $this->_format = $params[0] ?? 'EEE dd MMMM';
     }
 
-    protected function isValid(Horde_Variables|array $vars, $value): bool
+    protected function isValid(Horde_Variables|Variables|array $vars, $value): bool
     {
         if ($this->isRequired() && strlen(trim((string) $value)) == 0) {
             $this->message = sprintf(Horde_Form_Translation::t("%s is required"), $this->getHumanName());
