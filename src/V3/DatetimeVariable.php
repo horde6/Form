@@ -2,6 +2,7 @@
 
 namespace Horde\Form\V3;
 
+use Horde\Date\Formatter\IcuFormatter;
 use Horde\Util\Variables;
 use Horde_Variables;
 use Horde_Form_Translation;
@@ -12,8 +13,8 @@ use Horde_Form_Translation;
  * @property int $start_year The first available year for input
  * @property int $end_year The last available year for input
  * @property bool $picker Do we show the DHTML calendar
- * @property string|null $format_in The format to use when sending the date for storage
- * @property string $format_out The format to use when displaying the date
+ * @property string|null $format_in The ICU format to use when sending the date for storage
+ * @property string $format_out The ICU format to use when displaying the date
  * @property bool $show_seconds Include a form input for seconds
 
  *
@@ -33,8 +34,8 @@ class DatetimeVariable extends BaseVariable
      *                      - $params[0]: int $start_year - The first available year for input (default: '')
      *                      - $params[1]: int $end_year - The last available year for input (default: '')
      *                      - $params[2]: bool $picker - Do we show the DHTML calendar (default: true)
-     *                      - $params[3]: string|null $format_in - The format to use when sending the date for storage. Defaults to Unix epoch. Similar to the strftime() function. (default: null)
-     *                      - $params[4]: string $format_out - The format to use when displaying the date. Similar to the strftime() function. (default: '%x')
+     *                      - $params[3]: string|null $format_in - ICU format for storage. Defaults to Unix epoch. (default: null)
+     *                      - $params[4]: string $format_out - ICU format for display (default: 'short')
      *                      - $params[5]: bool $show_seconds - Include a form input for seconds (default: false)
       *
       * @api
@@ -45,7 +46,7 @@ class DatetimeVariable extends BaseVariable
         $end_year = $params[1] ?? '';
         $picker = $params[2] ?? true;
         $format_in = $params[3] ?? null;
-        $format_out = $params[4] ?? '%x';
+        $format_out = $params[4] ?? 'short';
         $show_seconds = $params[5] ?? false;
 
         $this->_mdy = new MonthdayyearVariable('', '', true);
@@ -100,7 +101,7 @@ class DatetimeVariable extends BaseVariable
         if ($this->getProperty('format_in') === null) {
             $info = $date->timestamp();
         } else {
-            $info = $date->strftime($this->getProperty('format_in'));
+            $info = $date->format($this->getProperty('format_in'), new IcuFormatter(), $GLOBALS['language'] ?? 'en_US');
         }
 
         return $info;
