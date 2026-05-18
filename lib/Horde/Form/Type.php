@@ -12,10 +12,10 @@
  * @package  Form
  */
 
+use Horde\Date\Format;
 use Horde\Date\FormatterInterface;
+use Horde\Date\Formatter\IcuFormatter;
 use Horde\Util\ArrayUtils;
-
-use function PHP81_BC\strftime;
 
 /**
  * Horde_Form_Type Class
@@ -3099,8 +3099,8 @@ class Horde_Form_Type_date extends Horde_Form_Type
                 $locale = $this->_resolveLocale();
                 $formatted = $this->_formatter->format($timestamp, $format, $locale, $this->_timezone);
             } else {
-                // strftime mode (default, backward compatible)
-                $formatted = strftime($format, $timestamp);
+                // ICU format mode (default)
+                $formatted = Format::formatDate($timestamp, $format, $GLOBALS['language'] ?? 'en_US');
             }
             return $formatted . ($showago ? Horde_Form_Type_date::getAgo($timestamp) : '');
         } else {
@@ -3598,8 +3598,8 @@ class Horde_Form_Type_monthdayyear extends Horde_Form_Type
             $locale = $this->_resolveLocale();
             return $date->format($this->_format_out, $this->_formatter, $locale);
         } else {
-            // strftime mode (default)
-            return $date->strftime($this->_format_out);
+            // ICU format mode (default)
+            return $date->format($this->_format_out, new IcuFormatter(), $GLOBALS['language'] ?? 'en_US');
         }
     }
 
@@ -3688,8 +3688,8 @@ class Horde_Form_Type_monthdayyear extends Horde_Form_Type
                     // Formatter mode
                     return $date->format($this->_format_in, $this->_formatter, $this->_locale);
                 } else {
-                    // strftime mode
-                    return $date->strftime($this->_format_in);
+                    // ICU format mode
+                    return $date->format($this->_format_in, new IcuFormatter(), $GLOBALS['language'] ?? 'en_US');
                 }
             }
         }
@@ -3827,7 +3827,7 @@ class Horde_Form_Type_datetime extends Horde_Form_Type
         if ($this->getProperty('format_in') === null) {
             $info = $date->timestamp();
         } else {
-            $info = $date->strftime($this->getProperty('format_in'));
+            $info = $date->format($this->getProperty('format_in'), new IcuFormatter(), $GLOBALS['language'] ?? 'en_US');
         }
         return $info;
     }

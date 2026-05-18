@@ -2,6 +2,7 @@
 
 namespace Horde\Form\V3;
 
+use Horde\Date\Format;
 use Horde\Util\Variables;
 use Horde_Variables;
 use Horde_Date;
@@ -11,7 +12,7 @@ use Horde_Date_Exception;
 /**
  * DateVariable type for date input fields.
  *
- * @property string $format The date format string
+ * @property string $format The ICU date format pattern
 
  *
  * PSR-4 implementation.
@@ -26,13 +27,13 @@ class DateVariable extends BaseVariable
      * Initialize a date field.
      *
      * @param array $params Variable arguments:
-     *                      - $params[0]: string $format - The date format string (default: '%a %d %B')
+     *                      - $params[0]: string $format - ICU date format pattern (default: 'EEE dd MMMM')
       *
       * @api
      */
     public function init(...$params)
     {
-        $this->_format = $params[0] ?? '%a %d %B';
+        $this->_format = $params[0] ?? 'EEE dd MMMM';
     }
 
     protected function isValid(Horde_Variables|array $vars, $value): bool
@@ -97,7 +98,7 @@ class DateVariable extends BaseVariable
             $format = $this->_format;
         }
 
-        return strftime($format, $timestamp) . ($showago ? $this::getAgo($timestamp) : '');
+        return Format::formatDate($timestamp, $format, $GLOBALS['language'] ?? 'en_US') . ($showago ? $this::getAgo($timestamp) : '');
     }
 
     /**

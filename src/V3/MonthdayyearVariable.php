@@ -2,6 +2,7 @@
 
 namespace Horde\Form\V3;
 
+use Horde\Date\Formatter\IcuFormatter;
 use Horde\Util\Variables;
 use Horde_Variables;
 use Horde_Date;
@@ -13,8 +14,8 @@ use Horde_Form_Translation;
  * @property int $start_year The first available year for input
  * @property int $end_year The last available year for input
  * @property bool $picker Do we show the DHTML calendar
- * @property string|null $format_in The format to use when sending the date for storage
- * @property string $format_out The format to use when displaying the date
+ * @property string|null $format_in The ICU format to use when sending the date for storage
+ * @property string $format_out The ICU format to use when displaying the date
 
  *
  * PSR-4 implementation.
@@ -27,7 +28,7 @@ class MonthdayyearVariable extends BaseVariable
     public $_end_year;
     public $_picker;
     public $_format_in = null;
-    public $_format_out = '%x';
+    public $_format_out = 'short';
 
     /**
      * Initialize a date selection field.
@@ -36,8 +37,8 @@ class MonthdayyearVariable extends BaseVariable
      *                      - $params[0]: int $start_year - The first available year for input (default: current year)
      *                      - $params[1]: int $end_year - The last available year for input (default: current year + 10)
      *                      - $params[2]: bool $picker - Do we show the DHTML calendar (default: true)
-     *                      - $params[3]: string|null $format_in - The format to use when sending the date for storage. Defaults to Unix epoch. Similar to the strftime() function. (default: null)
-     *                      - $params[4]: string $format_out - The format to use when displaying the date. Similar to the strftime() function. (default: '%x')
+     *                      - $params[3]: string|null $format_in - ICU format for storage. Defaults to Unix epoch. (default: null)
+     *                      - $params[4]: string $format_out - ICU format for display (default: 'short')
       *
       * @api
      */
@@ -47,7 +48,7 @@ class MonthdayyearVariable extends BaseVariable
         $end_year = $params[1] ?? '';
         $picker = $params[2] ?? true;
         $format_in = $params[3] ?? null;
-        $format_out = $params[4] ?? '%x';
+        $format_out = $params[4] ?? 'short';
 
         if (empty($start_year)) {
             $start_year = date('Y');
@@ -211,7 +212,7 @@ class MonthdayyearVariable extends BaseVariable
             $date = $this->getDateOb($date);
         }
 
-        return $date->strftime($this->_format_out);
+        return $date->format($this->_format_out, new IcuFormatter(), $GLOBALS['language'] ?? 'en_US');
     }
 
     /**
@@ -246,7 +247,7 @@ class MonthdayyearVariable extends BaseVariable
             return $date->timestamp();
         }
 
-        return $date->strftime($this->_format_in);
+        return $date->format($this->_format_in, new IcuFormatter(), $GLOBALS['language'] ?? 'en_US');
     }
 
     /**

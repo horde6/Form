@@ -271,6 +271,41 @@
     Original version string was 3.0.0alpha1
     [mjr] SECURITY: Prevent ability to specify temporary filename (CVE-2020-8866, Reported By: Andrea Cardaci working with Trend Micro Zero Day Initiative).
     |+
+3.0.0-RC1:
+  api: 3.0.0-RC1
+  state:
+    release: RC
+    api: RC
+  date: 2026-05-18
+  license:
+    identifier: LGPL-2.1-only
+    uri: https://spdx.org/licenses/LGPL-2.1-only.html
+  notes: |-
+    fix: Allow Horde\Util\Variables class in isValid() method
+    fix: Add Delegators - 866aa1af commit "Refactor variable method calls in Html.php" broke trean config menu
+    feat: add __call magic method to delegate undefined methods to $type
+    fix(v3): Reproduce legacy type names in getTypeName()
+    refactor: Improve createVariable() logic
+    fix: Make unused $info parameter in Horde_Form_Variable::getInfo() optional
+    Fix prompt check and update getInfo call
+    Merge pull request #26 from horde6/FRAMEWORK_6_0
+    refactor: use getFieldParts() in _getInfoFromVariables()
+    refactor: simplify _getUpload and getUploadedFileType()  - use getFieldParts() instead of getArrayParts() in 'image' type  - utilize extra parameter in getElement/setElement to simplify the code  - make getUploadedFileType() static
+    refactor: use array_splice in removeVariable()
+    fix: initialize $_img variable
+    refactor(Form): modernise _currentSection handling and variable insertion
+    Initialize _img property to null
+    Merge pull request #24 from horde6/V3
+    feat: Implement transitional support to V3 classes
+    docs: Add an "old-style entrypoint" and a PSR controller demonstrating all form types
+    test: Add regression test against the File behaviour change
+    fix: Restore original behavior of getInfo() for 'file" variable type
+    chore: Add Dmitry as the primary maintainer
+    fix: Type safety issue in PHP 8.5
+    docs: Add V3 UPGRADING.md which supersedes the previous migration guide
+    docs: Reference CSS for the V3 form model
+    test: Add test cases for V3 FieldGroups (replacing nested forms)
+    feat: Flesh out V3 forms and migrations
 2.0.19:
   api: 1.1.0
   state:

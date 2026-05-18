@@ -6,6 +6,20 @@
     "license": "LGPL-2.1-only",
     "authors": [
         {
+            "name": "Dmitry Petrov",
+            "role": "lead"
+        },
+        {
+            "name": "Torben Dannhauber",
+            "email": "torben@dannhauer.de",
+            "role": "releasemanager"
+        },
+        {
+            "name": "Ralf Lang",
+            "email": "ralf.lang@ralf-lang.de",
+            "role": "contributor"
+        },
+        {
             "name": "Jan Schneider",
             "email": "jan@horde.org",
             "role": "lead"
@@ -21,7 +35,7 @@
         "validation",
         "crud"
     ],
-    "time": "2026-04-13",
+    "time": "2026-05-18",
     "repositories": [],
     "require": {
         "php": "^7.4 || ^8",
