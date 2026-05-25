@@ -35,7 +35,7 @@
         "validation",
         "crud"
     ],
-    "time": "2026-05-19",
+    "time": "2026-05-25",
     "repositories": [],
     "require": {
         "php": "^7.4 || ^8",
@@ -48,7 +48,6 @@
         "horde/token": "^3 || dev-FRAMEWORK_6_0",
         "horde/translation": "^3 || dev-FRAMEWORK_6_0",
         "horde/util": "^3 || dev-FRAMEWORK_6_0",
-        "psr/http-message": "^2",
         "ext-json": "*"
     },
     "require-dev": {
