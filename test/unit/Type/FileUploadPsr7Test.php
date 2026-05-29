@@ -30,6 +30,7 @@ use Horde\Http\UploadedFile;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\UploadedFileInterface;
+use Horde_Variables;
 
 #[CoversClass(FileVariable::class)]
 #[CoversClass(BaseForm::class)]
@@ -78,7 +79,7 @@ class FileUploadPsr7Test extends TestCase
         $var = new FileVariable('Attachment', 'attachment', true);
         $var->setUploadedFile($upload);
 
-        $vars = new \Horde_Variables([]);
+        $vars = new Horde_Variables([]);
         $this->assertTrue($var->isValid($vars, null));
     }
 
@@ -89,7 +90,7 @@ class FileUploadPsr7Test extends TestCase
         $var = new FileVariable('Attachment', 'attachment', true);
         $var->setUploadedFile($upload);
 
-        $vars = new \Horde_Variables([]);
+        $vars = new Horde_Variables([]);
         $this->assertFalse($var->isValid($vars, null));
     }
 
@@ -100,7 +101,7 @@ class FileUploadPsr7Test extends TestCase
         $var = new FileVariable('Attachment', 'attachment', false);
         $var->setUploadedFile($upload);
 
-        $vars = new \Horde_Variables([]);
+        $vars = new Horde_Variables([]);
         $this->assertTrue($var->isValid($vars, null));
     }
 
@@ -112,7 +113,7 @@ class FileUploadPsr7Test extends TestCase
         $var = new FileVariable('Document', 'document', false);
         $var->setUploadedFile($upload);
 
-        $vars = new \Horde_Variables([]);
+        $vars = new Horde_Variables([]);
         $info = $var->getInfo($vars);
 
         $this->assertIsArray($info);
@@ -133,7 +134,7 @@ class FileUploadPsr7Test extends TestCase
         $var = new FileVariable('Document', 'document', false);
         $var->setUploadedFile($upload);
 
-        $vars = new \Horde_Variables([]);
+        $vars = new Horde_Variables([]);
         $info = $var->getInfo($vars);
 
         $this->assertNull($info);
@@ -148,7 +149,7 @@ class FileUploadPsr7Test extends TestCase
         $var = new FileVariable('File', 'file', true);
         $var->setUploadedFile($upload);
 
-        $vars = new \Horde_Variables([]);
+        $vars = new Horde_Variables([]);
         $this->assertFalse($var->isValid($vars, null));
         $this->assertNotEmpty($var->getMessage());
     }

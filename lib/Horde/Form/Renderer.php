@@ -80,7 +80,7 @@ class Horde_Form_Renderer
              * @deprecated Use Horde_Themes_Image::tag() instead
              * @see Horde_Deprecated::img()
              */
-/* Registry available, so use a pretty image. */
+            /* Registry available, so use a pretty image. */
             $this->_requiredMarker = Horde::img('required.png', '*');
         } else {
             /* No registry available, use something plain. */

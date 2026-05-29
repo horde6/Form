@@ -19,6 +19,7 @@ use Horde_Variables;
 use Horde;
 use Horde_Form_Translation;
 use Horde\Form\Form;
+use Horde_Form_Action;
 
 /**
  * This class represents a single form variable that may be rendered as one or
@@ -96,7 +97,7 @@ class BaseVariable implements Variable
     /**
      * A {@link Action} instance.
      */
-    public Action|\Horde_Form_Action|null $_action = null;
+    public Action|Horde_Form_Action|null $_action = null;
 
     /**
      * Whether this variable is disabled.

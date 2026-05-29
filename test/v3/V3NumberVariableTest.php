@@ -9,6 +9,7 @@ use Horde\Nls\Nls;
 use Horde_Variables;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
+use ReflectionMethod;
 
 #[CoversClass(NumberVariable::class)]
 class V3NumberVariableTest extends TestCase
@@ -51,7 +52,7 @@ class V3NumberVariableTest extends TestCase
 
         $vars = new Horde_Variables(['amount' => '1234.56']);
 
-        $method = new \ReflectionMethod($var, 'getInfoV3');
+        $method = new ReflectionMethod($var, 'getInfoV3');
         $result = $method->invoke($var, $vars);
 
         $this->assertIsString($result);

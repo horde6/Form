@@ -307,7 +307,7 @@ abstract class BaseRenderer implements Renderer
         $description = '';
         $group = method_exists($form, 'getGroup') ? $form->getGroup((string) $sectionName) : null;
 
-        if ($group instanceof \Horde\Form\V3\Section) {
+        if ($group instanceof Section) {
             $title = $group->getTitle();
             $description = $group->getDescription();
         } else {
@@ -629,7 +629,7 @@ abstract class BaseRenderer implements Renderer
         $description = '';
         $group = method_exists($form, 'getGroup') ? $form->getGroup((string) $sectionName) : null;
 
-        if ($group instanceof \Horde\Form\V3\Section) {
+        if ($group instanceof Section) {
             $title = $group->getTitle();
             $description = $group->getDescription();
         } else {
