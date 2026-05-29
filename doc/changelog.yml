@@ -271,6 +271,19 @@
     Original version string was 3.0.0alpha1
     [mjr] SECURITY: Prevent ability to specify temporary filename (CVE-2020-8866, Reported By: Andrea Cardaci working with Trend Micro Zero Day Initiative).
     |+
+3.0.0-RC5:
+  api: 3.0.0-RC5
+  state:
+    release: RC
+    api: RC
+  date: 2026-05-29
+  license:
+    identifier: LGPL-2.1-only
+    uri: https://spdx.org/licenses/LGPL-2.1-only.html
+  notes: |-
+    style: use "use" statements, whitespace according to PER-1
+    Cast mt_rand() to string for uniqid()
+    Fix random ID generation to cast mt_rand to string
 3.0.0-RC4:
   api: 3.0.0-RC4
   state:
