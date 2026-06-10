@@ -121,14 +121,14 @@ class DemoController implements RequestHandlerInterface
         $html = $renderer->render($form, '/contact', 'post');
 
         $page = <<<HTML
-        <!DOCTYPE html>
-        <html lang="en">
-        <head><meta charset="utf-8"><title>{$form->getTitle()}</title></head>
-        <body>
-        {$html}
-        </body>
-        </html>
-        HTML;
+            <!DOCTYPE html>
+            <html lang="en">
+            <head><meta charset="utf-8"><title>{$form->getTitle()}</title></head>
+            <body>
+            {$html}
+            </body>
+            </html>
+            HTML;
 
         $body = $this->streamFactory->createStream($page);
 

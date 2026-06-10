@@ -30,7 +30,7 @@ if (!isset($GLOBALS['browser'])) {
     $GLOBALS['browser'] = new class {
         public function wasFileUploaded(string $name): void
         {
-            throw new \Horde_Browser_Exception('No file uploaded');
+            throw new Horde_Browser_Exception('No file uploaded');
         }
     };
 }
@@ -237,7 +237,7 @@ try {
             echo "    $field: $message\n";
         }
     }
-} catch (\Throwable $e) {
+} catch (Throwable $e) {
     echo "  Skipped (service dependency): " . $e->getMessage() . "\n";
 }
 
@@ -248,7 +248,7 @@ try {
         $display = is_array($value) ? json_encode($value) : (string) $value;
         echo "  $key = $display\n";
     }
-} catch (\Throwable $e) {
+} catch (Throwable $e) {
     echo "  Skipped (service dependency): " . $e->getMessage() . "\n";
 }
 
