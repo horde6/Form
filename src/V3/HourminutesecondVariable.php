@@ -34,7 +34,7 @@ class HourminutesecondVariable extends BaseVariable
         $this->_show_seconds = $params[0] ?? false;
     }
 
-    public function isValid(Horde_Variables|Variables $vars, $value): bool
+    public function isValid(Horde_Variables|Variables $vars, $time): bool
     {
         if (!$this->_show_seconds && count($time) && !isset($time['second'])) {
             $time['second'] = 0;
